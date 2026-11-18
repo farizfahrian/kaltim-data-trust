@@ -1,5 +1,5 @@
 ---
-import 'maplibre-gl/dist/maplibre-gl.css';
+import 'leaflet/dist/leaflet.css';
 import AppShell from '../layouts/AppShell.astro';
 import geoFc from '../../public/api/v1/geo/regions.json';
 import {
@@ -339,13 +339,17 @@ const clientPayload = {
   />
 
   <script>
-    import * as maplibregl from 'maplibre-gl';
+    import L from 'leaflet';
 
     const payloadEl = document.getElementById('kdt-map-payload');
     if (payloadEl) {
       const store = JSON.parse(payloadEl.textContent || '{}');
       const RAMP = ['#d6eaee', '#8ec1cd', '#448fa2', '#1b6c80'];
       const MISSING = '#dfe5e8';
+
+      const KALTIM_BOUNDS: L.LatLngBoundsExpression = [[-2.41, 113.83], [2.63, 118.99]];
+      const CITIES_BOUNDS: L.LatLngBoundsExpression = [[-1.35, 116.62], [0.25, 117.62]];
+      const MAHAKAM_BOUNDS: L.LatLngBoundsExpression = [[-1.18, 113.80], [1.55, 116.55]];
 
       const intFmt = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 });
       const decFmt = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -402,8 +406,10 @@ const clientPayload = {
       const osmToggle = document.getElementById('osm-basemap-toggle') as HTMLInputElement;
 
       let geoData: any = null;
-      let mlMap: maplibregl.Map | null = null;
-      let mlReady = false;
+      let lMap: L.Map | null = null;
+      let geoLayer: L.GeoJSON | null = null;
+      let cityLayer: L.LayerGroup | null = null;
+      let osmLayer: L.TileLayer | null = null;
 
       function updateUrl() {
         const p = new URLSearchParams();
@@ -413,53 +419,105 @@ const clientPayload = {
         window.history.replaceState({}, '', `${window.location.pathname}?${p.toString()}`);
       }
 
-      function buildDecoratedGeoJSON() {
-        if (!geoData) return null;
+      function tooltipHtml(name: string, code: string, valText: string, unit: string, statusText: string) {
+        return `<div><strong>${name}</strong> <span class="mono">(${code})</span><br/><span>${valText} ${unit}</span> · <span style="color:#52565a;">${statusText}</span></div>`;
+      }
+
+      function syncLeafletLayers(flyToSelected = false) {
+        if (!lMap || !geoData) return;
         const ov = store.overviews[state.metric][state.year];
+        const unit = ov.meta.unit;
         const byReg: Record<string, any> = {};
         ov.data.forEach((r: any) => { byReg[r.region_code] = r; });
+
         const validVals = ov.data
           .filter((r: any) => r.value !== null && (r.quality_status === 'validated' || r.quality_status === 'warning'))
           .map((r: any) => r.value as number);
         const brk = quantiles(validVals);
 
-        return {
-          type: 'FeatureCollection',
-          features: geoData.features.map((f: any) => {
+        if (geoLayer) lMap.removeLayer(geoLayer);
+        if (cityLayer) lMap.removeLayer(cityLayer);
+
+        let selectedPolyLayer: L.Path | null = null;
+
+        geoLayer = L.geoJSON(geoData, {
+          style: (feature: any) => {
+            const code = feature?.properties?.region_code;
+            const obs = byReg[code];
+            const val = obs ? obs.value : null;
+            const isSel = code === state.selectedRegion;
+            return {
+              fillColor: fillFor(val, brk),
+              fillOpacity: osmToggle?.checked ? 0.82 : 0.94,
+              color: isSel ? '#131416' : '#ffffff',
+              weight: isSel ? 2.2 : 1.1,
+            };
+          },
+          onEachFeature: (feature: any, layer: L.Layer) => {
+            const code = feature.properties.region_code;
+            const obs = byReg[code];
+            const val = obs ? obs.value : null;
+            const statusText = obs ? stLabel(obs.quality_status, obs.missing_reason) : 'Tidak tersedia';
+
+            if (code === state.selectedRegion && 'bringToFront' in layer) {
+              selectedPolyLayer = layer as L.Path;
+            }
+
+            layer.bindTooltip(
+              tooltipHtml(feature.properties.region_name, code, fmtVal(val, unit), unit, statusText),
+              { sticky: true, direction: 'top', offset: [0, -6] }
+            );
+
+            layer.on('click', () => {
+              state.selectedRegion = code;
+              renderAll(false);
+            });
+          },
+        }).addTo(lMap);
+
+        if (selectedPolyLayer) {
+          (selectedPolyLayer as L.Path).bringToFront();
+        }
+
+        cityLayer = L.layerGroup();
+        geoData.features
+          .filter((f: any) => f.properties.region_level === 'city')
+          .forEach((f: any) => {
             const code = f.properties.region_code;
             const obs = byReg[code];
             const val = obs ? obs.value : null;
-            return {
-              ...f,
-              properties: {
-                ...f.properties,
-                metricValue: val,
-                formattedValue: fmtVal(val, ov.meta.unit),
-                unit: ov.meta.unit,
-                statusText: obs ? stLabel(obs.quality_status, obs.missing_reason) : 'Tidak tersedia',
-                fillColor: fillFor(val, brk),
-                isSelected: code === state.selectedRegion ? 1 : 0,
-              },
-            };
-          }),
-        };
-      }
+            const isSel = code === state.selectedRegion;
+            const statusText = obs ? stLabel(obs.quality_status, obs.missing_reason) : 'Tidak tersedia';
 
-      function buildCityPointsGeoJSON(decorated: any) {
-        if (!decorated) return { type: 'FeatureCollection', features: [] };
-        return {
-          type: 'FeatureCollection',
-          features: decorated.features
-            .filter((f: any) => f.properties.region_level === 'city')
-            .map((f: any) => ({
-              type: 'Feature',
-              properties: f.properties,
-              geometry: {
-                type: 'Point',
-                coordinates: [f.properties.label_lon, f.properties.label_lat],
-              },
-            })),
-        };
+            const dot = L.circleMarker([f.properties.label_lat, f.properties.label_lon], {
+              radius: isSel ? 7.5 : 6,
+              fillColor: fillFor(val, brk),
+              fillOpacity: 1,
+              color: '#131416',
+              weight: isSel ? 2.4 : 1.6,
+            });
+
+            dot.bindTooltip(
+              tooltipHtml(f.properties.region_name, code, fmtVal(val, unit), unit, statusText),
+              { direction: 'top', offset: [0, -8] }
+            );
+
+            dot.on('click', () => {
+              state.selectedRegion = code;
+              renderAll(false);
+            });
+
+            cityLayer!.addLayer(dot);
+          });
+        cityLayer.addTo(lMap);
+
+        if (flyToSelected) {
+          const feat = geoData.features.find((f: any) => f.properties.region_code === state.selectedRegion);
+          if (feat && feat.properties.bbox) {
+            const [minLon, minLat, maxLon, maxLat] = feat.properties.bbox;
+            lMap.fitBounds([[minLat, minLon], [maxLat, maxLon]], { padding: [36, 36], maxZoom: 9.5 });
+          }
+        }
       }
 
       function renderAll(flyToSelected = false) {
@@ -529,9 +587,9 @@ const clientPayload = {
           })
           .join('');
 
-        // Update SSR SVG fallback colors if still in DOM
+        // Update SSR SVG fallback colors if still visible
         const ssrSvg = document.getElementById('kaltim-ssr-svg');
-        if (ssrSvg) {
+        if (ssrSvg && ssrSvg.style.display !== 'none') {
           const byReg: Record<string, any> = {};
           rows.forEach((r: any) => { byReg[r.region_code] = r; });
           ssrSvg.querySelectorAll('[data-region-poly]').forEach((el) => {
@@ -549,22 +607,8 @@ const clientPayload = {
           });
         }
 
-        // Update MapLibre GL JS source if active
-        if (mlMap && mlReady && geoData) {
-          const dec = buildDecoratedGeoJSON();
-          const src = mlMap.getSource('kaltim') as maplibregl.GeoJSONSource | undefined;
-          if (src && dec) src.setData(dec as any);
-          const cSrc = mlMap.getSource('kaltim-cities') as maplibregl.GeoJSONSource | undefined;
-          if (cSrc && dec) cSrc.setData(buildCityPointsGeoJSON(dec) as any);
-
-          if (flyToSelected) {
-            const feat = geoData.features.find((f: any) => f.properties.region_code === state.selectedRegion);
-            if (feat && feat.properties.bbox) {
-              const [x1, y1, x2, y2] = feat.properties.bbox;
-              mlMap.fitBounds([[x1, y1], [x2, y2]], { padding: 48, maxZoom: 9.5, duration: 450 });
-            }
-          }
-        }
+        // Update Leaflet interactive GeoJSON layers
+        syncLeafletLayers(flyToSelected);
 
         // Update Selected Evidence Card
         const activeRow = rows.find((r: any) => r.region_code === state.selectedRegion) || rows[0];
@@ -629,7 +673,7 @@ const clientPayload = {
         renderAll(true);
       });
 
-      // SSR SVG click support (works immediately & if WebGL is unavailable)
+      // SSR SVG click support before interactive layer hydrates
       document.getElementById('kaltim-ssr-svg')?.addEventListener('click', (e) => {
         const poly = (e.target as HTMLElement).closest('[data-region-poly]');
         const city = (e.target as HTMLElement).closest('[data-city-marker]');
@@ -640,196 +684,93 @@ const clientPayload = {
         }
       });
 
-      // Initialize MapLibre GL JS when WebGL is supported
-      function canUseWebGL(): boolean {
-        try {
-          const c = document.createElement('canvas');
-          const gl = (c.getContext('webgl2') || c.getContext('webgl')) as WebGLRenderingContext | null;
-          if (!gl) return false;
-          const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-          if (dbg) {
-            const renderer = String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '');
-            if (/SwiftShader|llvmpipe|Software/i.test(renderer)) return false;
-          }
-          return true;
-        } catch {
-          return false;
-        }
-      }
+      // Hydrate interactive Leaflet SVG vector map (no WebGL / Worker blob issues on mobile browsers)
+      const mapContainer = document.getElementById('kaltim-map-canvas')!;
+      mapContainer.style.pointerEvents = 'none';
 
       fetch('/api/v1/geo/regions.json')
-        .then((r) => r.json())
+        .then((r) => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          return r.json();
+        })
         .then((fc) => {
           geoData = fc;
-          const container = document.getElementById('kaltim-map-canvas')!;
-          if (!canUseWebGL()) {
-            container.style.pointerEvents = 'none';
-            document.getElementById('map-engine-label')!.textContent = 'GeoJSON Vektor · 10/10 wilayah';
-            return;
+          mapContainer.style.pointerEvents = 'auto';
+
+          lMap = L.map(mapContainer, {
+            zoomControl: false,
+            attributionControl: false,
+            scrollWheelZoom: false,
+            zoomSnap: 0.25,
+            zoomDelta: 0.5,
+            minZoom: 5,
+            maxZoom: 13,
+            renderer: L.svg({ padding: 0.5 }),
+          });
+
+          L.control
+            .zoom({
+              position: 'topright',
+              zoomInTitle: 'Perbesar peta',
+              zoomOutTitle: 'Perkecil peta',
+            })
+            .addTo(lMap);
+
+          lMap.invalidateSize({ pan: false });
+          lMap.fitBounds(KALTIM_BOUNDS, { padding: [14, 14], animate: false });
+
+          syncLeafletLayers(false);
+
+          if (osmToggle?.checked) {
+            osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 18,
+              className: 'osm-muted-tiles',
+            }).addTo(lMap);
+            osmLayer.bringToBack();
           }
 
-          const decorated = buildDecoratedGeoJSON()!;
+          if (mapContainer.querySelectorAll('svg path').length >= 10) {
+            const ssr = document.getElementById('kaltim-ssr-svg');
+            if (ssr) ssr.style.display = 'none';
+            document.getElementById('map-engine-label')!.textContent = 'Leaflet SVG · 10/10 wilayah';
+          }
 
-          mlMap = new maplibregl.Map({
-            container,
-            canvasContextAttributes: { preserveDrawingBuffer: true },
-            style: {
-              version: 8,
-              sources: {
-                kaltim: {
-                  type: 'geojson',
-                  data: decorated as any,
-                },
-                'kaltim-cities': {
-                  type: 'geojson',
-                  data: buildCityPointsGeoJSON(decorated) as any,
-                },
-              },
-              layers: [
-                {
-                  id: 'bg-water',
-                  type: 'background',
-                  paint: { 'background-color': '#eaf1f3' },
-                },
-                {
-                  id: 'kaltim-fill',
-                  type: 'fill',
-                  source: 'kaltim',
-                  paint: {
-                    'fill-color': ['get', 'fillColor'],
-                    'fill-opacity': 0.9,
-                  },
-                },
-                {
-                  id: 'kaltim-outline',
-                  type: 'line',
-                  source: 'kaltim',
-                  paint: {
-                    'line-color': '#ffffff',
-                    'line-width': 1.2,
-                  },
-                },
-                {
-                  id: 'kaltim-selected',
-                  type: 'line',
-                  source: 'kaltim',
-                  filter: ['==', ['get', 'isSelected'], 1],
-                  paint: {
-                    'line-color': '#131416',
-                    'line-width': 2.4,
-                  },
-                },
-                {
-                  id: 'kaltim-city-dots',
-                  type: 'circle',
-                  source: 'kaltim-cities',
-                  paint: {
-                    'circle-radius': 6,
-                    'circle-color': ['get', 'fillColor'],
-                    'circle-stroke-color': '#131416',
-                    'circle-stroke-width': 1.6,
-                  },
-                },
-              ],
-            },
-            bounds: [[113.83, -2.41], [118.99, 2.63]],
-            fitBoundsOptions: { padding: 20 },
-            attributionControl: false,
-          });
-
-          mlMap.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
-
-          const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 10 });
-
-          mlMap.on('load', () => {
-            mlReady = true;
-            document.getElementById('map-engine-label')!.textContent = 'MapLibre GL · GeoJSON';
-            renderAll(false);
-          });
-
-          mlMap.once('idle', () => {
-            if (!mlMap) return;
-            const rendered = mlMap.queryRenderedFeatures(undefined, { layers: ['kaltim-fill'] });
-            if (rendered && rendered.length > 0) {
-              const ssr = document.getElementById('kaltim-ssr-svg');
-              if (ssr) ssr.style.display = 'none';
-            } else {
-              mlMap.remove();
-              mlMap = null;
-              mlReady = false;
-              container.style.pointerEvents = 'none';
-              document.getElementById('map-engine-label')!.textContent = 'GeoJSON Vektor · 10/10 wilayah';
-            }
-          });
-
-          const onHover = (e: any) => {
-            if (!mlMap || !e.features?.length) return;
-            mlMap.getCanvas().style.cursor = 'pointer';
-            const p = e.features[0].properties;
-            popup
-              .setLngLat(e.lngLat)
-              .setHTML(
-                `<div style="font:13px/18px 'IBM Plex Sans',sans-serif;color:#131416;">
-                  <strong>${p.region_name}</strong> <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">(${p.region_code})</span><br/>
-                  <span>${p.formattedValue} ${p.unit}</span> · <span style="color:#52565a;">${p.statusText}</span>
-                </div>`
-              )
-              .addTo(mlMap);
-          };
-
-          mlMap.on('mousemove', 'kaltim-fill', onHover);
-          mlMap.on('mousemove', 'kaltim-city-dots', onHover);
-          mlMap.on('mouseleave', 'kaltim-fill', () => {
-            if (mlMap) mlMap.getCanvas().style.cursor = '';
-            popup.remove();
-          });
-
-          const onClickFeature = (e: any) => {
-            if (!e.features?.length) return;
-            state.selectedRegion = e.features[0].properties.region_code;
-            renderAll(false);
-          };
-          mlMap.on('click', 'kaltim-fill', onClickFeature);
-          mlMap.on('click', 'kaltim-city-dots', onClickFeature);
+          if ('ResizeObserver' in window) {
+            const ro = new ResizeObserver(() => {
+              if (lMap) lMap.invalidateSize({ pan: false });
+            });
+            ro.observe(mapContainer);
+          }
         })
         .catch(() => {
-          document.getElementById('map-engine-label')!.textContent = 'Mode Vektor SVG';
+          mapContainer.style.pointerEvents = 'none';
+          document.getElementById('map-engine-label')!.textContent = 'GeoJSON Vektor · 10/10 wilayah';
         });
 
       osmToggle?.addEventListener('change', () => {
-        if (!mlMap || !mlReady) return;
-        if (!mlMap.getSource('osm-tiles')) {
-          mlMap.addSource('osm-tiles', {
-            type: 'raster',
-            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-            tileSize: 256,
-            attribution: '© OpenStreetMap contributors',
-          });
-          mlMap.addLayer(
-            {
-              id: 'osm-raster',
-              type: 'raster',
-              source: 'osm-tiles',
-              paint: { 'raster-opacity': 0.55, 'raster-saturation': -0.8 },
-            },
-            'kaltim-fill'
-          );
-        } else {
-          mlMap.setLayoutProperty('osm-raster', 'visibility', osmToggle.checked ? 'visible' : 'none');
+        if (!lMap) return;
+        if (osmToggle.checked) {
+          if (!osmLayer) {
+            osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 18,
+              className: 'osm-muted-tiles',
+            });
+          }
+          osmLayer.addTo(lMap);
+          osmLayer.bringToBack();
+        } else if (osmLayer) {
+          lMap.removeLayer(osmLayer);
         }
+        syncLeafletLayers(false);
       });
 
       document.querySelectorAll('[data-cam-preset]').forEach((btn) => {
         btn.addEventListener('click', () => {
           const p = btn.getAttribute('data-cam-preset');
-          if (mlMap && mlReady) {
-            if (p === 'all') {
-              mlMap.fitBounds([[113.83, -2.41], [118.99, 2.63]], { padding: 20, duration: 450 });
-            } else if (p === 'cities') {
-              mlMap.fitBounds([[116.62, -1.35], [117.62, 0.25]], { padding: 32, duration: 450 });
-            } else if (p === 'mahakam') {
-              mlMap.fitBounds([[113.80, -1.18], [116.55, 1.55]], { padding: 28, duration: 450 });
-            }
+          if (lMap) {
+            if (p === 'all') lMap.fitBounds(KALTIM_BOUNDS, { padding: [14, 14] });
+            else if (p === 'cities') lMap.fitBounds(CITIES_BOUNDS, { padding: [24, 24] });
+            else if (p === 'mahakam') lMap.fitBounds(MAHAKAM_BOUNDS, { padding: [20, 20] });
             return;
           }
           const ssrSvg = document.getElementById('kaltim-ssr-svg');
