@@ -1,0 +1,249 @@
+{
+  "meta": {
+    "metric_code": "puskesmas_non_inpatient_count",
+    "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+    "short_label": "Puskesmas Non Rawat Inap",
+    "unit": "unit",
+    "kind": "source",
+    "formula": "Nilai kolom 2024 dari SRC-PKM-NRI setelah pemadanan kode BPS ke kode Kemendagri",
+    "operational_definition": "Puskesmas yang menyelenggarakan pelayanan rawat jalan tingkat pertama (tanpa rawat inap kecuali persalinan normal).",
+    "limitations": "Nilai 0 pada Kabupaten Mahakam Ulu adalah nol faktual terverifikasi (seluruh 6 Puskesmas di Mahakam Ulu berstatus Rawat Inap).",
+    "year": 2024,
+    "available_years": [
+      2024
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-PKM-NRI"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 10,
+    "missing_or_blocked_count": 0,
+    "province_observation": {
+      "observation_id": "srcf-e6f18494cad659aa",
+      "region_code": "64",
+      "region_name": "Provinsi Kalimantan Timur",
+      "short_name": "Kalimantan Timur",
+      "region_level": "province",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 99,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R14C4",
+      "lineage_url": "/api/v1/lineage/srcf-e6f18494cad659aa"
+    },
+    "min_region": {
+      "region_code": "64.11",
+      "short_name": "Mahakam Ulu",
+      "value": 0
+    },
+    "max_region": {
+      "region_code": "64.71",
+      "short_name": "Balikpapan",
+      "value": 27
+    }
+  },
+  "data": [
+    {
+      "observation_id": "srcf-f7da30c28fc45668",
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 10,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R4C4",
+      "lineage_url": "/api/v1/lineage/srcf-f7da30c28fc45668"
+    },
+    {
+      "observation_id": "srcf-7802a27e893f5782",
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 9,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R6C4",
+      "lineage_url": "/api/v1/lineage/srcf-7802a27e893f5782"
+    },
+    {
+      "observation_id": "srcf-5e8835b62d7b5738",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 13,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R8C4",
+      "lineage_url": "/api/v1/lineage/srcf-5e8835b62d7b5738"
+    },
+    {
+      "observation_id": "srcf-0eb99a92237352cf",
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 5,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R5C4",
+      "lineage_url": "/api/v1/lineage/srcf-0eb99a92237352cf"
+    },
+    {
+      "observation_id": "srcf-80501dc26a695a48",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 3,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R7C4",
+      "lineage_url": "/api/v1/lineage/srcf-80501dc26a695a48"
+    },
+    {
+      "observation_id": "srcf-77a51a7702be574b",
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 2,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R9C4",
+      "lineage_url": "/api/v1/lineage/srcf-77a51a7702be574b"
+    },
+    {
+      "observation_id": "srcf-643bf31f2302534d",
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 0,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R10C4",
+      "lineage_url": "/api/v1/lineage/srcf-643bf31f2302534d"
+    },
+    {
+      "observation_id": "srcf-74d1cedfe17459d5",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 27,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R11C4",
+      "lineage_url": "/api/v1/lineage/srcf-74d1cedfe17459d5"
+    },
+    {
+      "observation_id": "srcf-584fb931905e51b1",
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 24,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R12C4",
+      "lineage_url": "/api/v1/lineage/srcf-584fb931905e51b1"
+    },
+    {
+      "observation_id": "srcf-dd511df5bb715eb2",
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 6,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R13C4",
+      "lineage_url": "/api/v1/lineage/srcf-dd511df5bb715eb2"
+    }
+  ]
+}

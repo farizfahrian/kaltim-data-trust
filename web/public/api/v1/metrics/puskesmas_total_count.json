@@ -1,0 +1,22 @@
+{
+  "metric_code": "puskesmas_total_count",
+  "label": "Jumlah Puskesmas (Induk)",
+  "short_label": "Total Puskesmas",
+  "unit": "unit",
+  "kind": "derived",
+  "priority": "P0",
+  "operational_definition": "Jumlah seluruh Puskesmas induk (Rawat Inap + Non Rawat Inap) di kabupaten/kota pada tahun yang sama.",
+  "formula": "puskesmas_inpatient_count + puskesmas_non_inpatient_count",
+  "numerator_source": "SRC-PKM-RI",
+  "denominator_source": "SRC-PKM-NRI",
+  "sources": [
+    "SRC-PKM-RI",
+    "SRC-PKM-NRI"
+  ],
+  "aggregation_rule": "sum_regencies_if_reconciled",
+  "valid_periods": [
+    2024
+  ],
+  "limitations": "Kategori Rawat Inap dan Non Rawat Inap bersifat saling lepas (terverifikasi total 89 + 99 = 188 unit sama persis dengan jumlah Puskesmas induk pada SRC-PKM-SPA dan SRC-ACC).",
+  "methodology_version": "1.0.0"
+}

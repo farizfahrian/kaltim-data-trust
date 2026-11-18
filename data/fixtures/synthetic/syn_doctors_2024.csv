@@ -1,0 +1,13 @@
+# SYNTHETIC DEMO FIXTURE — NOT REAL EAST KALIMANTAN DATA
+region_code,region_name,year,metric_code,value,unit
+64.72,Kota Samarinda,2024,doctor_total_count,1000,orang
+64.71,Kota Balikpapan,2024,doctor_total_count,900,orang
+64.74,Kota Bontang,2024,doctor_total_count,250,orang
+64.01,Kabupaten Paser,2024,doctor_total_count,200,orang
+64.02,Kabupaten Kutai Kartanegara,2024,doctor_total_count,350,orang
+64.03,Kabupaten Berau,2024,doctor_total_count,210,orang
+64.07,Kabupaten Kutai Barat,2024,doctor_total_count,120,orang
+64.08,Kabupaten Kutai Timur,2024,doctor_total_count,300,orang
+64.09,Kabupaten Penajam Paser Utara,2024,doctor_total_count,140,orang
+64.11,Kabupaten Mahakam Ulu,2024,doctor_total_count,20,orang
+64,Provinsi Kalimantan Timur,2024,doctor_total_count,3490,orang

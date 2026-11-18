@@ -1,0 +1,23 @@
+{
+  "metric_code": "dentist_total_count",
+  "label": "Jumlah Dokter Gigi",
+  "short_label": "Dokter Gigi",
+  "unit": "orang",
+  "kind": "source",
+  "priority": "P1",
+  "operational_definition": "Jumlah tenaga Dokter Gigi (umum/non-spesialis) yang tercatat di kabupaten/kota.",
+  "formula": "Nilai baris 'Dokter Gigi' dari SRC-DOC",
+  "numerator_source": "SRC-DOC",
+  "denominator_source": null,
+  "sources": [
+    "SRC-DOC"
+  ],
+  "aggregation_rule": "sum_regencies_if_reconciled",
+  "valid_periods": [
+    2023,
+    2024,
+    2025
+  ],
+  "limitations": "Tidak termasuk Dokter Gigi Spesialis (dilaporkan pada baris terpisah di file sumber).",
+  "methodology_version": "1.0.0"
+}

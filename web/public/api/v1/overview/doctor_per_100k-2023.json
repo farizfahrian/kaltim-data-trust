@@ -1,0 +1,253 @@
+{
+  "meta": {
+    "metric_code": "doctor_per_100k",
+    "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+    "short_label": "Tenaga Medis / 100rb Penduduk",
+    "unit": "orang/100.000 penduduk",
+    "kind": "derived",
+    "formula": "(doctor_total_count / population_count) * 100000",
+    "operational_definition": "Rasio jumlah seluruh tenaga medis kedokteran (Dokter Umum, Spesialis, & Dokter Gigi) terhadap 100.000 penduduk pada wilayah dan tahun referensi yang sama.",
+    "limitations": "Menggambarkan kepadatan administratif tenaga medis per penduduk, bukan waktu tunggu, keterjangkauan geografis, atau mutu layanan klinis. Diblokir otomatis untuk selain 2024 karena ketiadaan denominator sepadan.",
+    "year": 2023,
+    "available_years": [
+      2024
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-DOC",
+      "SRC-POP-NAKES"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 0,
+    "missing_or_blocked_count": 10,
+    "province_observation": {
+      "observation_id": "derf-e63fa8aaa6785651",
+      "region_code": "64",
+      "region_name": "Provinsi Kalimantan Timur",
+      "short_name": "Kalimantan Timur",
+      "region_level": "province",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-e63fa8aaa6785651"
+    },
+    "min_region": null,
+    "max_region": null
+  },
+  "data": [
+    {
+      "observation_id": "derf-85ba14f91f445688",
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-85ba14f91f445688"
+    },
+    {
+      "observation_id": "derf-f0ec2a1709e95080",
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-f0ec2a1709e95080"
+    },
+    {
+      "observation_id": "derf-8c9236ba981f5d72",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-8c9236ba981f5d72"
+    },
+    {
+      "observation_id": "derf-8b830c92808a52ee",
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-8b830c92808a52ee"
+    },
+    {
+      "observation_id": "derf-e5a18f6995bc5cc8",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-e5a18f6995bc5cc8"
+    },
+    {
+      "observation_id": "derf-24e1c25ef0a85429",
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-24e1c25ef0a85429"
+    },
+    {
+      "observation_id": "derf-cfeb7d7a1bec560d",
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-cfeb7d7a1bec560d"
+    },
+    {
+      "observation_id": "derf-3c86bdbd2857589f",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-3c86bdbd2857589f"
+    },
+    {
+      "observation_id": "derf-597c4c3bd6415933",
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-597c4c3bd6415933"
+    },
+    {
+      "observation_id": "derf-f65870becd395c4d",
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-f65870becd395c4d"
+    }
+  ]
+}

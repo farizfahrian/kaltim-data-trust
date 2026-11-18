@@ -1,0 +1,23 @@
+{
+  "metric_code": "facility_total_count",
+  "label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+  "short_label": "Faskes Utama (RS + Puskesmas)",
+  "unit": "fasilitas",
+  "kind": "derived",
+  "priority": "P0",
+  "operational_definition": "Jumlah fasilitas pelayanan kesehatan publik/rujukan utama yang terverifikasi pada level kabupaten/kota tahun 2024, terdiri atas Rumah Sakit dan Puskesmas Induk (Rawat Inap + Non Rawat Inap).",
+  "formula": "hospital_total_count + puskesmas_inpatient_count + puskesmas_non_inpatient_count",
+  "numerator_source": "SRC-RS",
+  "denominator_source": "SRC-PKM-RI,SRC-PKM-NRI",
+  "sources": [
+    "SRC-RS",
+    "SRC-PKM-RI",
+    "SRC-PKM-NRI"
+  ],
+  "aggregation_rule": "sum_regencies_if_reconciled",
+  "valid_periods": [
+    2024
+  ],
+  "limitations": "Dataset katalog klinik swasta/praktik mandiri 2024 tidak tersedia (HTTP 404 pada slug lama), sehingga cakupan dibatasi secara eksplisit pada Rumah Sakit + Puskesmas Induk (total provinsi 47 + 188 = 235 fasilitas).",
+  "methodology_version": "1.0.0"
+}

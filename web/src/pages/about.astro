@@ -1,0 +1,78 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+---
+
+<AppShell
+  title="Tentang & Lisensi"
+  activeNav="about"
+  crumb="Tata kelola data / Pernyataan proyek independen & atribusi"
+>
+  <div class="title-row">
+    <div>
+      <h1>Tentang Kaltim Data Trust &amp; Pernyataan Independensi</h1>
+      <p class="finding">
+        Proyek ini adalah prototipe rekayasa data dan analitik sektor publik yang dibangun secara independen sebagai studi kasus teknis — bukan produk resmi, kerja sama, maupun sistem operasional Pemerintah Provinsi atau Diskominfo Kalimantan Timur.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid-12">
+    <section class="panel span-6" aria-labelledby="purpose-heading">
+      <div class="panel-head">
+        <h2 id="purpose-heading">Tujuan rekayasa &amp; ruang lingkup</h2>
+      </div>
+      <p style="margin-bottom:12px;">
+        Ketika statistik publik diterbitkan dalam berbagai lembar kerja Excel dan CSV oleh unit yang berbeda, risiko terbesarnya bukanlah kurangnya grafik, melainkan <strong>penggabungan tanpa validasi</strong>: pertukaran kode wilayah Kemendagri vs BPS, salah ketik kode kota, perubahan format angka oleh Excel, serta pencampuran periode referensi.
+      </p>
+      <p style="color:var(--muted);">
+        <strong>Kaltim Data Trust</strong> mendemonstrasikan arsitektur <em>data-to-decision</em> yang dapat direproduksi: mulai dari sidik jari byte SHA-256, karantina data gagal, skema relasional PostgreSQL dengan pelacakan input rasio, hingga antarmuka analitik yang transparan terhadap keterbatasan data.
+      </p>
+    </section>
+
+    <section class="panel span-6" aria-labelledby="legal-heading">
+      <div class="panel-head">
+        <h2 id="legal-heading">Kebijakan lisensi, privasi, dan atribusi sumber</h2>
+      </div>
+      <ul style="display:grid;gap:10px;padding-left:18px;">
+        <li>
+          <strong>Hanya data agregat publik:</strong> Tidak memuat data pribadi, pasien, rekam medis individu, ataupun koordinat sensitif.
+        </li>
+        <li>
+          <strong>Tanpa redistribusi file mentah:</strong> Karena header paket pada katalog CKAN mencatat status lisensi belum ditentukan (<em>No License Provided</em>), repositori dan aplikasi ini tidak meng-host ulang file <span class="mono">.xlsx/.csv</span> asli pemerintah dan selalu mengarahkan pembaca ke halaman resmi penerbit.
+        </li>
+        <li>
+          <strong>Bukan alat keputusan klinis:</strong> Rasio ketersediaan tenaga medis per penduduk adalah indikator administratif makro dan tidak mencerminkan mutu diagnosis, waktu tempuh geografis, atau kecukupan layanan darurat.
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel span-12" aria-labelledby="stack-heading">
+      <div class="panel-head">
+        <h2 id="stack-heading">Arsitektur teknis &amp; reproduksibilitas</h2>
+        <span class="panel-meta">Kode asli proyek dilisensikan terpisah dari data pihak ketiga</span>
+      </div>
+      <div class="kv-list">
+        <div class="kv-row">
+          <span class="kv-key">Pipeline &amp; Quality Gate</span>
+          <span class="kv-val mono">Python 3.12+ · openpyxl · pandas · Pandera · pytest (20 skenario uji)</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">Basis data &amp; API kontrak</span>
+          <span class="kv-val mono">PostgreSQL 16+ / SQLAlchemy 2.0 · FastAPI (/api/v1 OpenAPI)</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">Penyajian antarmuka publik</span>
+          <span class="kv-val mono">Astro 5 · TypeScript · Immutable Signed Snapshot JSON di Cloudflare</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">Perancang &amp; pengembang</span>
+          <span class="kv-val">
+            <a class="row-link" href="https://farizfahrian.com" target="_blank" rel="noopener noreferrer">
+              Fariz Fahrian (farizfahrian.com)
+            </a>
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+</AppShell>

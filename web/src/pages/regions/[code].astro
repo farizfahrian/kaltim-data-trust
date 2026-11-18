@@ -1,0 +1,192 @@
+---
+import AppShell from '../../layouts/AppShell.astro';
+import {
+  snapshotData,
+  formatMetricValue,
+  formatShortUnit,
+  statusLabel,
+  statusPillClass,
+  missingReasonExplanation,
+} from '../../lib/format';
+
+export function getStaticPaths() {
+  return snapshotData.regions.map((r) => ({
+    params: { code: r.region_code },
+    props: { regionCode: r.region_code },
+  }));
+}
+
+const { regionCode } = Astro.props;
+const detail = (snapshotData.region_details_2024 as Record<string, any>)[regionCode];
+const reg = detail.region;
+
+const doctorSeries = [2023, 2024, 2025].map((yr) => {
+  const tot = detail.series.find(
+    (s: any) => s.metric_code === 'doctor_total_count' && s.year === yr
+  );
+  const gen = detail.series.find(
+    (s: any) => s.metric_code === 'doctor_general_count' && s.year === yr
+  );
+  const spec = detail.series.find(
+    (s: any) => s.metric_code === 'doctor_specialist_count' && s.year === yr
+  );
+  const ratio = detail.series.find(
+    (s: any) => s.metric_code === 'doctor_per_100k' && s.year === yr
+  );
+  return { yr, tot, gen, spec, ratio };
+});
+
+const ratioMetric = detail.metrics.find((m: any) => m.metric_code === 'doctor_per_100k');
+const popMetric = detail.metrics.find((m: any) => m.metric_code === 'population_count');
+const docMetric = detail.metrics.find((m: any) => m.metric_code === 'doctor_total_count');
+const facMetric = detail.metrics.find((m: any) => m.metric_code === 'facility_total_count');
+---
+
+<AppShell
+  title={reg.region_name}
+  activeNav="regions"
+  crumb={`Kabupaten & kota / ${reg.region_name} (${reg.region_code})`}
+>
+  <div class="title-row">
+    <div>
+      <h1>{reg.region_name}</h1>
+      <p class="finding">
+        Kode kanonik Kemendagri <span class="mono">{reg.region_code}</span> (numerik <span class="mono">{reg.kemendagri_numeric}</span>) · Kode kerja statistik BPS <span class="mono">{reg.bps_numeric}</span> · Tahun evaluasi utama 2024.
+      </p>
+    </div>
+    <div class="title-actions">
+      <a class="btn" href="/regions">Semua wilayah</a>
+      <a class="btn primary" href={`/?metric=doctor_per_100k&year=2024&region=${reg.region_code}`}>
+        Buka di pembanding
+      </a>
+    </div>
+  </div>
+
+  <section class="kpis" aria-label="Ringkasan indikator wilayah">
+    <div class="kpi lead">
+      <div class="kpi-label">Tenaga medis / 100rb (2024)</div>
+      <div class="kpi-value">
+        {formatMetricValue(ratioMetric?.value, ratioMetric?.unit || 'orang/100.000 penduduk')}
+        <span class="kpi-unit">/ 100rb pddk</span>
+      </div>
+      <div class="kpi-sub">
+        Provinsi: {formatMetricValue(ratioMetric?.province_value, 'orang/100.000 penduduk')}
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Jumlah penduduk (2024)</div>
+      <div class="kpi-value">
+        {formatMetricValue(popMetric?.value, 'jiwa')}
+        <span class="kpi-unit">jiwa</span>
+      </div>
+      <div class="kpi-sub">Denominator resmi 2024</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Tenaga medis kedokteran</div>
+      <div class="kpi-value">
+        {formatMetricValue(docMetric?.value, 'orang')}
+        <span class="kpi-unit">orang</span>
+      </div>
+      <div class="kpi-sub">Sumber: SRC-DOC (2024)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Fasilitas kesehatan utama</div>
+      <div class="kpi-value">
+        {formatMetricValue(facMetric?.value, 'fasilitas')}
+        <span class="kpi-unit">faskes</span>
+      </div>
+      <div class="kpi-sub">RS + Puskesmas induk (2024)</div>
+    </div>
+  </section>
+
+  <div class="grid-12">
+    <section class="panel span-12" aria-labelledby="reg-metrics-heading">
+      <div class="panel-head">
+        <h2 id="reg-metrics-heading">Seluruh indikator terkurasi tahun 2024</h2>
+        <span class="panel-meta">Setiap metrik ditautkan ke definisi operasional dan dataset asalnya</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Indikator</th>
+              <th>Jenis</th>
+              <th class="n">Nilai wilayah</th>
+              <th class="n">Angka provinsi</th>
+              <th>Satuan</th>
+              <th>Status validasi</th>
+              <th>Sumber</th>
+            </tr>
+          </thead>
+          <tbody>
+            {detail.metrics.map((m: any) => (
+              <tr>
+                <td>
+                  <a class="row-link" href={`/metrics/${m.metric_code}`}>
+                    {m.label}
+                  </a>
+                </td>
+                <td>{m.kind === 'derived' ? 'Turunan lintas sumber' : 'Sumber tunggal'}</td>
+                <td class="n num">{formatMetricValue(m.value, m.unit)}</td>
+                <td class="n num">
+                  {formatMetricValue(m.province_value, m.unit)}
+                  {m.province_quality_status === 'warning' && (
+                    <span class="cell-sub">Catatan rekonsiliasi</span>
+                  )}
+                </td>
+                <td>{formatShortUnit(m.unit)}</td>
+                <td>
+                  <span class={statusPillClass(m.quality_status)}>
+                    {statusLabel(m.quality_status, m.missing_reason)}
+                  </span>
+                </td>
+                <td class="mono">{m.sources.join(', ')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel span-12" aria-labelledby="series-heading">
+      <div class="panel-head">
+        <h2 id="series-heading">Seri tahunan tenaga medis (2023–2025) &amp; alasan penguncian rasio</h2>
+        <span class="panel-meta">Tahun 2022 diblokir oleh DQ-007 pada tingkat dataset sumber</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tahun referensi</th>
+              <th class="n">Tenaga medis (orang)</th>
+              <th class="n">Dokter umum (orang)</th>
+              <th class="n">Dokter spesialis (orang)</th>
+              <th class="n">Rasio / 100rb penduduk</th>
+              <th>Keterangan kompatibilitas rasio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {doctorSeries.map((row) => (
+              <tr>
+                <td class="mono">{row.yr}</td>
+                <td class="n num">{formatMetricValue(row.tot?.value ?? null, 'orang')}</td>
+                <td class="n num">{formatMetricValue(row.gen?.value ?? null, 'orang')}</td>
+                <td class="n num">{formatMetricValue(row.spec?.value ?? null, 'orang')}</td>
+                <td class="n num">
+                  {formatMetricValue(row.ratio?.value ?? null, 'orang/100.000 penduduk')}
+                </td>
+                <td>
+                  {row.ratio?.value !== null
+                    ? 'Terhitung sah menggunakan denominator penduduk 2024'
+                    : missingReasonExplanation(row.ratio?.missing_reason)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</AppShell>

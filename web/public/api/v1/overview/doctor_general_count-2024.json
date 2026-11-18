@@ -1,0 +1,251 @@
+{
+  "meta": {
+    "metric_code": "doctor_general_count",
+    "metric_label": "Jumlah Dokter Umum",
+    "short_label": "Dokter Umum",
+    "unit": "orang",
+    "kind": "source",
+    "formula": "Nilai baris 'Dokter Umum' dari SRC-DOC (direkonsiliasi silang 100% identik dengan SRC-POP-NAKES untuk 2024)",
+    "operational_definition": "Jumlah tenaga Dokter Umum yang tercatat aktif di fasilitas pelayanan kesehatan pada kabupaten/kota.",
+    "limitations": "Mengukur jumlah tenaga tercatat berdasarkan tempat praktik/registrasi SISDMK, bukan ekuivalen penuh waktu (FTE) atau jam layanan aktual.",
+    "year": 2024,
+    "available_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-DOC"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 10,
+    "missing_or_blocked_count": 0,
+    "province_observation": {
+      "observation_id": "srcf-8e1c71048efe5dc3",
+      "region_code": "64",
+      "region_name": "Provinsi Kalimantan Timur",
+      "short_name": "Kalimantan Timur",
+      "region_level": "province",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 2319,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R74C5",
+      "lineage_url": "/api/v1/lineage/srcf-8e1c71048efe5dc3"
+    },
+    "min_region": {
+      "region_code": "64.11",
+      "short_name": "Mahakam Ulu",
+      "value": 18
+    },
+    "max_region": {
+      "region_code": "64.72",
+      "short_name": "Samarinda",
+      "value": 682
+    }
+  },
+  "data": [
+    {
+      "observation_id": "srcf-c281bbb654605535",
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 130,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R4C5",
+      "lineage_url": "/api/v1/lineage/srcf-c281bbb654605535"
+    },
+    {
+      "observation_id": "srcf-fb31587ca8ef5e28",
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 242,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R11C5",
+      "lineage_url": "/api/v1/lineage/srcf-fb31587ca8ef5e28"
+    },
+    {
+      "observation_id": "srcf-9bf89f6198a35d1e",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 151,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R18C5",
+      "lineage_url": "/api/v1/lineage/srcf-9bf89f6198a35d1e"
+    },
+    {
+      "observation_id": "srcf-f93bc4087bd251e4",
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 90,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R25C5",
+      "lineage_url": "/api/v1/lineage/srcf-f93bc4087bd251e4"
+    },
+    {
+      "observation_id": "srcf-a447aa017ff95dd7",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 206,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R32C5",
+      "lineage_url": "/api/v1/lineage/srcf-a447aa017ff95dd7"
+    },
+    {
+      "observation_id": "srcf-87ec3f72e9d65ce9",
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 67,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R39C5",
+      "lineage_url": "/api/v1/lineage/srcf-87ec3f72e9d65ce9"
+    },
+    {
+      "observation_id": "srcf-1c446ba947d151b3",
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 18,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R46C5",
+      "lineage_url": "/api/v1/lineage/srcf-1c446ba947d151b3"
+    },
+    {
+      "observation_id": "srcf-c95a1e7b70335427",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 557,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R53C5",
+      "lineage_url": "/api/v1/lineage/srcf-c95a1e7b70335427"
+    },
+    {
+      "observation_id": "srcf-8faf493ed3ed5363",
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 682,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R60C5",
+      "lineage_url": "/api/v1/lineage/srcf-8faf493ed3ed5363"
+    },
+    {
+      "observation_id": "srcf-e7bdbd0606775d81",
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 176,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R67C5",
+      "lineage_url": "/api/v1/lineage/srcf-e7bdbd0606775d81"
+    }
+  ]
+}

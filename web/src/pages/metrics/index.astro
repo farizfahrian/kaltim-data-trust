@@ -1,0 +1,101 @@
+---
+import AppShell from '../../layouts/AppShell.astro';
+import { snapshotData } from '../../lib/format';
+
+const metrics = snapshotData.metrics;
+const sourceMetrics = metrics.filter((m) => m.kind === 'source');
+const derivedMetrics = metrics.filter((m) => m.kind === 'derived');
+---
+
+<AppShell
+  title="Kamus Indikator"
+  activeNav="metrics"
+  crumb="Analitik daerah / Kamus indikator & rumus perhitungan"
+>
+  <div class="title-row">
+    <div>
+      <h1>Kamus Indikator &amp; Kontrak Metrik</h1>
+      <p class="finding">
+        Tidak ada indikator yang ditampilkan tanpa satuan baku, periode sah, definisi operasional, dan aturan pembatalan otomatis apabila tahun atau denominator tidak sepadan.
+      </p>
+    </div>
+  </div>
+
+  <section class="kpis" aria-label="Ringkasan katalog indikator">
+    <div class="kpi lead">
+      <div class="kpi-label">Total indikator terdaftar</div>
+      <div class="kpi-value">
+        {metrics.length}
+        <span class="kpi-unit">indikator</span>
+      </div>
+      <div class="kpi-sub">Versi metodologi 1.0.0</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Fakta sumber langsung</div>
+      <div class="kpi-value">
+        {sourceMetrics.length}
+        <span class="kpi-unit">metrik</span>
+      </div>
+      <div class="kpi-sub">Atribut ke satu dataset resmi</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Metrik turunan &amp; rasio</div>
+      <div class="kpi-value">
+        {derivedMetrics.length}
+        <span class="kpi-unit">metrik</span>
+      </div>
+      <div class="kpi-sub">Jejak numerator + denominator</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Cakupan provenance</div>
+      <div class="kpi-value">
+        100
+        <span class="kpi-unit">%</span>
+      </div>
+      <div class="kpi-sub">275 observasi terlacak penuh</div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="metric-table-heading">
+    <div class="panel-head">
+      <h2 id="metric-table-heading">Spesifikasi indikator kesehatan publik</h2>
+      <span class="panel-meta">Klik nama indikator untuk melihat rumus, sumber, dan rincian wilayah</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Kode &amp; nama indikator</th>
+            <th>Jenis</th>
+            <th>Satuan</th>
+            <th>Tahun aktif</th>
+            <th>Sumber pembentuk</th>
+            <th class="n">Buka</th>
+          </tr>
+        </thead>
+        <tbody>
+          {metrics.map((m) => (
+            <tr>
+              <td>
+                <a class="row-link" href={`/metrics/${m.metric_code}`}>
+                  <span class="mono">{m.metric_code}</span> — {m.label}
+                </a>
+                <span class="cell-sub">{m.operational_definition}</span>
+              </td>
+              <td>{m.kind === 'derived' ? 'Turunan' : 'Sumber'}</td>
+              <td>{m.unit}</td>
+              <td class="mono">{m.valid_periods.join(', ')}</td>
+              <td class="mono">{m.sources.join(', ')}</td>
+              <td class="n">
+                <a class="text-action" href={`/?metric=${m.metric_code}&year=2024`}>
+                  Bandingkan
+                </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</AppShell>

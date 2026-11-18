@@ -1,0 +1,23 @@
+{
+  "metric_code": "doctor_specialist_count",
+  "label": "Jumlah Dokter Spesialis",
+  "short_label": "Dokter Spesialis",
+  "unit": "orang",
+  "kind": "source",
+  "priority": "P0",
+  "operational_definition": "Jumlah tenaga Dokter Spesialis (di luar Dokter Gigi Spesialis) yang tercatat di kabupaten/kota.",
+  "formula": "Nilai baris 'Dokter Spesialis' dari SRC-DOC",
+  "numerator_source": "SRC-DOC",
+  "denominator_source": null,
+  "sources": [
+    "SRC-DOC"
+  ],
+  "aggregation_rule": "regency_only_when_province_diverges",
+  "valid_periods": [
+    2023,
+    2024,
+    2025
+  ],
+  "limitations": "Pada tahun 2024, penjumlahan 10 kabupaten/kota adalah 930 orang sedangkan baris agregat provinsi tertulis 980 orang (selisih +50); sistem memberi status warning rekonsiliasi pada agregat provinsi.",
+  "methodology_version": "1.0.0"
+}

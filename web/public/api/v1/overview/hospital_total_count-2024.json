@@ -1,0 +1,249 @@
+{
+  "meta": {
+    "metric_code": "hospital_total_count",
+    "metric_label": "Jumlah Rumah Sakit",
+    "short_label": "Rumah Sakit",
+    "unit": "unit",
+    "kind": "source",
+    "formula": "Nilai kolom 2024 dari SRC-RS (terverifikasi 10 kab/kota = 47 unit)",
+    "operational_definition": "Banyaknya institusi pelayanan kesehatan rujukan yang menyelenggarakan pelayanan rawat inap, rawat jalan, dan gawat darurat di wilayah kabupaten/kota (Permenkes 18/2022).",
+    "limitations": "Mencakup unit rumah sakit tanpa merinci kapasitas tempat tidur atau kelas rujukan pada indikator agregat ini.",
+    "year": 2024,
+    "available_years": [
+      2024
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-RS"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 10,
+    "missing_or_blocked_count": 0,
+    "province_observation": {
+      "observation_id": "srcf-76a4b99611ce5a54",
+      "region_code": "64",
+      "region_name": "Provinsi Kalimantan Timur",
+      "short_name": "Kalimantan Timur",
+      "region_level": "province",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 47,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R12C4",
+      "lineage_url": "/api/v1/lineage/srcf-76a4b99611ce5a54"
+    },
+    "min_region": {
+      "region_code": "64.01",
+      "short_name": "Paser",
+      "value": 2
+    },
+    "max_region": {
+      "region_code": "64.71",
+      "short_name": "Balikpapan",
+      "value": 12
+    }
+  },
+  "data": [
+    {
+      "observation_id": "srcf-e98152a3429b58ff",
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 2,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R2C4",
+      "lineage_url": "/api/v1/lineage/srcf-e98152a3429b58ff"
+    },
+    {
+      "observation_id": "srcf-d1e19fd9994c53df",
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 3,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R3C4",
+      "lineage_url": "/api/v1/lineage/srcf-d1e19fd9994c53df"
+    },
+    {
+      "observation_id": "srcf-b7aaa62d84f550fb",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 2,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R4C4",
+      "lineage_url": "/api/v1/lineage/srcf-b7aaa62d84f550fb"
+    },
+    {
+      "observation_id": "srcf-a7ba2e1d29d85af0",
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 3,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R5C4",
+      "lineage_url": "/api/v1/lineage/srcf-a7ba2e1d29d85af0"
+    },
+    {
+      "observation_id": "srcf-1e55d069b1de52e6",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 3,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R6C4",
+      "lineage_url": "/api/v1/lineage/srcf-1e55d069b1de52e6"
+    },
+    {
+      "observation_id": "srcf-865ebb3b7a2e520f",
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 4,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R7C4",
+      "lineage_url": "/api/v1/lineage/srcf-865ebb3b7a2e520f"
+    },
+    {
+      "observation_id": "srcf-f45c48e8efa45e76",
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 2,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R8C4",
+      "lineage_url": "/api/v1/lineage/srcf-f45c48e8efa45e76"
+    },
+    {
+      "observation_id": "srcf-e65ce580ab26565f",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 12,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R9C4",
+      "lineage_url": "/api/v1/lineage/srcf-e65ce580ab26565f"
+    },
+    {
+      "observation_id": "srcf-e49dfc4a34e054b5",
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 11,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R10C4",
+      "lineage_url": "/api/v1/lineage/srcf-e49dfc4a34e054b5"
+    },
+    {
+      "observation_id": "srcf-d5f97a47522c5383",
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 5,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R11C4",
+      "lineage_url": "/api/v1/lineage/srcf-d5f97a47522c5383"
+    }
+  ]
+}

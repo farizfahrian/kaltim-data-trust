@@ -1,0 +1,251 @@
+{
+  "meta": {
+    "metric_code": "dentist_total_count",
+    "metric_label": "Jumlah Dokter Gigi",
+    "short_label": "Dokter Gigi",
+    "unit": "orang",
+    "kind": "source",
+    "formula": "Nilai baris 'Dokter Gigi' dari SRC-DOC",
+    "operational_definition": "Jumlah tenaga Dokter Gigi (umum/non-spesialis) yang tercatat di kabupaten/kota.",
+    "limitations": "Tidak termasuk Dokter Gigi Spesialis (dilaporkan pada baris terpisah di file sumber).",
+    "year": 2025,
+    "available_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-DOC"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 10,
+    "missing_or_blocked_count": 0,
+    "province_observation": {
+      "observation_id": "srcf-398b18487bb65c32",
+      "region_code": "64",
+      "region_name": "Provinsi Kalimantan Timur",
+      "short_name": "Kalimantan Timur",
+      "region_level": "province",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 729,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R76C6",
+      "lineage_url": "/api/v1/lineage/srcf-398b18487bb65c32"
+    },
+    "min_region": {
+      "region_code": "64.11",
+      "short_name": "Mahakam Ulu",
+      "value": 5
+    },
+    "max_region": {
+      "region_code": "64.71",
+      "short_name": "Balikpapan",
+      "value": 215
+    }
+  },
+  "data": [
+    {
+      "observation_id": "srcf-9ae2eb92092551ee",
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 61,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R6C6",
+      "lineage_url": "/api/v1/lineage/srcf-9ae2eb92092551ee"
+    },
+    {
+      "observation_id": "srcf-b35d0b93597d5597",
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 61,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R13C6",
+      "lineage_url": "/api/v1/lineage/srcf-b35d0b93597d5597"
+    },
+    {
+      "observation_id": "srcf-693a531badbd5c39",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 33,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R20C6",
+      "lineage_url": "/api/v1/lineage/srcf-693a531badbd5c39"
+    },
+    {
+      "observation_id": "srcf-b1b27d20286d5ebb",
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 23,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R27C6",
+      "lineage_url": "/api/v1/lineage/srcf-b1b27d20286d5ebb"
+    },
+    {
+      "observation_id": "srcf-b21f5caf660b5848",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 50,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R34C6",
+      "lineage_url": "/api/v1/lineage/srcf-b21f5caf660b5848"
+    },
+    {
+      "observation_id": "srcf-5482e333bcdf5a58",
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 41,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R41C6",
+      "lineage_url": "/api/v1/lineage/srcf-5482e333bcdf5a58"
+    },
+    {
+      "observation_id": "srcf-eda9eb86287c53b8",
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 5,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R48C6",
+      "lineage_url": "/api/v1/lineage/srcf-eda9eb86287c53b8"
+    },
+    {
+      "observation_id": "srcf-85b331c07dbe5404",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 215,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R55C6",
+      "lineage_url": "/api/v1/lineage/srcf-85b331c07dbe5404"
+    },
+    {
+      "observation_id": "srcf-2b1622b1652c5254",
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 186,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R62C6",
+      "lineage_url": "/api/v1/lineage/srcf-2b1622b1652c5254"
+    },
+    {
+      "observation_id": "srcf-be47e2463c6a56e9",
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 54,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R69C6",
+      "lineage_url": "/api/v1/lineage/srcf-be47e2463c6a56e9"
+    }
+  ]
+}

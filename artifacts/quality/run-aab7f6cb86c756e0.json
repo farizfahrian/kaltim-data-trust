@@ -1,0 +1,262 @@
+{
+  "run_id": "run-aab7f6cb86c756e0",
+  "source_id": "SRC-DOC-RATIO-BAD",
+  "source_title": "Distribusi Jumlah dan Rasio Tenaga Medis di Provinsi Kalimantan Timur Tahun 2024 (Quarantined Audit Target)",
+  "status": "QUARANTINED",
+  "source_sha256": "aa5b1aee1547e95ea7c24342ba542975c6a61c2b63a80664c236fb20c2d0b343",
+  "actual_format": "XLSX",
+  "file_size_bytes": 10808,
+  "mapping_version": "1.0.0",
+  "transformation_version": "1.0.0",
+  "retrieved_at": "2026-11-18T06:54:25",
+  "started_at": "2026-11-18T07:19:23.986203",
+  "input_row_count": 11,
+  "output_row_count": 0,
+  "quarantined_row_count": 11,
+  "is_synthetic": false,
+  "rules": [
+    {
+      "rule_code": "DQ-001",
+      "dimension": "Validity",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Format byte (XLSX) dan struktur kolom wajib terverifikasi.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-002",
+      "dimension": "Uniqueness",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Seluruh kunci bisnis (wilayah × tahun × metrik) unik tanpa penghitungan ganda.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-003",
+      "dimension": "Referential Integrity",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Seluruh kode dan nama wilayah cocok 100% dengan master wilayah resmi.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-004",
+      "dimension": "Validity",
+      "status": "fail",
+      "severity": "critical",
+      "affected_count": 1,
+      "message": "1 nilai gagal diurai secara deterministik (locale ambigu / formula / teks ilegal).",
+      "details": {
+        "samples": [
+          {
+            "locator": "Lembar1!R12C3",
+            "raw_value": "4,045,858",
+            "reason": "ambiguous_locale_number"
+          }
+        ]
+      }
+    },
+    {
+      "rule_code": "DQ-005",
+      "dimension": "Validity",
+      "status": "fail",
+      "severity": "critical",
+      "affected_count": 10,
+      "message": "Ditemukan nilai negatif atau pecahan tidak sah pada metrik cacah bulat.",
+      "details": {
+        "samples": [
+          "Metrik cacah bulat menerima nilai pecahan 286.991 (kemungkinan korupsi pemisah ribuan pada 286.991).",
+          "Metrik cacah bulat menerima nilai pecahan 789.767 (kemungkinan korupsi pemisah ribuan pada 789.767).",
+          "Metrik cacah bulat menerima nilai pecahan 261.833 (kemungkinan korupsi pemisah ribuan pada 261.833).",
+          "Metrik cacah bulat menerima nilai pecahan 178.743 (kemungkinan korupsi pemisah ribuan pada 178.743).",
+          "Metrik cacah bulat menerima nilai pecahan 462.993 (kemungkinan korupsi pemisah ribuan pada 462.993)."
+        ]
+      }
+    },
+    {
+      "rule_code": "DQ-006",
+      "dimension": "Timeliness",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Tahun referensi valid dan berada dalam periode sumber yang dideklarasikan.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-007",
+      "dimension": "Consistency",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Semantik kategori dan subkategori konsisten tanpa tumpang tindih tersembunyi.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-008",
+      "dimension": "Consistency",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Kunci wilayah dan tahun referensi siap untuk pemeriksaan kompatibilitas lintas sumber.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-009",
+      "dimension": "Consistency",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Satuan dan konversi skala sesuai dengan kamus metrik.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-010",
+      "dimension": "Traceability",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Provenance lengkap (SHA-256 aa5b1aee1547…, URL penerbit, dan koordinat sel tersimpan).",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-011",
+      "dimension": "Accuracy Evidence",
+      "status": "pass",
+      "severity": "warning",
+      "affected_count": 0,
+      "message": "Penjumlahan 10 kabupaten/kota cocok 100% dengan baris agregat resmi Provinsi Kalimantan Timur.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-012",
+      "dimension": "Consistency",
+      "status": "pass",
+      "severity": "warning",
+      "affected_count": 0,
+      "message": "Tidak ada lonjakan tahunan di luar ambang batas wajar.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-013",
+      "dimension": "Timeliness",
+      "status": "warn",
+      "severity": "warning",
+      "affected_count": 1,
+      "message": "Periode referensi terbaru (0) lebih lama dari target baseline 2024.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-014",
+      "dimension": "Completeness",
+      "status": "pass",
+      "severity": "warning",
+      "affected_count": 0,
+      "message": "Cakupan lengkap 10/10 kabupaten/kota Kalimantan Timur terpenuhi.",
+      "details": {}
+    }
+  ],
+  "quarantined_samples": [
+    {
+      "source_locator": "Lembar1!R2C3",
+      "raw_region": "64.01",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-005",
+      "reason_code": "non_integer_for_integral_metric",
+      "detail_message": "Metrik cacah bulat menerima nilai pecahan 286.991 (kemungkinan korupsi pemisah ribuan pada 286.991)."
+    },
+    {
+      "source_locator": "Lembar1!R3C3",
+      "raw_region": "64.02",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-005",
+      "reason_code": "non_integer_for_integral_metric",
+      "detail_message": "Metrik cacah bulat menerima nilai pecahan 789.767 (kemungkinan korupsi pemisah ribuan pada 789.767)."
+    },
+    {
+      "source_locator": "Lembar1!R4C3",
+      "raw_region": "64.03",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-005",
+      "reason_code": "non_integer_for_integral_metric",
+      "detail_message": "Metrik cacah bulat menerima nilai pecahan 261.833 (kemungkinan korupsi pemisah ribuan pada 261.833)."
+    },
+    {
+      "source_locator": "Lembar1!R5C3",
+      "raw_region": "64.07",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-005",
+      "reason_code": "non_integer_for_integral_metric",
+      "detail_message": "Metrik cacah bulat menerima nilai pecahan 178.743 (kemungkinan korupsi pemisah ribuan pada 178.743)."
+    },
+    {
+      "source_locator": "Lembar1!R6C3",
+      "raw_region": "64.08",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-005",
+      "reason_code": "non_integer_for_integral_metric",
+      "detail_message": "Metrik cacah bulat menerima nilai pecahan 462.993 (kemungkinan korupsi pemisah ribuan pada 462.993)."
+    },
+    {
+      "source_locator": "Lembar1!R7C3",
+      "raw_region": "64.09",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-005",
+      "reason_code": "non_integer_for_integral_metric",
+      "detail_message": "Metrik cacah bulat menerima nilai pecahan 267.686 (kemungkinan korupsi pemisah ribuan pada 267.686)."
+    },
+    {
+      "source_locator": "Lembar1!R8C3",
+      "raw_region": "64.11",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-005",
+      "reason_code": "non_integer_for_integral_metric",
+      "detail_message": "Metrik cacah bulat menerima nilai pecahan 34.246 (kemungkinan korupsi pemisah ribuan pada 34.246)."
+    },
+    {
+      "source_locator": "Lembar1!R9C3",
+      "raw_region": "64.71",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-005",
+      "reason_code": "non_integer_for_integral_metric",
+      "detail_message": "Metrik cacah bulat menerima nilai pecahan 717.231 (kemungkinan korupsi pemisah ribuan pada 717.231)."
+    },
+    {
+      "source_locator": "Lembar1!R10C3",
+      "raw_region": "64.72",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-005",
+      "reason_code": "non_integer_for_integral_metric",
+      "detail_message": "Metrik cacah bulat menerima nilai pecahan 858.079 (kemungkinan korupsi pemisah ribuan pada 858.079)."
+    },
+    {
+      "source_locator": "Lembar1!R11C3",
+      "raw_region": "64.74",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-005",
+      "reason_code": "non_integer_for_integral_metric",
+      "detail_message": "Metrik cacah bulat menerima nilai pecahan 188.289 (kemungkinan korupsi pemisah ribuan pada 188.289)."
+    },
+    {
+      "source_locator": "Lembar1!R12C3",
+      "raw_region": "64",
+      "raw_year": "2024",
+      "raw_metric": "population_count",
+      "rule_code": "DQ-004",
+      "reason_code": "ambiguous_locale_number",
+      "detail_message": "String numerik '4,045,858' ambigu antara pemisah ribuan vs desimal pada mode strict."
+    }
+  ]
+}

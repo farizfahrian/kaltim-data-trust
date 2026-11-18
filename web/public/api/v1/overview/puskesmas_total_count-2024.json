@@ -1,0 +1,261 @@
+{
+  "meta": {
+    "metric_code": "puskesmas_total_count",
+    "metric_label": "Jumlah Puskesmas (Induk)",
+    "short_label": "Total Puskesmas",
+    "unit": "unit",
+    "kind": "derived",
+    "formula": "puskesmas_inpatient_count + puskesmas_non_inpatient_count",
+    "operational_definition": "Jumlah seluruh Puskesmas induk (Rawat Inap + Non Rawat Inap) di kabupaten/kota pada tahun yang sama.",
+    "limitations": "Kategori Rawat Inap dan Non Rawat Inap bersifat saling lepas (terverifikasi total 89 + 99 = 188 unit sama persis dengan jumlah Puskesmas induk pada SRC-PKM-SPA dan SRC-ACC).",
+    "year": 2024,
+    "available_years": [
+      2024
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-PKM-RI",
+      "SRC-PKM-NRI"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 10,
+    "missing_or_blocked_count": 0,
+    "province_observation": {
+      "observation_id": "derf-525bc2e7a4c85695",
+      "region_code": "64",
+      "region_name": "Provinsi Kalimantan Timur",
+      "short_name": "Kalimantan Timur",
+      "region_level": "province",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 188,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-525bc2e7a4c85695"
+    },
+    "min_region": {
+      "region_code": "64.11",
+      "short_name": "Mahakam Ulu",
+      "value": 6
+    },
+    "max_region": {
+      "region_code": "64.02",
+      "short_name": "Kutai Kartanegara",
+      "value": 32
+    }
+  },
+  "data": [
+    {
+      "observation_id": "derf-8d749ab9c0cf5b0f",
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 19,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-8d749ab9c0cf5b0f"
+    },
+    {
+      "observation_id": "derf-257a8175f2465a8b",
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 32,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-257a8175f2465a8b"
+    },
+    {
+      "observation_id": "derf-401a295557c45bdd",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 21,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-401a295557c45bdd"
+    },
+    {
+      "observation_id": "derf-c97be7c047d556cd",
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 19,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-c97be7c047d556cd"
+    },
+    {
+      "observation_id": "derf-508f4b41b11b5d88",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 21,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-508f4b41b11b5d88"
+    },
+    {
+      "observation_id": "derf-594224702e86597a",
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 11,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-594224702e86597a"
+    },
+    {
+      "observation_id": "derf-c079bb0ef30b5da0",
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 6,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-c079bb0ef30b5da0"
+    },
+    {
+      "observation_id": "derf-7529af8457fa5b9d",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 27,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-7529af8457fa5b9d"
+    },
+    {
+      "observation_id": "derf-9d5520959fc95a3c",
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 26,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-9d5520959fc95a3c"
+    },
+    {
+      "observation_id": "derf-25937af752115467",
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 6,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-25937af752115467"
+    }
+  ]
+}

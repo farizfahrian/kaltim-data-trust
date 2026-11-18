@@ -1,0 +1,214 @@
+version: "1.0.0"
+metrics:
+  - metric_code: doctor_total_count
+    label: "Jumlah Tenaga Medis Kedokteran"
+    short_label: "Tenaga Medis (Dokter & Dokter Gigi)"
+    unit: "orang"
+    kind: "source"
+    priority: "P0"
+    operational_definition: >-
+      Jumlah seluruh tenaga medis kedokteran yang tercatat pada SISDMK di kabupaten/kota,
+      mencakup Dokter Umum, Dokter Spesialis, Dokter Gigi, dan Dokter Gigi Spesialis
+      (sesuai rumus eksplisit =SUM pada lembar sumber 1-dokter.xlsx dan definisi Tenaga Medis Permenkes 18/2022).
+    formula: "Nilai baris 'Dokter' resmi dari SRC-DOC (terverifikasi sama dengan Dokter Umum + Dokter Spesialis + Dokter Gigi + Dokter Gigi Spesialis pada 2023–2025)"
+    numerator_source: "SRC-DOC"
+    denominator_source: null
+    aggregation_rule: "sum_regencies_if_reconciled"
+    valid_periods: [2023, 2024, 2025]
+    limitations: >-
+      Catatan katalog CKAN menyebut tanpa dokter gigi, namun rumus sel Excel (=SUM) pada file sumber
+      menjumlahkan keempat subkategori termasuk dokter gigi. Tahun 2022 diblokir karena gagal uji
+      konsistensi subkategori pada Berau (185 < 197) dan Kutai Barat (120 < 184).
+
+  - metric_code: doctor_general_count
+    label: "Jumlah Dokter Umum"
+    short_label: "Dokter Umum"
+    unit: "orang"
+    kind: "source"
+    priority: "P0"
+    operational_definition: >-
+      Jumlah tenaga Dokter Umum yang tercatat aktif di fasilitas pelayanan kesehatan pada kabupaten/kota.
+    formula: "Nilai baris 'Dokter Umum' dari SRC-DOC (direkonsiliasi silang 100% identik dengan SRC-POP-NAKES untuk 2024)"
+    numerator_source: "SRC-DOC"
+    denominator_source: null
+    aggregation_rule: "sum_regencies_if_reconciled"
+    valid_periods: [2023, 2024, 2025]
+    limitations: >-
+      Mengukur jumlah tenaga tercatat berdasarkan tempat praktik/registrasi SISDMK, bukan ekuivalen penuh waktu (FTE) atau jam layanan aktual.
+
+  - metric_code: doctor_specialist_count
+    label: "Jumlah Dokter Spesialis"
+    short_label: "Dokter Spesialis"
+    unit: "orang"
+    kind: "source"
+    priority: "P0"
+    operational_definition: >-
+      Jumlah tenaga Dokter Spesialis (di luar Dokter Gigi Spesialis) yang tercatat di kabupaten/kota.
+    formula: "Nilai baris 'Dokter Spesialis' dari SRC-DOC"
+    numerator_source: "SRC-DOC"
+    denominator_source: null
+    aggregation_rule: "regency_only_when_province_diverges"
+    valid_periods: [2023, 2024, 2025]
+    limitations: >-
+      Pada tahun 2024, penjumlahan 10 kabupaten/kota adalah 930 orang sedangkan baris agregat provinsi tertulis 980 orang (selisih +50); sistem memberi status warning rekonsiliasi pada agregat provinsi.
+
+  - metric_code: dentist_total_count
+    label: "Jumlah Dokter Gigi"
+    short_label: "Dokter Gigi"
+    unit: "orang"
+    kind: "source"
+    priority: "P1"
+    operational_definition: >-
+      Jumlah tenaga Dokter Gigi (umum/non-spesialis) yang tercatat di kabupaten/kota.
+    formula: "Nilai baris 'Dokter Gigi' dari SRC-DOC"
+    numerator_source: "SRC-DOC"
+    denominator_source: null
+    aggregation_rule: "sum_regencies_if_reconciled"
+    valid_periods: [2023, 2024, 2025]
+    limitations: >-
+      Tidak termasuk Dokter Gigi Spesialis (dilaporkan pada baris terpisah di file sumber).
+
+  - metric_code: hospital_total_count
+    label: "Jumlah Rumah Sakit"
+    short_label: "Rumah Sakit"
+    unit: "unit"
+    kind: "source"
+    priority: "P0"
+    operational_definition: >-
+      Banyaknya institusi pelayanan kesehatan rujukan yang menyelenggarakan pelayanan rawat inap,
+      rawat jalan, dan gawat darurat di wilayah kabupaten/kota (Permenkes 18/2022).
+    formula: "Nilai kolom 2024 dari SRC-RS (terverifikasi 10 kab/kota = 47 unit)"
+    numerator_source: "SRC-RS"
+    denominator_source: null
+    aggregation_rule: "sum_regencies_if_reconciled"
+    valid_periods: [2024]
+    limitations: >-
+      Mencakup unit rumah sakit tanpa merinci kapasitas tempat tidur atau kelas rujukan pada indikator agregat ini.
+
+  - metric_code: puskesmas_inpatient_count
+    label: "Jumlah Puskesmas Rawat Inap"
+    short_label: "Puskesmas Rawat Inap"
+    unit: "unit"
+    kind: "source"
+    priority: "P0"
+    operational_definition: >-
+      Puskesmas yang diberi tambahan sumber daya untuk menyelenggarakan pelayanan rawat inap sesuai kebutuhan wilayah kerja.
+    formula: "Nilai kolom 2024 dari SRC-PKM-RI setelah pemadanan kode BPS ke kode Kemendagri"
+    numerator_source: "SRC-PKM-RI"
+    denominator_source: null
+    aggregation_rule: "sum_regencies_if_reconciled"
+    valid_periods: [2024]
+    limitations: >-
+      Sumber asli menggunakan penomoran kode wilayah BPS (6402=Kutai Barat, 6403=Kutai Kartanegara); wajib melewati pemetaan kode terverifikasi sebelum digabung.
+
+  - metric_code: puskesmas_non_inpatient_count
+    label: "Jumlah Puskesmas Non Rawat Inap"
+    short_label: "Puskesmas Non Rawat Inap"
+    unit: "unit"
+    kind: "source"
+    priority: "P0"
+    operational_definition: >-
+      Puskesmas yang menyelenggarakan pelayanan rawat jalan tingkat pertama (tanpa rawat inap kecuali persalinan normal).
+    formula: "Nilai kolom 2024 dari SRC-PKM-NRI setelah pemadanan kode BPS ke kode Kemendagri"
+    numerator_source: "SRC-PKM-NRI"
+    denominator_source: null
+    aggregation_rule: "sum_regencies_if_reconciled"
+    valid_periods: [2024]
+    limitations: >-
+      Nilai 0 pada Kabupaten Mahakam Ulu adalah nol faktual terverifikasi (seluruh 6 Puskesmas di Mahakam Ulu berstatus Rawat Inap).
+
+  - metric_code: population_count
+    label: "Jumlah Penduduk"
+    short_label: "Penduduk"
+    unit: "jiwa"
+    kind: "source"
+    priority: "P0"
+    operational_definition: >-
+      Jumlah penduduk kabupaten/kota tahun referensi 2024 yang digunakan Dinas Kesehatan Prov. Kaltim sebagai denominator resmi rasio tenaga kesehatan.
+    formula: "Nilai kolom JUMLAH PENDUDUK dari SRC-POP-NAKES dalam satuan jiwa utuh (total 10 kab/kota = 4.045.858 jiwa)"
+    numerator_source: "SRC-POP-NAKES"
+    denominator_source: null
+    aggregation_rule: "sum_regencies_if_reconciled"
+    valid_periods: [2024]
+    limitations: >-
+      Hanya digunakan sebagai denominator untuk indikator tahun 2024 yang sama; dilarang dipakai untuk menghitung rasio tahun 2023 atau 2025.
+
+  - metric_code: puskesmas_total_count
+    label: "Jumlah Puskesmas (Induk)"
+    short_label: "Total Puskesmas"
+    unit: "unit"
+    kind: "derived"
+    priority: "P0"
+    operational_definition: >-
+      Jumlah seluruh Puskesmas induk (Rawat Inap + Non Rawat Inap) di kabupaten/kota pada tahun yang sama.
+    formula: "puskesmas_inpatient_count + puskesmas_non_inpatient_count"
+    numerator_source: "SRC-PKM-RI"
+    denominator_source: "SRC-PKM-NRI"
+    aggregation_rule: "sum_regencies_if_reconciled"
+    valid_periods: [2024]
+    limitations: >-
+      Kategori Rawat Inap dan Non Rawat Inap bersifat saling lepas (terverifikasi total 89 + 99 = 188 unit sama persis dengan jumlah Puskesmas induk pada SRC-PKM-SPA dan SRC-ACC).
+
+  - metric_code: facility_total_count
+    label: "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)"
+    short_label: "Faskes Utama (RS + Puskesmas)"
+    unit: "fasilitas"
+    kind: "derived"
+    priority: "P0"
+    operational_definition: >-
+      Jumlah fasilitas pelayanan kesehatan publik/rujukan utama yang terverifikasi pada level kabupaten/kota tahun 2024, terdiri atas Rumah Sakit dan Puskesmas Induk (Rawat Inap + Non Rawat Inap).
+    formula: "hospital_total_count + puskesmas_inpatient_count + puskesmas_non_inpatient_count"
+    numerator_source: "SRC-RS"
+    denominator_source: "SRC-PKM-RI,SRC-PKM-NRI"
+    aggregation_rule: "sum_regencies_if_reconciled"
+    valid_periods: [2024]
+    limitations: >-
+      Dataset katalog klinik swasta/praktik mandiri 2024 tidak tersedia (HTTP 404 pada slug lama), sehingga cakupan dibatasi secara eksplisit pada Rumah Sakit + Puskesmas Induk (total provinsi 47 + 188 = 235 fasilitas).
+
+  - metric_code: doctor_per_100k
+    label: "Tenaga Medis Kedokteran per 100.000 Penduduk"
+    short_label: "Tenaga Medis / 100rb Penduduk"
+    unit: "orang/100.000 penduduk"
+    kind: "derived"
+    priority: "P0"
+    operational_definition: >-
+      Rasio jumlah seluruh tenaga medis kedokteran (Dokter Umum, Spesialis, & Dokter Gigi) terhadap 100.000 penduduk pada wilayah dan tahun referensi yang sama.
+    formula: "(doctor_total_count / population_count) * 100000"
+    numerator_source: "SRC-DOC"
+    denominator_source: "SRC-POP-NAKES"
+    aggregation_rule: "weighted_by_denominator"
+    valid_periods: [2024]
+    limitations: >-
+      Menggambarkan kepadatan administratif tenaga medis per penduduk, bukan waktu tunggu, keterjangkauan geografis, atau mutu layanan klinis. Diblokir otomatis untuk selain 2024 karena ketiadaan denominator sepadan.
+
+  - metric_code: doctor_general_per_100k
+    label: "Dokter Umum per 100.000 Penduduk"
+    short_label: "Dokter Umum / 100rb Penduduk"
+    unit: "orang/100.000 penduduk"
+    kind: "derived"
+    priority: "P0"
+    operational_definition: >-
+      Rasio jumlah Dokter Umum terhadap 100.000 penduduk pada kabupaten/kota di tahun referensi 2024.
+    formula: "(doctor_general_count / population_count) * 100000"
+    numerator_source: "SRC-DOC"
+    denominator_source: "SRC-POP-NAKES"
+    aggregation_rule: "weighted_by_denominator"
+    valid_periods: [2024]
+    limitations: >-
+      Tidak mencerminkan distribusi antar-kecamatan pedalaman vs perkotaan di dalam satu kabupaten.
+
+  - metric_code: facility_per_100k
+    label: "Fasilitas Kesehatan Utama per 100.000 Penduduk"
+    short_label: "Faskes Utama / 100rb Penduduk"
+    unit: "fasilitas/100.000 penduduk"
+    kind: "derived"
+    priority: "P1"
+    operational_definition: >-
+      Rasio jumlah Rumah Sakit dan Puskesmas Induk terhadap 100.000 penduduk pada tahun referensi 2024.
+    formula: "(facility_total_count / population_count) * 100000"
+    numerator_source: "SRC-RS,SRC-PKM-RI,SRC-PKM-NRI"
+    denominator_source: "SRC-POP-NAKES"
+    aggregation_rule: "weighted_by_denominator"
+    valid_periods: [2024]
+    limitations: >-
+      Wilayah berpenduduk kecil namun luas secara geografis (seperti Mahakam Ulu) secara matematis memiliki rasio per kapita lebih tinggi meskipun jarak antar-permukiman sangat jauh.

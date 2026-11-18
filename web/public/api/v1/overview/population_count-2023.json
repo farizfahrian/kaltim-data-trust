@@ -1,0 +1,223 @@
+{
+  "meta": {
+    "metric_code": "population_count",
+    "metric_label": "Jumlah Penduduk",
+    "short_label": "Penduduk",
+    "unit": "jiwa",
+    "kind": "source",
+    "formula": "Nilai kolom JUMLAH PENDUDUK dari SRC-POP-NAKES dalam satuan jiwa utuh (total 10 kab/kota = 4.045.858 jiwa)",
+    "operational_definition": "Jumlah penduduk kabupaten/kota tahun referensi 2024 yang digunakan Dinas Kesehatan Prov. Kaltim sebagai denominator resmi rasio tenaga kesehatan.",
+    "limitations": "Hanya digunakan sebagai denominator untuk indikator tahun 2024 yang sama; dilarang dipakai untuk menghitung rasio tahun 2023 atau 2025.",
+    "year": 2023,
+    "available_years": [
+      2024
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-POP-NAKES"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 0,
+    "missing_or_blocked_count": 10,
+    "province_observation": null,
+    "min_region": null,
+    "max_region": null
+  },
+  "data": [
+    {
+      "observation_id": null,
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": null,
+      "unit": "jiwa",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": null,
+      "unit": "jiwa",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": null,
+      "unit": "jiwa",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": null,
+      "unit": "jiwa",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": null,
+      "unit": "jiwa",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": null,
+      "unit": "jiwa",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": null,
+      "unit": "jiwa",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": null,
+      "unit": "jiwa",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": null,
+      "unit": "jiwa",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": null,
+      "unit": "jiwa",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    }
+  ]
+}

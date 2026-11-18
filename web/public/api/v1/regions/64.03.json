@@ -1,0 +1,745 @@
+{
+  "region": {
+    "region_code": "64.03",
+    "region_name": "Kabupaten Berau",
+    "short_name": "Berau",
+    "region_level": "regency",
+    "kemendagri_numeric": "6403",
+    "bps_numeric": "6405",
+    "code_system": "Kepmendagri 100.1.1-6117/2022"
+  },
+  "year": 2024,
+  "metrics": [
+    {
+      "metric_code": "dentist_total_count",
+      "label": "Jumlah Dokter Gigi",
+      "short_label": "Dokter Gigi",
+      "unit": "orang",
+      "kind": "source",
+      "value": 32,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-25e0967435b25ebe",
+      "lineage_url": "/api/v1/lineage/srcf-25e0967435b25ebe",
+      "province_value": 610,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter Gigi' dari SRC-DOC"
+    },
+    {
+      "metric_code": "doctor_general_count",
+      "label": "Jumlah Dokter Umum",
+      "short_label": "Dokter Umum",
+      "unit": "orang",
+      "kind": "source",
+      "value": 151,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-9bf89f6198a35d1e",
+      "lineage_url": "/api/v1/lineage/srcf-9bf89f6198a35d1e",
+      "province_value": 2319,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter Umum' dari SRC-DOC (direkonsiliasi silang 100% identik dengan SRC-POP-NAKES untuk 2024)"
+    },
+    {
+      "metric_code": "doctor_general_per_100k",
+      "label": "Dokter Umum per 100.000 Penduduk",
+      "short_label": "Dokter Umum / 100rb Penduduk",
+      "unit": "orang/100.000 penduduk",
+      "kind": "derived",
+      "value": 57.67,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-b4d07a48425f55e6",
+      "lineage_url": "/api/v1/lineage/derf-b4d07a48425f55e6",
+      "province_value": 57.32,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "formula": "(doctor_general_count / population_count) * 100000"
+    },
+    {
+      "metric_code": "doctor_per_100k",
+      "label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "short_label": "Tenaga Medis / 100rb Penduduk",
+      "unit": "orang/100.000 penduduk",
+      "kind": "derived",
+      "value": 85.55,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-268baa37c52d5980",
+      "lineage_url": "/api/v1/lineage/derf-268baa37c52d5980",
+      "province_value": 97.43,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "formula": "(doctor_total_count / population_count) * 100000"
+    },
+    {
+      "metric_code": "doctor_specialist_count",
+      "label": "Jumlah Dokter Spesialis",
+      "short_label": "Dokter Spesialis",
+      "unit": "orang",
+      "kind": "source",
+      "value": 35,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-b1dcfb871d30569e",
+      "lineage_url": "/api/v1/lineage/srcf-b1dcfb871d30569e",
+      "province_value": 980,
+      "province_quality_status": "warning",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter Spesialis' dari SRC-DOC"
+    },
+    {
+      "metric_code": "doctor_total_count",
+      "label": "Jumlah Tenaga Medis Kedokteran",
+      "short_label": "Tenaga Medis (Dokter & Dokter Gigi)",
+      "unit": "orang",
+      "kind": "source",
+      "value": 224,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-ea7181f918ba52c2",
+      "lineage_url": "/api/v1/lineage/srcf-ea7181f918ba52c2",
+      "province_value": 3942,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter' resmi dari SRC-DOC (terverifikasi sama dengan Dokter Umum + Dokter Spesialis + Dokter Gigi + Dokter Gigi Spesialis pada 2023–2025)"
+    },
+    {
+      "metric_code": "facility_per_100k",
+      "label": "Fasilitas Kesehatan Utama per 100.000 Penduduk",
+      "short_label": "Faskes Utama / 100rb Penduduk",
+      "unit": "fasilitas/100.000 penduduk",
+      "kind": "derived",
+      "value": 8.78,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-c78e32817da059c6",
+      "lineage_url": "/api/v1/lineage/derf-c78e32817da059c6",
+      "province_value": 5.81,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI",
+        "SRC-POP-NAKES"
+      ],
+      "formula": "(facility_total_count / population_count) * 100000"
+    },
+    {
+      "metric_code": "facility_total_count",
+      "label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "short_label": "Faskes Utama (RS + Puskesmas)",
+      "unit": "fasilitas",
+      "kind": "derived",
+      "value": 23,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-57481cbe874c533d",
+      "lineage_url": "/api/v1/lineage/derf-57481cbe874c533d",
+      "province_value": 235,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "formula": "hospital_total_count + puskesmas_inpatient_count + puskesmas_non_inpatient_count"
+    },
+    {
+      "metric_code": "hospital_total_count",
+      "label": "Jumlah Rumah Sakit",
+      "short_label": "Rumah Sakit",
+      "unit": "unit",
+      "kind": "source",
+      "value": 2,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-b7aaa62d84f550fb",
+      "lineage_url": "/api/v1/lineage/srcf-b7aaa62d84f550fb",
+      "province_value": 47,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-RS"
+      ],
+      "formula": "Nilai kolom 2024 dari SRC-RS (terverifikasi 10 kab/kota = 47 unit)"
+    },
+    {
+      "metric_code": "population_count",
+      "label": "Jumlah Penduduk",
+      "short_label": "Penduduk",
+      "unit": "jiwa",
+      "kind": "source",
+      "value": 261833,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-edd79f61b0cd5435",
+      "lineage_url": "/api/v1/lineage/srcf-edd79f61b0cd5435",
+      "province_value": 4045858,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "formula": "Nilai kolom JUMLAH PENDUDUK dari SRC-POP-NAKES dalam satuan jiwa utuh (total 10 kab/kota = 4.045.858 jiwa)"
+    },
+    {
+      "metric_code": "puskesmas_inpatient_count",
+      "label": "Jumlah Puskesmas Rawat Inap",
+      "short_label": "Puskesmas Rawat Inap",
+      "unit": "unit",
+      "kind": "source",
+      "value": 8,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-efdcf0c745e45447",
+      "lineage_url": "/api/v1/lineage/srcf-efdcf0c745e45447",
+      "province_value": 89,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "formula": "Nilai kolom 2024 dari SRC-PKM-RI setelah pemadanan kode BPS ke kode Kemendagri"
+    },
+    {
+      "metric_code": "puskesmas_non_inpatient_count",
+      "label": "Jumlah Puskesmas Non Rawat Inap",
+      "short_label": "Puskesmas Non Rawat Inap",
+      "unit": "unit",
+      "kind": "source",
+      "value": 13,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-5e8835b62d7b5738",
+      "lineage_url": "/api/v1/lineage/srcf-5e8835b62d7b5738",
+      "province_value": 99,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "formula": "Nilai kolom 2024 dari SRC-PKM-NRI setelah pemadanan kode BPS ke kode Kemendagri"
+    },
+    {
+      "metric_code": "puskesmas_total_count",
+      "label": "Jumlah Puskesmas (Induk)",
+      "short_label": "Total Puskesmas",
+      "unit": "unit",
+      "kind": "derived",
+      "value": 21,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-401a295557c45bdd",
+      "lineage_url": "/api/v1/lineage/derf-401a295557c45bdd",
+      "province_value": 188,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "formula": "puskesmas_inpatient_count + puskesmas_non_inpatient_count"
+    }
+  ],
+  "series": [
+    {
+      "observation_id": "srcf-2b5d9ef30fa05fad",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 32,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R20C4",
+      "lineage_url": "/api/v1/lineage/srcf-2b5d9ef30fa05fad"
+    },
+    {
+      "observation_id": "srcf-f424f398e7445396",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 122,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R18C4",
+      "lineage_url": "/api/v1/lineage/srcf-f424f398e7445396"
+    },
+    {
+      "observation_id": "derf-9866600ff6565f33",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_general_per_100k",
+      "metric_label": "Dokter Umum per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-9866600ff6565f33"
+    },
+    {
+      "observation_id": "derf-8c9236ba981f5d72",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-8c9236ba981f5d72"
+    },
+    {
+      "observation_id": "srcf-77febb0d72f55fca",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_specialist_count",
+      "metric_label": "Jumlah Dokter Spesialis",
+      "value": 30,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R19C4",
+      "lineage_url": "/api/v1/lineage/srcf-77febb0d72f55fca"
+    },
+    {
+      "observation_id": "srcf-ed61c774e1615cc9",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 189,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R17C4",
+      "lineage_url": "/api/v1/lineage/srcf-ed61c774e1615cc9"
+    },
+    {
+      "observation_id": "srcf-25e0967435b25ebe",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 32,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R20C5",
+      "lineage_url": "/api/v1/lineage/srcf-25e0967435b25ebe"
+    },
+    {
+      "observation_id": "srcf-9bf89f6198a35d1e",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 151,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R18C5",
+      "lineage_url": "/api/v1/lineage/srcf-9bf89f6198a35d1e"
+    },
+    {
+      "observation_id": "derf-b4d07a48425f55e6",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_per_100k",
+      "metric_label": "Dokter Umum per 100.000 Penduduk",
+      "value": 57.67,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-b4d07a48425f55e6"
+    },
+    {
+      "observation_id": "derf-268baa37c52d5980",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": 85.55,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-268baa37c52d5980"
+    },
+    {
+      "observation_id": "srcf-b1dcfb871d30569e",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_specialist_count",
+      "metric_label": "Jumlah Dokter Spesialis",
+      "value": 35,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R19C5",
+      "lineage_url": "/api/v1/lineage/srcf-b1dcfb871d30569e"
+    },
+    {
+      "observation_id": "srcf-ea7181f918ba52c2",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 224,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R17C5",
+      "lineage_url": "/api/v1/lineage/srcf-ea7181f918ba52c2"
+    },
+    {
+      "observation_id": "derf-c78e32817da059c6",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "facility_per_100k",
+      "metric_label": "Fasilitas Kesehatan Utama per 100.000 Penduduk",
+      "value": 8.78,
+      "unit": "fasilitas/100.000 penduduk",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-c78e32817da059c6"
+    },
+    {
+      "observation_id": "derf-57481cbe874c533d",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": 23,
+      "unit": "fasilitas",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-57481cbe874c533d"
+    },
+    {
+      "observation_id": "srcf-b7aaa62d84f550fb",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 2,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R4C4",
+      "lineage_url": "/api/v1/lineage/srcf-b7aaa62d84f550fb"
+    },
+    {
+      "observation_id": "srcf-edd79f61b0cd5435",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 261833,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R4C3",
+      "lineage_url": "/api/v1/lineage/srcf-edd79f61b0cd5435"
+    },
+    {
+      "observation_id": "srcf-efdcf0c745e45447",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 8,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R8C4",
+      "lineage_url": "/api/v1/lineage/srcf-efdcf0c745e45447"
+    },
+    {
+      "observation_id": "srcf-5e8835b62d7b5738",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 13,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R8C4",
+      "lineage_url": "/api/v1/lineage/srcf-5e8835b62d7b5738"
+    },
+    {
+      "observation_id": "derf-401a295557c45bdd",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 21,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-401a295557c45bdd"
+    },
+    {
+      "observation_id": "srcf-693a531badbd5c39",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 33,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R20C6",
+      "lineage_url": "/api/v1/lineage/srcf-693a531badbd5c39"
+    },
+    {
+      "observation_id": "srcf-3539fcf108255267",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 132,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R18C6",
+      "lineage_url": "/api/v1/lineage/srcf-3539fcf108255267"
+    },
+    {
+      "observation_id": "derf-d3762c6f23d35d57",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_general_per_100k",
+      "metric_label": "Dokter Umum per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-d3762c6f23d35d57"
+    },
+    {
+      "observation_id": "derf-550f3d08136e566a",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-550f3d08136e566a"
+    },
+    {
+      "observation_id": "srcf-7ab9137ce9db56ab",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_specialist_count",
+      "metric_label": "Jumlah Dokter Spesialis",
+      "value": 41,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R19C6",
+      "lineage_url": "/api/v1/lineage/srcf-7ab9137ce9db56ab"
+    },
+    {
+      "observation_id": "srcf-e2cf0305e0ac5e1a",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 213,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R17C6",
+      "lineage_url": "/api/v1/lineage/srcf-e2cf0305e0ac5e1a"
+    }
+  ]
+}

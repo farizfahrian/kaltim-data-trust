@@ -1,0 +1,138 @@
+---
+import AppShell from '../../layouts/AppShell.astro';
+import {
+  snapshotData,
+  formatMetricValue,
+  statusLabel,
+  statusPillClass,
+} from '../../lib/format';
+
+export function getStaticPaths() {
+  return snapshotData.metrics.map((m) => ({
+    params: { code: m.metric_code },
+    props: { metricCode: m.metric_code },
+  }));
+}
+
+const { metricCode } = Astro.props;
+const metric = snapshotData.metrics.find((m) => m.metric_code === metricCode)!;
+const ov2024 = (snapshotData.overviews as Record<string, any>)[metricCode]['2024'];
+const rows = [...ov2024.data].sort((a, b) => (b.value ?? -1) - (a.value ?? -1));
+---
+
+<AppShell
+  title={metric.label}
+  activeNav="metrics"
+  crumb={`Kamus indikator / ${metric.metric_code}`}
+>
+  <div class="title-row">
+    <div>
+      <h1>{metric.label}</h1>
+      <p class="finding">{metric.operational_definition}</p>
+    </div>
+    <div class="title-actions">
+      <a class="btn" href="/metrics">Semua indikator</a>
+      <a class="btn primary" href={`/?metric=${metric.metric_code}&year=2024`}>
+        Buka di dashboard utama
+      </a>
+    </div>
+  </div>
+
+  <div class="grid-12">
+    <section class="panel span-6" aria-labelledby="spec-heading">
+      <div class="panel-head">
+        <h2 id="spec-heading">Spesifikasi teknis &amp; rumus</h2>
+        <span class="mono">{metric.metric_code}</span>
+      </div>
+      <div class="kv-list">
+        <div class="kv-row">
+          <span class="kv-key">Satuan</span>
+          <span class="kv-val">{metric.unit}</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">Jenis metrik</span>
+          <span class="kv-val">
+            {metric.kind === 'derived' ? 'Fakta turunan lintas sumber' : 'Fakta sumber tunggal'}
+          </span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">Rumus perhitungan</span>
+          <span class="kv-val mono">{metric.formula}</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">Periode tervalidasi</span>
+          <span class="kv-val mono">{metric.valid_periods.join(', ')}</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">Aturan agregasi provinsi</span>
+          <span class="kv-val mono">{metric.aggregation_rule}</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">Sumber pembentuk</span>
+          <span class="kv-val mono">{metric.sources.join(', ')}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel span-6" aria-labelledby="guard-heading">
+      <div class="panel-head">
+        <h2 id="guard-heading">Aturan interpretasi &amp; batasan</h2>
+        <span class="panel-meta">Versi metodologi {metric.methodology_version}</span>
+      </div>
+      <p style="color:var(--text);margin-bottom:12px;">{metric.limitations}</p>
+      <div class="kv-list">
+        <div class="kv-row">
+          <span class="kv-key">Jika denominator &le; 0 / NULL</span>
+          <span class="kv-val mono">not_computable (bukan 0)</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">Jika tahun sumber berbeda</span>
+          <span class="kv-val mono">not_comparable (year_mismatch)</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">Jika komponen gagal DQ</span>
+          <span class="kv-val mono">blocked (tidak dipublikasikan)</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel span-12" aria-labelledby="vals-heading">
+      <div class="panel-head">
+        <h2 id="vals-heading">Nilai terpublikasi tahun referensi 2024</h2>
+        <span class="panel-meta">Satuan: {metric.unit}</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Wilayah</th>
+              <th>Kode</th>
+              <th class="n">Nilai 2024</th>
+              <th>Status validasi</th>
+              <th>ID observasi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr>
+                <td>
+                  <a class="row-link" href={`/regions/${r.region_code}`}>
+                    {r.region_name}
+                  </a>
+                </td>
+                <td class="mono">{r.region_code}</td>
+                <td class="n num">{formatMetricValue(r.value, metric.unit)}</td>
+                <td>
+                  <span class={statusPillClass(r.quality_status)}>
+                    {statusLabel(r.quality_status, r.missing_reason)}
+                  </span>
+                </td>
+                <td class="mono">{r.observation_id || '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</AppShell>

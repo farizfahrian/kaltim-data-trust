@@ -1,0 +1,170 @@
+{
+  "source_id": "SRC-PKM-RI",
+  "title": "Jumlah Puskesmas Rawat Inap Tahun 2024",
+  "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+  "dataset_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-rawat-inap-tahun-2024",
+  "resource_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-rawat-inap-tahun-2024",
+  "reported_format": "XLSX",
+  "actual_format": "XLSX",
+  "region_code_system": "bps",
+  "license_status": "No License Provided in CKAN header; Metadata Indikator R11 states 'Apakah dapat diakses umum: Ya'",
+  "publication_allowed": "curated_aggregates_with_attribution_no_raw_redistribution",
+  "quality_status": "validated",
+  "latest_run": {
+    "run_id": "run-765a3718acc958e9",
+    "status": "PUBLISHED",
+    "source_sha256": "f927d32043e6e448d0f0b246b858691515306a96d36fabc8cf8e50a00f743b29",
+    "file_size_bytes": 23901,
+    "retrieved_at": "2026-11-18T06:54:20",
+    "input_row_count": 11,
+    "output_row_count": 11,
+    "quarantined_row_count": 0,
+    "rules_summary": {
+      "pass": 14,
+      "warn": 0,
+      "fail": 0
+    }
+  },
+  "known_limitations": [
+    "Kolom KODE menggunakan sistem kode BPS (6402=Kutai Barat, 6403=Kutai Kartanegara, 6404=Kutai Timur, 6405=Berau), berbeda dengan SRC-DOC & SRC-RS yang memakai Kemendagri."
+  ],
+  "quality_rules": [
+    {
+      "rule_code": "DQ-001",
+      "dimension": "Validity",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Format byte (XLSX) dan struktur kolom wajib terverifikasi.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-002",
+      "dimension": "Uniqueness",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Seluruh kunci bisnis (wilayah × tahun × metrik) unik tanpa penghitungan ganda.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-003",
+      "dimension": "Referential Integrity",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Seluruh kode dan nama wilayah cocok 100% dengan master wilayah resmi.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-004",
+      "dimension": "Validity",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Parsing numerik valid; 0 nilai kosong disimpan sebagai NULL bermakna (bukan 0).",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-005",
+      "dimension": "Validity",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Semua metrik cacah bernilai non-negatif dan bulat utuh.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-006",
+      "dimension": "Timeliness",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Tahun referensi valid dan berada dalam periode sumber yang dideklarasikan.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-007",
+      "dimension": "Consistency",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Semantik kategori dan subkategori konsisten tanpa tumpang tindih tersembunyi.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-008",
+      "dimension": "Consistency",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Kunci wilayah dan tahun referensi siap untuk pemeriksaan kompatibilitas lintas sumber.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-009",
+      "dimension": "Consistency",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Satuan dan konversi skala sesuai dengan kamus metrik.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-010",
+      "dimension": "Traceability",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Provenance lengkap (SHA-256 f927d32043e6…, URL penerbit, dan koordinat sel tersimpan).",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-011",
+      "dimension": "Accuracy Evidence",
+      "status": "pass",
+      "severity": "warning",
+      "affected_count": 0,
+      "message": "Penjumlahan 10 kabupaten/kota cocok 100% dengan baris agregat resmi Provinsi Kalimantan Timur.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-012",
+      "dimension": "Consistency",
+      "status": "pass",
+      "severity": "warning",
+      "affected_count": 0,
+      "message": "Tidak ada lonjakan tahunan di luar ambang batas wajar.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-013",
+      "dimension": "Timeliness",
+      "status": "pass",
+      "severity": "warning",
+      "affected_count": 0,
+      "message": "Periode referensi mencakup baseline mutakhir (hingga 2024).",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-014",
+      "dimension": "Completeness",
+      "status": "pass",
+      "severity": "warning",
+      "affected_count": 0,
+      "message": "Cakupan lengkap 10/10 kabupaten/kota Kalimantan Timur terpenuhi.",
+      "details": {}
+    }
+  ],
+  "quarantined_samples": [],
+  "run_history": [
+    {
+      "run_id": "run-765a3718acc958e9",
+      "status": "PUBLISHED",
+      "source_sha256": "f927d32043e6e448d0f0b246b858691515306a96d36fabc8cf8e50a00f743b29",
+      "started_at": "2026-11-18T07:19:23.501808",
+      "output_row_count": 11,
+      "quarantined_row_count": 0
+    }
+  ]
+}

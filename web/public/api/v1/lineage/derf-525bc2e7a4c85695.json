@@ -1,0 +1,50 @@
+{
+  "observation_id": "derf-525bc2e7a4c85695",
+  "observation_kind": "derived",
+  "region_code": "64",
+  "region_name": "Provinsi Kalimantan Timur",
+  "year": 2024,
+  "metric_code": "puskesmas_total_count",
+  "metric_label": "Jumlah Puskesmas (Induk)",
+  "value": 188,
+  "unit": "unit",
+  "quality_status": "validated",
+  "missing_reason": null,
+  "formula": "puskesmas_inpatient_count + puskesmas_non_inpatient_count",
+  "methodology_version": "1.0.0",
+  "derivation_run_id": "drun-f6697c1732925abe",
+  "upstream_inputs": [
+    {
+      "role": "numerator",
+      "fact_id": "srcf-8aa6e743089e550a",
+      "metric_code": "puskesmas_inpatient_count",
+      "value": 89,
+      "unit": "unit",
+      "source_id": "SRC-PKM-RI",
+      "source_title": "Jumlah Puskesmas Rawat Inap Tahun 2024",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-rawat-inap-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-rawat-inap-tahun-2024",
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R14C4",
+      "run_id": "run-765a3718acc958e9",
+      "source_sha256": "f927d32043e6e448d0f0b246b858691515306a96d36fabc8cf8e50a00f743b29",
+      "retrieved_at": "2026-11-18T06:54:20"
+    },
+    {
+      "role": "supporting",
+      "fact_id": "srcf-e6f18494cad659aa",
+      "metric_code": "puskesmas_non_inpatient_count",
+      "value": 99,
+      "unit": "unit",
+      "source_id": "SRC-PKM-NRI",
+      "source_title": "Jumlah Puskesmas Non Rawat Inap Tahun 2024",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-non-rawat-inap-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-non-rawat-inap-tahun-2024",
+      "source_locator": "Puskesmas Non Rawat Inap!R14C4",
+      "run_id": "run-759d7e82fc7f53c0",
+      "source_sha256": "c6f54da0db4bfde880f5c4db6e79f95e14fd29c9b04711b808d96597e3dd7f68",
+      "retrieved_at": "2026-11-18T06:54:20"
+    }
+  ]
+}

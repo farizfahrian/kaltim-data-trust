@@ -1,0 +1,23 @@
+{
+  "metric_code": "doctor_total_count",
+  "label": "Jumlah Tenaga Medis Kedokteran",
+  "short_label": "Tenaga Medis (Dokter & Dokter Gigi)",
+  "unit": "orang",
+  "kind": "source",
+  "priority": "P0",
+  "operational_definition": "Jumlah seluruh tenaga medis kedokteran yang tercatat pada SISDMK di kabupaten/kota, mencakup Dokter Umum, Dokter Spesialis, Dokter Gigi, dan Dokter Gigi Spesialis (sesuai rumus eksplisit =SUM pada lembar sumber 1-dokter.xlsx dan definisi Tenaga Medis Permenkes 18/2022).",
+  "formula": "Nilai baris 'Dokter' resmi dari SRC-DOC (terverifikasi sama dengan Dokter Umum + Dokter Spesialis + Dokter Gigi + Dokter Gigi Spesialis pada 2023–2025)",
+  "numerator_source": "SRC-DOC",
+  "denominator_source": null,
+  "sources": [
+    "SRC-DOC"
+  ],
+  "aggregation_rule": "sum_regencies_if_reconciled",
+  "valid_periods": [
+    2023,
+    2024,
+    2025
+  ],
+  "limitations": "Catatan katalog CKAN menyebut tanpa dokter gigi, namun rumus sel Excel (=SUM) pada file sumber menjumlahkan keempat subkategori termasuk dokter gigi. Tahun 2022 diblokir karena gagal uji konsistensi subkategori pada Berau (185 < 197) dan Kutai Barat (120 < 184).",
+  "methodology_version": "1.0.0"
+}

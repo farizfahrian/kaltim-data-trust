@@ -1,0 +1,21 @@
+{
+  "metric_code": "puskesmas_non_inpatient_count",
+  "label": "Jumlah Puskesmas Non Rawat Inap",
+  "short_label": "Puskesmas Non Rawat Inap",
+  "unit": "unit",
+  "kind": "source",
+  "priority": "P0",
+  "operational_definition": "Puskesmas yang menyelenggarakan pelayanan rawat jalan tingkat pertama (tanpa rawat inap kecuali persalinan normal).",
+  "formula": "Nilai kolom 2024 dari SRC-PKM-NRI setelah pemadanan kode BPS ke kode Kemendagri",
+  "numerator_source": "SRC-PKM-NRI",
+  "denominator_source": null,
+  "sources": [
+    "SRC-PKM-NRI"
+  ],
+  "aggregation_rule": "sum_regencies_if_reconciled",
+  "valid_periods": [
+    2024
+  ],
+  "limitations": "Nilai 0 pada Kabupaten Mahakam Ulu adalah nol faktual terverifikasi (seluruh 6 Puskesmas di Mahakam Ulu berstatus Rawat Inap).",
+  "methodology_version": "1.0.0"
+}

@@ -1,0 +1,33 @@
+{
+  "observation_id": "srcf-ed61c774e1615cc9",
+  "observation_kind": "source",
+  "region_code": "64.03",
+  "region_name": "Kabupaten Berau",
+  "year": 2023,
+  "metric_code": "doctor_total_count",
+  "metric_label": "Jumlah Tenaga Medis Kedokteran",
+  "value": 189,
+  "unit": "orang",
+  "quality_status": "validated",
+  "missing_reason": null,
+  "formula": "Nilai baris 'Dokter' resmi dari SRC-DOC (terverifikasi sama dengan Dokter Umum + Dokter Spesialis + Dokter Gigi + Dokter Gigi Spesialis pada 2023–2025)",
+  "transformation_version": "1.0.0",
+  "upstream_inputs": [
+    {
+      "role": "direct_source",
+      "fact_id": "srcf-ed61c774e1615cc9",
+      "metric_code": "doctor_total_count",
+      "value": 189,
+      "unit": "orang",
+      "source_id": "SRC-DOC",
+      "source_title": "Distribusi Tenaga Dokter di Provinsi Kalimantan Timur Tahun 2022 - 2025",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/id/dataset/distribusi-tenaga-dokter-di-provinsi-kalimantan-timur",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/2c14404c-7069-4448-9848-2584fb54786b/resource/e61b504d-6ca8-4ebe-b71e-7ac32b50ce45/download/1-dokter.xlsx",
+      "source_locator": "1-dokter!R17C4",
+      "run_id": "run-69d998f354a8537f",
+      "source_sha256": "f427719f44070b01021ab25e8a5fe7cded0e39de75f3ded705bbd87b62eac8ad",
+      "retrieved_at": "2026-11-18T06:50:55"
+    }
+  ]
+}

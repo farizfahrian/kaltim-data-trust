@@ -1,0 +1,61 @@
+name: CI — Data Quality Gate, PostgreSQL Suite & Astro Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pipeline-and-sql:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: kdt
+          POSTGRES_PASSWORD: kdt_ci_password
+          POSTGRES_DB: kaltim_data_trust_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python pipeline & test dependencies
+        working-directory: pipeline
+        run: uv sync --extra dev --extra postgres
+      - name: Lint Python pipeline (Ruff)
+        working-directory: pipeline
+        run: uv run ruff check src tests
+      - name: Apply PostgreSQL 16 DDL smoke check
+        env:
+          PGPASSWORD: kdt_ci_password
+        run: psql -h localhost -U kdt -d kaltim_data_trust_test -f sql/schema_postgres.sql
+      - name: Run T-001..T-020 quality & API suite
+        working-directory: pipeline
+        run: uv run pytest -v
+
+  web-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci
+      - name: TypeScript & Astro check
+        working-directory: web
+        run: npm run check
+      - name: Production static build
+        working-directory: web
+        run: npm run build

@@ -1,0 +1,151 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import { snapshotData } from '../lib/format';
+
+const regions = snapshotData.regions.filter((r) => r.region_level !== 'province');
+---
+
+<AppShell
+  title="Metodologi & SQL"
+  activeNav="methodology"
+  crumb="Tata kelola data / Metodologi, pemadanan kode, dan kueri SQL"
+>
+  <div class="title-row">
+    <div>
+      <h1>Metodologi Standarisasi, Quality Gate, dan Kueri SQL</h1>
+      <p class="finding">
+        Visualisasi pada aplikasi ini hanyalah lapisan hilir dari alur deterministik: inspeksi byte file sumber, pemadanan kode wilayah Kemendagri–BPS, pemeriksaan 14 aturan kualitas, dan publikasi snapshot atomik.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid-12">
+    <section class="panel span-6" aria-labelledby="sem-heading">
+      <div class="panel-head">
+        <h2 id="sem-heading">Semantik nilai nol, kosong, dan diblokir</h2>
+        <span class="panel-meta">Larangan keras terhadap fillna(0)</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Kondisi data sumber</th>
+              <th>Representasi DB</th>
+              <th>Tampilan UI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tercatat eksplisit bernilai 0 (mis. PKM Rawat Inap Kota Balikpapan)</td>
+              <td class="mono">value=0, validated</td>
+              <td class="mono">0 unit</td>
+            </tr>
+            <tr>
+              <td>Kosong, tanda strip (-), atau TAD pada sumber</td>
+              <td class="mono">NULL, missing_in_source</td>
+              <td class="mono">— (Tidak tercatat)</td>
+            </tr>
+            <tr>
+              <td>Tahun pembilang &amp; penyebut tidak sepadan (mis. rasio 2025)</td>
+              <td class="mono">NULL, year_mismatch</td>
+              <td class="mono">— (Tahun tak sepadan)</td>
+            </tr>
+            <tr>
+              <td>Gagal aturan kualitas kritis (mis. korupsi serial waktu Excel)</td>
+              <td class="mono">NULL, blocked_quality</td>
+              <td class="mono">Diblokir DQ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel span-6" aria-labelledby="gate-heading">
+      <div class="panel-head">
+        <h2 id="gate-heading">Temuan nyata pada file Satu Data Kaltim</h2>
+        <span class="panel-meta">Terbukti pada audit 18 Nov 2026</span>
+      </div>
+      <ul style="display:grid;gap:10px;padding-left:18px;color:var(--text);">
+        <li>
+          <strong>Label CSV berisi byte XLSX (<span class="mono">SRC-DOC</span>):</strong> File <span class="mono">1 TENAGA DOKTER.csv</span> memiliki magic bytes <span class="mono">PK\x03\x04</span> dan SHA-256 identik dengan <span class="mono">1-dokter.xlsx</span>.
+        </li>
+        <li>
+          <strong>Salah ketik kode wilayah duplikat (<span class="mono">SRC-DOC</span>):</strong> Baris Kota Bontang (<span class="mono">R65</span>) tertulis berkode <span class="mono">6472.0</span> (milik Kota Samarinda); diselesaikan lewat kamus otoritas nama dan dicatat pada <span class="mono">DQ-003</span>.
+        </li>
+        <li>
+          <strong>Benturan kode Kemendagri vs BPS:</strong> <span class="mono">SRC-PKM-RI</span> dan <span class="mono">SRC-PKM-NRI</span> memakai kode BPS (<span class="mono">6402</span>=Kutai Barat) sedangkan <span class="mono">SRC-DOC</span> memakai Kemendagri (<span class="mono">6402</span>=Kutai Kartanegara).
+        </li>
+        <li>
+          <strong>Korupsi serial waktu Excel (<span class="mono">SRC-DOC-RATIO-BAD</span>):</strong> Rasio <span class="mono">45,05</span> berubah menjadi <span class="mono">1,877083</span> hari dan penduduk kabupaten terpotong desimal; dikarantina penuh oleh <span class="mono">DQ-005</span> &amp; <span class="mono">DQ-009</span>.
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel span-12" aria-labelledby="bridge-heading">
+      <div class="panel-head">
+        <h2 id="bridge-heading">Tabel jembatan kode wilayah resmi (Kepmendagri vs BPS)</h2>
+        <span class="panel-meta">Mencegah pertukaran data 4 kabupaten saat penggabungan lintas sumber</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Wilayah administratif</th>
+              <th>Level</th>
+              <th>Kode Kanonik (Kemendagri)</th>
+              <th>Numerik Kemendagri</th>
+              <th>Numerik BPS</th>
+              <th>Status kesamaan kode</th>
+            </tr>
+          </thead>
+          <tbody>
+            {regions.map((r) => {
+              const same = r.kemendagri_numeric === r.bps_numeric;
+              return (
+                <tr>
+                  <td>{r.region_name}</td>
+                  <td>{r.region_level === 'city' ? 'Kota' : 'Kabupaten'}</td>
+                  <td class="mono">{r.region_code}</td>
+                  <td class="mono">{r.kemendagri_numeric}</td>
+                  <td class="mono">{r.bps_numeric}</td>
+                  <td>
+                    <span class={same ? 'pill pos' : 'pill warn'}>
+                      {same ? 'Identik' : 'Wajib jembatan kode'}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel span-12" aria-labelledby="sql-heading">
+      <div class="panel-head">
+        <h2 id="sql-heading">Contoh kueri SQL pelacakan rasio ke sel sumber (PostgreSQL 16+)</h2>
+        <span class="panel-meta">Memisahkan tabel curated_facts dan derived_facts via derived_fact_inputs</span>
+      </div>
+      <pre class="code-block"><code>SELECT
+    r.region_code,
+    r.short_name AS wilayah,
+    df.value_numeric AS dokter_per_100rb,
+    num_cf.value_numeric AS jumlah_tenaga_medis,
+    num_cf.source_locator AS sel_dokter,
+    den_cf.value_numeric AS jumlah_penduduk,
+    den_cf.source_locator AS sel_penduduk
+FROM published_snapshots ps
+JOIN snapshot_derived_facts sdf ON sdf.snapshot_id = ps.snapshot_id
+JOIN derived_facts df ON df.derived_fact_id = sdf.derived_fact_id
+JOIN regions r ON r.region_code = df.region_code
+JOIN derived_fact_inputs num_e ON num_e.derived_fact_id = df.derived_fact_id AND num_e.input_role = 'numerator'
+JOIN curated_facts num_cf ON num_cf.fact_id = num_e.source_fact_id
+JOIN derived_fact_inputs den_e ON den_e.derived_fact_id = df.derived_fact_id AND den_e.input_role = 'denominator'
+JOIN curated_facts den_cf ON den_cf.fact_id = den_e.source_fact_id
+WHERE ps.status = 'active'
+  AND df.metric_code = 'doctor_per_100k'
+  AND df.reference_year = 2024
+ORDER BY df.value_numeric DESC;</code></pre>
+    </section>
+  </div>
+</AppShell>

@@ -1,0 +1,12 @@
+region_code,region_name,short_name,region_level,parent_region_code,kemendagri_numeric,bps_numeric,code_system,code_valid_from,aliases
+64,Provinsi Kalimantan Timur,Kalimantan Timur,province,,64,6400,Kepmendagri 100.1.1-6117/2022,2022-11-09,Kalimantan Timur|KALIMANTAN TIMUR|Provinsi Kalimantan Timur|Prov. Kalimantan Timur
+64.01,Kabupaten Paser,Paser,regency,64,6401,6401,Kepmendagri 100.1.1-6117/2022,2022-11-09,Paser|PASER|Kab. Paser|Kabupaten Paser
+64.02,Kabupaten Kutai Kartanegara,Kutai Kartanegara,regency,64,6402,6403,Kepmendagri 100.1.1-6117/2022,2022-11-09,Kutai Kartanegara|KUTAI KARTANEGARA|Kab. Kutai Kartanegara|Kabupaten Kutai Kartanegara
+64.03,Kabupaten Berau,Berau,regency,64,6403,6405,Kepmendagri 100.1.1-6117/2022,2022-11-09,Berau|BERAU|Kab. Berau|Kabupaten Berau
+64.07,Kabupaten Kutai Barat,Kutai Barat,regency,64,6407,6402,Kepmendagri 100.1.1-6117/2022,2022-11-09,Kutai Barat|KUTAI BARAT|Kab. Kutai Barat|Kabupaten Kutai Barat
+64.08,Kabupaten Kutai Timur,Kutai Timur,regency,64,6408,6404,Kepmendagri 100.1.1-6117/2022,2022-11-09,Kutai Timur|KUTAI TIMUR|Kab. Kutai Timur|Kabupaten Kutai Timur
+64.09,Kabupaten Penajam Paser Utara,Penajam Paser Utara,regency,64,6409,6409,Kepmendagri 100.1.1-6117/2022,2022-11-09,Penajam Paser Utara|PENAJAM PASER UTARA|Kab. Penajam Paser Utara|Kabupaten Penajam Paser Utara
+64.11,Kabupaten Mahakam Ulu,Mahakam Ulu,regency,64,6411,6411,Kepmendagri 100.1.1-6117/2022,2022-11-09,Mahakam Ulu|MAHAKAM ULU|Kab. Mahakam Ulu|Kabupaten Mahakam Ulu
+64.71,Kota Balikpapan,Balikpapan,city,64,6471,6471,Kepmendagri 100.1.1-6117/2022,2022-11-09,Balikpapan|BALIKPAPAN|Kota Balikpapan|KOTA BALIKPAPAN
+64.72,Kota Samarinda,Samarinda,city,64,6472,6472,Kepmendagri 100.1.1-6117/2022,2022-11-09,Samarinda|SAMARINDA|Kota Samarinda|KOTA SAMARINDA
+64.74,Kota Bontang,Bontang,city,64,6474,6474,Kepmendagri 100.1.1-6117/2022,2022-11-09,Bontang|BONTANG|Kota Bontang|KOTA BONTANG

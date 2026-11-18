@@ -1,0 +1,665 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import {
+  snapshotData,
+  formatMetricValue,
+  formatShortUnit,
+  statusLabel,
+  statusPillClass,
+} from '../lib/format';
+
+const defaultMetric = 'doctor_per_100k';
+const defaultYear = '2024';
+const ov = snapshotData.overviews[defaultMetric][defaultYear];
+const regionsMeta = Object.fromEntries(snapshotData.regions.map((r) => [r.region_code, r]));
+
+const sortedRows = [...ov.data].sort((a, b) => (b.value ?? -1) - (a.value ?? -1));
+const maxVal = Math.max(...sortedRows.map((r) => r.value ?? 0), 1);
+const provVal = ov.summary.province_observation?.value ?? null;
+const defaultSelected = sortedRows[0];
+const defaultLineage = defaultSelected?.observation_id
+  ? (snapshotData.lineages as Record<string, any>)[defaultSelected.observation_id]
+  : null;
+
+const primaryTabs = [
+  { code: 'doctor_per_100k', label: 'Tenaga medis / 100rb' },
+  { code: 'doctor_general_per_100k', label: 'Dokter umum / 100rb' },
+  { code: 'doctor_total_count', label: 'Jumlah tenaga medis' },
+  { code: 'facility_total_count', label: 'Faskes utama (RS + PKM)' },
+  { code: 'hospital_total_count', label: 'Rumah sakit' },
+];
+
+const clientPayload = {
+  overviews: snapshotData.overviews,
+  lineages: snapshotData.lineages,
+  regionsMeta,
+  metrics: snapshotData.metrics,
+};
+---
+
+<AppShell
+  title="Ringkasan Wilayah"
+  activeNav="overview"
+  crumb="Kesehatan Kalimantan Timur / Ringkasan indikator tervalidasi"
+>
+  <div class="snapshot-notice" role="status">
+    <span>
+      Snapshot terpublikasi <span class="mono">{snapshotData.snapshot.snapshot_id}</span> · 5 dataset resmi lolos validasi SHA-256, 1 dataset rasio korup dikarantina penuh sebelum publikasi.
+    </span>
+    <a href="/datasets">Buka laporan Quality Gate</a>
+  </div>
+
+  <div class="title-row">
+    <div>
+      <h1 id="page-title">Indikator Kesehatan Kalimantan Timur</h1>
+      <p class="finding" id="page-finding">
+        Pada baseline 2024, Kota Bontang mencatat kepadatan tertinggi (156,14 tenaga medis per 100.000 penduduk) atau 3,35 kali Kabupaten Kutai Kartanegara (46,60), sementara ketujuh kabupaten berada di bawah angka provinsi (97,43).
+      </p>
+    </div>
+    <div class="title-actions">
+      <a class="btn primary" href="/datasets/SRC-DOC-RATIO-BAD">Lihat bukti karantina</a>
+    </div>
+  </div>
+
+  <div class="tabs-row">
+    <div class="underline-tabs" role="tablist" aria-label="Pilih indikator utama">
+      {primaryTabs.map((t) => (
+        <button
+          type="button"
+          role="tab"
+          class="underline-tab"
+          data-metric-tab={t.code}
+          aria-selected={t.code === defaultMetric ? 'true' : 'false'}
+        >
+          {t.label}
+        </button>
+      ))}
+    </div>
+
+    <div class="filter-controls">
+      <label for="metric-select" class="panel-meta">Semua metrik</label>
+      <select id="metric-select" class="select-control" aria-label="Pilih indikator lengkap">
+        {snapshotData.metrics.map((m) => (
+          <option value={m.metric_code} selected={m.metric_code === defaultMetric}>
+            {m.short_label} ({m.unit})
+          </option>
+        ))}
+      </select>
+
+      <div class="segmented" role="group" aria-label="Tahun referensi">
+        {['2023', '2024', '2025'].map((yr) => (
+          <button
+            type="button"
+            data-year-btn={yr}
+            aria-pressed={yr === defaultYear ? 'true' : 'false'}
+          >
+            {yr}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <section class="kpis" aria-label="Ringkasan indikator provinsi">
+    <div class="kpi lead">
+      <div class="kpi-label" id="kpi-prov-label">Angka Provinsi Kalimantan Timur (2024)</div>
+      <div class="kpi-value" id="kpi-prov-val">
+        {formatMetricValue(provVal, ov.meta.unit)}
+        <span class="kpi-unit" id="kpi-prov-unit">{formatShortUnit(ov.meta.unit)}</span>
+      </div>
+      <div class="kpi-sub" id="kpi-prov-sub">
+        Tervalidasi · Sumber: {ov.meta.sources.join(' + ')}
+      </div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Cakupan wilayah lolos validasi</div>
+      <div class="kpi-value" id="kpi-cov-val">
+        {ov.summary.valid_region_count}
+        <span class="kpi-unit">/ {ov.summary.total_target_regions} kab/kota</span>
+      </div>
+      <div class="kpi-sub" id="kpi-cov-sub">
+        {ov.summary.missing_or_blocked_count === 0
+          ? 'Lengkap tanpa wilayah terblokir'
+          : `${ov.summary.missing_or_blocked_count} wilayah belum sepadan/kosong`}
+      </div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Tertinggi daerah</div>
+      <div class="kpi-value" id="kpi-max-val">
+        {ov.summary.max_region ? formatMetricValue(ov.summary.max_region.value, ov.meta.unit) : '—'}
+        <span class="kpi-unit" id="kpi-max-unit">{formatShortUnit(ov.meta.unit)}</span>
+      </div>
+      <div class="kpi-sub" id="kpi-max-sub">
+        {ov.summary.max_region ? ov.summary.max_region.short_name : 'Tidak tersedia pada periode ini'}
+      </div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Terendah daerah</div>
+      <div class="kpi-value" id="kpi-min-val">
+        {ov.summary.min_region ? formatMetricValue(ov.summary.min_region.value, ov.meta.unit) : '—'}
+        <span class="kpi-unit" id="kpi-min-unit">{formatShortUnit(ov.meta.unit)}</span>
+      </div>
+      <div class="kpi-sub" id="kpi-min-sub">
+        {ov.summary.min_region ? ov.summary.min_region.short_name : 'Tidak tersedia pada periode ini'}
+      </div>
+    </div>
+  </section>
+
+  <div class="grid-12">
+    <section class="panel span-7" aria-labelledby="chart-heading">
+      <div class="panel-head">
+        <h2 id="chart-heading">{ov.meta.metric_label}</h2>
+        <span class="panel-meta" id="chart-meta">Tahun {ov.meta.year} · Klik wilayah untuk melacak sel sumber</span>
+      </div>
+
+      <div class="bar-list" id="comparison-bars" role="listbox" aria-label="Peringkat kabupaten dan kota">
+        {sortedRows.map((row, idx) => {
+          const pct = row.value !== null ? Math.max((row.value / (maxVal * 1.08)) * 100, 1.5) : 0;
+          const refPct = provVal !== null ? Math.min((provVal / (maxVal * 1.08)) * 100, 98) : null;
+          return (
+            <div
+              class="bar-row"
+              role="option"
+              tabindex="0"
+              aria-selected={idx === 0 ? 'true' : 'false'}
+              data-region-code={row.region_code}
+            >
+              <span class="bar-name">{row.short_name}</span>
+              <span class="bar-track">
+                {row.value !== null && <span class="bar-fill" style={`width:${pct.toFixed(1)}%`} />}
+                {refPct !== null && <span class="bar-ref-tick" style={`left:${refPct.toFixed(1)}%`} title={`Angka Provinsi: ${formatMetricValue(provVal, ov.meta.unit)}`} />}
+              </span>
+              <span class={`bar-val ${row.value === null ? 'is-missing' : ''}`}>
+                {formatMetricValue(row.value, ov.meta.unit)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div class="chart-legend-note" id="chart-legend">
+        <span class="swatch-inline">
+          <span class="swatch-box"></span>
+          <span id="legend-unit-text">Satuan: {ov.meta.unit}</span>
+        </span>
+        <span class="swatch-inline" id="legend-ref-wrap">
+          <span class="swatch-tick"></span>
+          <span id="legend-ref-text">Garis vertikal: Provinsi Kalimantan Timur ({formatMetricValue(provVal, ov.meta.unit)})</span>
+        </span>
+      </div>
+    </section>
+
+    <section class="panel span-5" aria-labelledby="lineage-heading">
+      <div class="panel-head">
+        <h2 id="lineage-heading">Jejak bukti &amp; asal angka</h2>
+        <span class={statusPillClass(defaultSelected.quality_status)} id="lin-status-pill">
+          {statusLabel(defaultSelected.quality_status, defaultSelected.missing_reason)}
+        </span>
+      </div>
+
+      <div class="lineage-well" id="lineage-panel">
+        <div class="kv-list">
+          <div class="kv-row">
+            <span class="kv-key">Wilayah &amp; kode</span>
+            <span class="kv-val" id="lin-region">
+              {defaultSelected.region_name} (<span class="mono">{defaultSelected.region_code}</span>)
+            </span>
+          </div>
+          <div class="kv-row">
+            <span class="kv-key">Nilai terbit</span>
+            <span class="kv-val num" id="lin-val">
+              {formatMetricValue(defaultSelected.value, ov.meta.unit)} {ov.meta.unit}
+            </span>
+          </div>
+          <div class="kv-row">
+            <span class="kv-key">ID observasi</span>
+            <span class="kv-val mono" id="lin-obs-id">{defaultSelected.observation_id}</span>
+          </div>
+          <div class="kv-row">
+            <span class="kv-key">Aturan transformasi</span>
+            <span class="kv-val mono" id="lin-formula">{ov.meta.formula}</span>
+          </div>
+        </div>
+
+        <div id="lin-inputs" style="display:grid;gap:8px;">
+          {defaultLineage?.upstream_inputs?.map((inp: any) => (
+            <div class="lineage-step">
+              <div class="lineage-step-head">
+                <span>
+                  {inp.role === 'numerator'
+                    ? 'Pembilang (Numerator)'
+                    : inp.role === 'denominator'
+                      ? 'Penyebut (Denominator)'
+                      : 'Sumber Langsung'}: <span class="mono">{inp.source_id}</span>
+                </span>
+                <span class="num">
+                  {formatMetricValue(inp.value, inp.unit)} {inp.unit}
+                </span>
+              </div>
+              <div class="lineage-step-meta">
+                <span>Sel: <span class="mono">{inp.source_locator}</span></span>
+                <span>SHA-256: <span class="mono">{inp.source_sha256.slice(0, 12)}…</span></span>
+                <a class="row-link" href={`/datasets/${inp.source_id}`}>Audit sumber</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="panel span-12" aria-labelledby="table-heading">
+      <div class="panel-head">
+        <h2 id="table-heading">Tabel pembanding kabupaten/kota</h2>
+        <span class="panel-meta" id="table-summary-meta">
+          Menampilkan 10 wilayah administratif · Angka nol berbeda dari data tidak tercatat (—)
+        </span>
+      </div>
+
+      <div class="table-wrap">
+        <table id="regional-table">
+          <thead>
+            <tr>
+              <th>
+                <button type="button" class="sort-btn" data-sort-col="name">Wilayah</button>
+              </th>
+              <th>Kode Kemendagri / BPS</th>
+              <th class="n">
+                <button type="button" class="sort-btn" data-sort-col="value">
+                  Nilai (<span id="th-unit">{formatShortUnit(ov.meta.unit)}</span>) ↓
+                </button>
+              </th>
+              <th class="n">Selisih thd provinsi</th>
+              <th>Status validasi</th>
+              <th>Sumber</th>
+              <th class="n">Tindakan</th>
+            </tr>
+          </thead>
+          <tbody id="regional-tbody">
+            {sortedRows.map((row, idx) => {
+              const rMeta = regionsMeta[row.region_code];
+              const diff =
+                row.value !== null && provVal !== null ? row.value - provVal : null;
+              const diffStr =
+                diff === null
+                  ? '—'
+                  : `${diff >= 0 ? '+' : ''}${formatMetricValue(diff, ov.meta.unit)}`;
+              return (
+                <tr
+                  data-row-region={row.region_code}
+                  aria-selected={idx === 0 ? 'true' : 'false'}
+                >
+                  <td>
+                    <a class="row-link" href={`/regions/${row.region_code}`}>
+                      {row.region_name}
+                    </a>
+                  </td>
+                  <td class="mono">
+                    {row.region_code} / BPS {rMeta?.bps_numeric}
+                  </td>
+                  <td class="n num">
+                    {formatMetricValue(row.value, ov.meta.unit)}
+                  </td>
+                  <td class="n num">{diffStr}</td>
+                  <td>
+                    <span class={statusPillClass(row.quality_status)}>
+                      {statusLabel(row.quality_status, row.missing_reason)}
+                    </span>
+                  </td>
+                  <td class="mono">{row.sources.join(', ')}</td>
+                  <td class="n">
+                    <button
+                      type="button"
+                      class="text-action"
+                      data-inspect-region={row.region_code}
+                    >
+                      Lihat bukti
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel span-12" aria-labelledby="method-strip-heading">
+      <div class="panel-head">
+        <h2 id="method-strip-heading">Definisi operasional &amp; batas kesimpulan</h2>
+        <a class="row-link" href="/methodology">Buka metodologi &amp; kueri SQL lengkap</a>
+      </div>
+      <div class="grid-12">
+        <div class="span-6">
+          <div class="kpi-label">Definisi indikator terpilih</div>
+          <p style="margin-top:6px;color:var(--text);" id="def-text">
+            {ov.meta.operational_definition}
+          </p>
+        </div>
+        <div class="span-6">
+          <div class="kpi-label">Keterbatasan &amp; aturan anti-salah tafsir</div>
+          <p style="margin-top:6px;color:var(--muted);" id="lim-text">
+            {ov.meta.limitations}
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script
+    type="application/json"
+    id="kdt-overview-payload"
+    set:html={JSON.stringify(clientPayload)}
+  />
+
+  <script is:inline>
+    (() => {
+      const payloadEl = document.getElementById('kdt-overview-payload');
+      if (!payloadEl) return;
+      const store = JSON.parse(payloadEl.textContent || '{}');
+
+      const intFmt = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 });
+      const decFmt = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      const fmtVal = (v, unit) => {
+        if (v === null || v === undefined) return '—';
+        const isRatio = unit.includes('/') || unit.includes('%') || !Number.isInteger(v);
+        return isRatio ? decFmt.format(v) : intFmt.format(v);
+      };
+      const shortUnit = (u) =>
+        u === 'orang/100.000 penduduk' || u === 'fasilitas/100.000 penduduk' ? '/ 100rb pddk' : u;
+      const pillClass = (st) =>
+        st === 'validated' ? 'pill pos' : st === 'warning' ? 'pill warn' : st === 'blocked' ? 'pill neg' : 'pill';
+      const stLabel = (st, mr) => {
+        if (st === 'validated') return 'Tervalidasi';
+        if (st === 'warning') return mr === 'missing_in_source' ? 'Tidak tercatat' : 'Catatan audit';
+        if (st === 'blocked') return 'Diblokir DQ';
+        if (st === 'not_comparable') return 'Tahun tak sepadan';
+        if (st === 'not_computable') return 'Tak dapat dihitung';
+        return 'Belum diperiksa';
+      };
+      const missingExplain = (mr) => {
+        if (mr === 'year_mismatch')
+          return 'Indikator rasio dikunci otomatis pada tahun ini karena denominator penduduk terverifikasi hanya tersedia untuk tahun 2024.';
+        if (mr === 'denominator_not_computable')
+          return 'Denominator penduduk bernilai nol atau kosong sehingga rasio tidak dihitung.';
+        if (mr === 'missing_in_source')
+          return 'Sumber resmi tidak mencantumkan nilai pada sel ini (disimpan sebagai NULL, bukan 0).';
+        if (mr === 'blocked_quality')
+          return 'Diblokir oleh Quality Gate karena gagal pemeriksaan konsistensi.';
+        return 'Data tidak tersedia untuk kombinasi filter ini.';
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      let state = {
+        metric: params.get('metric') && store.overviews[params.get('metric')] ? params.get('metric') : 'doctor_per_100k',
+        year: ['2023', '2024', '2025'].includes(params.get('year')) ? params.get('year') : '2024',
+        selectedRegion: params.get('region') || null,
+        sortBy: 'value',
+        sortAsc: false,
+      };
+
+      const selectEl = document.getElementById('metric-select');
+      const tabBtns = Array.from(document.querySelectorAll('[data-metric-tab]'));
+      const yearBtns = Array.from(document.querySelectorAll('[data-year-btn]'));
+      const barsWrap = document.getElementById('comparison-bars');
+      const tbody = document.getElementById('regional-tbody');
+
+      function syncUrl() {
+        const next = new URLSearchParams();
+        next.set('metric', state.metric);
+        next.set('year', state.year);
+        if (state.selectedRegion) next.set('region', state.selectedRegion);
+        window.history.replaceState({}, '', `${window.location.pathname}?${next.toString()}`);
+      }
+
+      function getSortedRows(rows) {
+        const copy = [...rows];
+        copy.sort((a, b) => {
+          if (state.sortBy === 'name') {
+            return state.sortAsc
+              ? a.short_name.localeCompare(b.short_name, 'id')
+              : b.short_name.localeCompare(a.short_name, 'id');
+          }
+          const av = a.value;
+          const bv = b.value;
+          if (av === null && bv === null) return a.short_name.localeCompare(b.short_name, 'id');
+          if (av === null) return 1;
+          if (bv === null) return -1;
+          return state.sortAsc ? av - bv : bv - av;
+        });
+        return copy;
+      }
+
+      function renderLineage(ov, row) {
+        const pill = document.getElementById('lin-status-pill');
+        pill.className = pillClass(row.quality_status);
+        pill.textContent = stLabel(row.quality_status, row.missing_reason);
+
+        document.getElementById('lin-region').innerHTML =
+          `${row.region_name} (<span class="mono">${row.region_code}</span>)`;
+        document.getElementById('lin-val').textContent =
+          row.value !== null ? `${fmtVal(row.value, ov.meta.unit)} ${ov.meta.unit}` : `— (${stLabel(row.quality_status, row.missing_reason)})`;
+        document.getElementById('lin-obs-id').textContent = row.observation_id || 'tidak_terbit';
+        document.getElementById('lin-formula').textContent = ov.meta.formula || 'Sumber langsung';
+
+        const inputsBox = document.getElementById('lin-inputs');
+        const lin = row.observation_id ? store.lineages[row.observation_id] : null;
+        if (!lin || !lin.upstream_inputs || lin.upstream_inputs.length === 0) {
+          inputsBox.innerHTML = `<div class="empty-frame">${missingExplain(row.missing_reason)}</div>`;
+          return;
+        }
+        let html = '';
+        if (row.value === null && row.missing_reason) {
+          html += `<div class="empty-frame">${missingExplain(row.missing_reason)}</div>`;
+        }
+        for (const inp of lin.upstream_inputs) {
+          const roleLabel =
+            inp.role === 'numerator'
+              ? 'Pembilang (Numerator)'
+              : inp.role === 'denominator'
+                ? 'Penyebut (Denominator)'
+                : inp.role === 'supporting'
+                  ? 'Komponen Penambah'
+                  : 'Sumber Langsung';
+          html += `
+            <div class="lineage-step">
+              <div class="lineage-step-head">
+                <span>${roleLabel}: <span class="mono">${inp.source_id}</span></span>
+                <span class="num">${fmtVal(inp.value, inp.unit)} ${inp.unit}</span>
+              </div>
+              <div class="lineage-step-meta">
+                <span>Sel: <span class="mono">${inp.source_locator}</span></span>
+                <span>SHA-256: <span class="mono">${(inp.source_sha256 || '').slice(0, 12)}…</span></span>
+                <a class="row-link" href="/datasets/${inp.source_id}">Audit sumber</a>
+              </div>
+            </div>`;
+        }
+        inputsBox.innerHTML = html;
+      }
+
+      function render() {
+        const ov = store.overviews[state.metric][state.year];
+        const rows = getSortedRows(ov.data);
+        if (!state.selectedRegion || !rows.some((r) => r.region_code === state.selectedRegion)) {
+          state.selectedRegion = rows[0]?.region_code || null;
+        }
+
+        selectEl.value = state.metric;
+        tabBtns.forEach((b) =>
+          b.setAttribute('aria-selected', String(b.getAttribute('data-metric-tab') === state.metric))
+        );
+        yearBtns.forEach((b) =>
+          b.setAttribute('aria-pressed', String(b.getAttribute('data-year-btn') === state.year))
+        );
+
+        const provObs = ov.summary.province_observation;
+        const provVal = provObs && provObs.value !== null ? provObs.value : null;
+        const unit = ov.meta.unit;
+        const sUnit = shortUnit(unit);
+
+        document.getElementById('kpi-prov-label').textContent = `Angka Provinsi Kalimantan Timur (${state.year})`;
+        document.getElementById('kpi-prov-val').innerHTML =
+          `${fmtVal(provVal, unit)} <span class="kpi-unit">${sUnit}</span>`;
+        document.getElementById('kpi-prov-sub').textContent = provObs
+          ? `${stLabel(provObs.quality_status, provObs.missing_reason)} · Sumber: ${ov.meta.sources.join(' + ')}`
+          : `Tidak tersedia untuk tahun ${state.year}`;
+
+        document.getElementById('kpi-cov-val').innerHTML =
+          `${ov.summary.valid_region_count} <span class="kpi-unit">/ ${ov.summary.total_target_regions} kab/kota</span>`;
+        document.getElementById('kpi-cov-sub').textContent =
+          ov.summary.valid_region_count === 0
+            ? `Indikator belum tersedia/sepadan pada ${state.year}`
+            : ov.summary.missing_or_blocked_count === 0
+              ? 'Lengkap tanpa wilayah terblokir'
+              : `${ov.summary.missing_or_blocked_count} wilayah kosong/terblokir`;
+
+        const maxR = ov.summary.max_region;
+        const minR = ov.summary.min_region;
+        document.getElementById('kpi-max-val').innerHTML =
+          `${maxR ? fmtVal(maxR.value, unit) : '—'} <span class="kpi-unit">${maxR ? sUnit : ''}</span>`;
+        document.getElementById('kpi-max-sub').textContent = maxR ? maxR.short_name : 'Tidak tersedia pada periode ini';
+        document.getElementById('kpi-min-val').innerHTML =
+          `${minR ? fmtVal(minR.value, unit) : '—'} <span class="kpi-unit">${minR ? sUnit : ''}</span>`;
+        document.getElementById('kpi-min-sub').textContent = minR ? minR.short_name : 'Tidak tersedia pada periode ini';
+
+        // Dynamic finding line computed strictly from active view's real values
+        const findingEl = document.getElementById('page-finding');
+        if (ov.summary.valid_region_count === 0) {
+          findingEl.textContent =
+            ov.meta.kind === 'derived'
+              ? `Pada tahun ${state.year}, indikator ${ov.meta.short_label.toLowerCase()} sengaja tidak dihitung karena denominator penduduk atau komponen pembanding terverifikasi hanya tersedia untuk tahun 2024 (tersedia pada tahun: ${ov.meta.available_years.join(', ') || '2024'}).`
+              : `Dataset sumber untuk ${ov.meta.short_label.toLowerCase()} belum menerbitkan cakupan tahun ${state.year} (tahun tervalidasi: ${ov.meta.available_years.join(', ')}).`;
+        } else if (maxR && minR) {
+          findingEl.textContent = `Pada tahun ${state.year}, ${maxR.short_name} mencatat nilai tertinggi (${fmtVal(maxR.value, unit)} ${unit}), sedangkan ${minR.short_name} berada pada titik terendah (${fmtVal(minR.value, unit)} ${unit}) berdasarkan sumber tervalidasi ${ov.meta.sources.join(' + ')}.`;
+        }
+
+        document.getElementById('chart-heading').textContent = ov.meta.metric_label;
+        document.getElementById('chart-meta').textContent = `Tahun ${state.year} · Klik wilayah untuk melacak sel sumber`;
+        document.getElementById('legend-unit-text').textContent = `Satuan: ${unit}`;
+        const refWrap = document.getElementById('legend-ref-wrap');
+        if (provVal !== null) {
+          refWrap.style.display = 'inline-flex';
+          document.getElementById('legend-ref-text').textContent =
+            `Garis vertikal: Provinsi Kalimantan Timur (${fmtVal(provVal, unit)})`;
+        } else {
+          refWrap.style.display = 'none';
+        }
+
+        document.getElementById('def-text').textContent = ov.meta.operational_definition;
+        document.getElementById('lim-text').textContent = ov.meta.limitations;
+
+        const maxVal = Math.max(...rows.map((r) => (r.value !== null ? r.value : 0)), 1);
+        if (ov.summary.valid_region_count === 0) {
+          const reasonMsg = missingExplain(rows[0]?.missing_reason);
+          barsWrap.innerHTML = `<div class="empty-frame">${reasonMsg} Pilih tahun <strong>2024</strong> atau indikator jumlah absolut untuk membandingkan wilayah.</div>`;
+        } else {
+          barsWrap.innerHTML = rows
+            .map((r) => {
+              const pct = r.value !== null ? Math.max((r.value / (maxVal * 1.08)) * 100, 1.5) : 0;
+              const refPct = provVal !== null ? Math.min((provVal / (maxVal * 1.08)) * 100, 98) : null;
+              const sel = r.region_code === state.selectedRegion;
+              return `
+                <div class="bar-row" role="option" tabindex="0" aria-selected="${sel}" data-region-code="${r.region_code}">
+                  <span class="bar-name">${r.short_name}</span>
+                  <span class="bar-track">
+                    ${r.value !== null ? `<span class="bar-fill" style="width:${pct.toFixed(1)}%"></span>` : ''}
+                    ${refPct !== null ? `<span class="bar-ref-tick" style="left:${refPct.toFixed(1)}%"></span>` : ''}
+                  </span>
+                  <span class="bar-val ${r.value === null ? 'is-missing' : ''}">${fmtVal(r.value, unit)}</span>
+                </div>`;
+            })
+            .join('');
+        }
+
+        const sortArrow = state.sortAsc ? '↑' : '↓';
+        document.querySelector('[data-sort-col="name"]').textContent =
+          `Wilayah ${state.sortBy === 'name' ? sortArrow : ''}`.trim();
+        document.querySelector('[data-sort-col="value"]').innerHTML =
+          `Nilai (<span>${sUnit}</span>) ${state.sortBy === 'value' ? sortArrow : ''}`.trim();
+
+        tbody.innerHTML = rows
+          .map((r) => {
+            const rMeta = store.regionsMeta[r.region_code] || {};
+            const diff = r.value !== null && provVal !== null ? r.value - provVal : null;
+            const diffStr = diff === null ? '—' : `${diff >= 0 ? '+' : ''}${fmtVal(diff, unit)}`;
+            const sel = r.region_code === state.selectedRegion;
+            return `
+              <tr data-row-region="${r.region_code}" aria-selected="${sel}">
+                <td><a class="row-link" href="/regions/${r.region_code}">${r.region_name}</a></td>
+                <td class="mono">${r.region_code} / BPS ${rMeta.bps_numeric || '—'}</td>
+                <td class="n num">${fmtVal(r.value, unit)}</td>
+                <td class="n num">${diffStr}</td>
+                <td><span class="${pillClass(r.quality_status)}">${stLabel(r.quality_status, r.missing_reason)}</span></td>
+                <td class="mono">${r.sources.join(', ')}</td>
+                <td class="n"><button type="button" class="text-action" data-inspect-region="${r.region_code}">Lihat bukti</button></td>
+              </tr>`;
+          })
+          .join('');
+
+        const activeRow = rows.find((r) => r.region_code === state.selectedRegion) || rows[0];
+        if (activeRow) renderLineage(ov, activeRow);
+        syncUrl();
+      }
+
+      tabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.metric = btn.getAttribute('data-metric-tab');
+          render();
+        });
+      });
+      selectEl.addEventListener('change', () => {
+        state.metric = selectEl.value;
+        render();
+      });
+      yearBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.year = btn.getAttribute('data-year-btn');
+          render();
+        });
+      });
+
+      barsWrap.addEventListener('click', (e) => {
+        const row = e.target.closest('[data-region-code]');
+        if (!row) return;
+        state.selectedRegion = row.getAttribute('data-region-code');
+        render();
+      });
+      barsWrap.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const row = e.target.closest('[data-region-code]');
+        if (!row) return;
+        e.preventDefault();
+        state.selectedRegion = row.getAttribute('data-region-code');
+        render();
+      });
+
+      tbody.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-inspect-region]');
+        if (!btn) return;
+        state.selectedRegion = btn.getAttribute('data-inspect-region');
+        render();
+        document.getElementById('lineage-heading')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+
+      document.querySelectorAll('[data-sort-col]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const col = btn.getAttribute('data-sort-col');
+          if (state.sortBy === col) {
+            state.sortAsc = !state.sortAsc;
+          } else {
+            state.sortBy = col;
+            state.sortAsc = col === 'name';
+          }
+          render();
+        });
+      });
+
+      if (params.has('metric') || params.has('year') || params.has('region')) {
+        render();
+      }
+    })();
+  </script>
+</AppShell>

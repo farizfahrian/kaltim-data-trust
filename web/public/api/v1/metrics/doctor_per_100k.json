@@ -1,0 +1,22 @@
+{
+  "metric_code": "doctor_per_100k",
+  "label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+  "short_label": "Tenaga Medis / 100rb Penduduk",
+  "unit": "orang/100.000 penduduk",
+  "kind": "derived",
+  "priority": "P0",
+  "operational_definition": "Rasio jumlah seluruh tenaga medis kedokteran (Dokter Umum, Spesialis, & Dokter Gigi) terhadap 100.000 penduduk pada wilayah dan tahun referensi yang sama.",
+  "formula": "(doctor_total_count / population_count) * 100000",
+  "numerator_source": "SRC-DOC",
+  "denominator_source": "SRC-POP-NAKES",
+  "sources": [
+    "SRC-DOC",
+    "SRC-POP-NAKES"
+  ],
+  "aggregation_rule": "weighted_by_denominator",
+  "valid_periods": [
+    2024
+  ],
+  "limitations": "Menggambarkan kepadatan administratif tenaga medis per penduduk, bukan waktu tunggu, keterjangkauan geografis, atau mutu layanan klinis. Diblokir otomatis untuk selain 2024 karena ketiadaan denominator sepadan.",
+  "methodology_version": "1.0.0"
+}

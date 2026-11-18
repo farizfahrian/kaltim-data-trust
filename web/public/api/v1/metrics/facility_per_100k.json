@@ -1,0 +1,24 @@
+{
+  "metric_code": "facility_per_100k",
+  "label": "Fasilitas Kesehatan Utama per 100.000 Penduduk",
+  "short_label": "Faskes Utama / 100rb Penduduk",
+  "unit": "fasilitas/100.000 penduduk",
+  "kind": "derived",
+  "priority": "P1",
+  "operational_definition": "Rasio jumlah Rumah Sakit dan Puskesmas Induk terhadap 100.000 penduduk pada tahun referensi 2024.",
+  "formula": "(facility_total_count / population_count) * 100000",
+  "numerator_source": "SRC-RS,SRC-PKM-RI,SRC-PKM-NRI",
+  "denominator_source": "SRC-POP-NAKES",
+  "sources": [
+    "SRC-RS",
+    "SRC-PKM-RI",
+    "SRC-PKM-NRI",
+    "SRC-POP-NAKES"
+  ],
+  "aggregation_rule": "weighted_by_denominator",
+  "valid_periods": [
+    2024
+  ],
+  "limitations": "Wilayah berpenduduk kecil namun luas secara geografis (seperti Mahakam Ulu) secara matematis memiliki rasio per kapita lebih tinggi meskipun jarak antar-permukiman sangat jauh.",
+  "methodology_version": "1.0.0"
+}

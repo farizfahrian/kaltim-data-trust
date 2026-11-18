@@ -1,0 +1,249 @@
+{
+  "meta": {
+    "metric_code": "puskesmas_inpatient_count",
+    "metric_label": "Jumlah Puskesmas Rawat Inap",
+    "short_label": "Puskesmas Rawat Inap",
+    "unit": "unit",
+    "kind": "source",
+    "formula": "Nilai kolom 2024 dari SRC-PKM-RI setelah pemadanan kode BPS ke kode Kemendagri",
+    "operational_definition": "Puskesmas yang diberi tambahan sumber daya untuk menyelenggarakan pelayanan rawat inap sesuai kebutuhan wilayah kerja.",
+    "limitations": "Sumber asli menggunakan penomoran kode wilayah BPS (6402=Kutai Barat, 6403=Kutai Kartanegara); wajib melewati pemetaan kode terverifikasi sebelum digabung.",
+    "year": 2024,
+    "available_years": [
+      2024
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-PKM-RI"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 10,
+    "missing_or_blocked_count": 0,
+    "province_observation": {
+      "observation_id": "srcf-8aa6e743089e550a",
+      "region_code": "64",
+      "region_name": "Provinsi Kalimantan Timur",
+      "short_name": "Kalimantan Timur",
+      "region_level": "province",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 89,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R14C4",
+      "lineage_url": "/api/v1/lineage/srcf-8aa6e743089e550a"
+    },
+    "min_region": {
+      "region_code": "64.71",
+      "short_name": "Balikpapan",
+      "value": 0
+    },
+    "max_region": {
+      "region_code": "64.02",
+      "short_name": "Kutai Kartanegara",
+      "value": 23
+    }
+  },
+  "data": [
+    {
+      "observation_id": "srcf-9086eeff6a025ef8",
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 9,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R4C4",
+      "lineage_url": "/api/v1/lineage/srcf-9086eeff6a025ef8"
+    },
+    {
+      "observation_id": "srcf-66aa872292e75f78",
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 23,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R6C4",
+      "lineage_url": "/api/v1/lineage/srcf-66aa872292e75f78"
+    },
+    {
+      "observation_id": "srcf-efdcf0c745e45447",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 8,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R8C4",
+      "lineage_url": "/api/v1/lineage/srcf-efdcf0c745e45447"
+    },
+    {
+      "observation_id": "srcf-b970322d18c05571",
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 14,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R5C4",
+      "lineage_url": "/api/v1/lineage/srcf-b970322d18c05571"
+    },
+    {
+      "observation_id": "srcf-881dd2d9b688510e",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 18,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R7C4",
+      "lineage_url": "/api/v1/lineage/srcf-881dd2d9b688510e"
+    },
+    {
+      "observation_id": "srcf-f89199ddf45350d8",
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 9,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R9C4",
+      "lineage_url": "/api/v1/lineage/srcf-f89199ddf45350d8"
+    },
+    {
+      "observation_id": "srcf-1ca07f4ba5ec5b63",
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 6,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R10C4",
+      "lineage_url": "/api/v1/lineage/srcf-1ca07f4ba5ec5b63"
+    },
+    {
+      "observation_id": "srcf-52105944cb285557",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 0,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R11C4",
+      "lineage_url": "/api/v1/lineage/srcf-52105944cb285557"
+    },
+    {
+      "observation_id": "srcf-1ce085d48f035723",
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 2,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R12C4",
+      "lineage_url": "/api/v1/lineage/srcf-1ce085d48f035723"
+    },
+    {
+      "observation_id": "srcf-f6cc2bf39a725c81",
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 0,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R13C4",
+      "lineage_url": "/api/v1/lineage/srcf-f6cc2bf39a725c81"
+    }
+  ]
+}

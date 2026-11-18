@@ -1,0 +1,142 @@
+---
+import AppShell from '../../layouts/AppShell.astro';
+import { snapshotData, formatMetricValue } from '../../lib/format';
+
+const regencies = snapshotData.regions.filter((r) => r.region_level !== 'province');
+const details = snapshotData.region_details_2024 as Record<string, any>;
+const provDetail = details['64'];
+
+function valOf(regCode: string, metricCode: string): number | null {
+  const m = details[regCode]?.metrics?.find((x: any) => x.metric_code === metricCode);
+  return m?.value ?? null;
+}
+
+const rows = regencies
+  .map((r) => ({
+    ...r,
+    pop: valOf(r.region_code, 'population_count'),
+    docTotal: valOf(r.region_code, 'doctor_total_count'),
+    docGen: valOf(r.region_code, 'doctor_general_count'),
+    docSpec: valOf(r.region_code, 'doctor_specialist_count'),
+    rs: valOf(r.region_code, 'hospital_total_count'),
+    pkm: valOf(r.region_code, 'puskesmas_total_count'),
+    ratio: valOf(r.region_code, 'doctor_per_100k'),
+    codeDiffers: r.kemendagri_numeric !== r.bps_numeric,
+  }))
+  .sort((a, b) => (b.ratio ?? 0) - (a.ratio ?? 0));
+---
+
+<AppShell
+  title="Kabupaten & Kota"
+  activeNav="regions"
+  crumb="Kesehatan Kalimantan Timur / Matriks 10 kabupaten & kota"
+>
+  <div class="title-row">
+    <div>
+      <h1>Matriks Indikator Kabupaten &amp; Kota Kalimantan Timur (2024)</h1>
+      <p class="finding">
+        Empat kabupaten (Kutai Kartanegara, Berau, Kutai Barat, dan Kutai Timur) memiliki penomoran kode numerik berbeda antara Kemendagri dan BPS; seluruh angka di bawah telah dipadankan dan direkonsiliasi silang.
+      </p>
+    </div>
+    <div class="title-actions">
+      <a class="btn" href="/methodology">Lihat jembatan kode wilayah</a>
+    </div>
+  </div>
+
+  <section class="kpis" aria-label="Ringkasan wilayah administratif">
+    <div class="kpi lead">
+      <div class="kpi-label">Total populasi terverifikasi</div>
+      <div class="kpi-value">
+        {formatMetricValue(valOf('64', 'population_count'), 'jiwa')}
+        <span class="kpi-unit">jiwa</span>
+      </div>
+      <div class="kpi-sub">10/10 kab/kota rekonsiliasi 100%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Total tenaga medis (2024)</div>
+      <div class="kpi-value">
+        {formatMetricValue(valOf('64', 'doctor_total_count'), 'orang')}
+        <span class="kpi-unit">orang</span>
+      </div>
+      <div class="kpi-sub">2.319 dokter umum · 610 drg</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Rumah sakit &amp; puskesmas</div>
+      <div class="kpi-value">
+        {formatMetricValue(valOf('64', 'facility_total_count'), 'fasilitas')}
+        <span class="kpi-unit">faskes</span>
+      </div>
+      <div class="kpi-sub">47 RS + 188 Puskesmas induk</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Wilayah beda kode BPS</div>
+      <div class="kpi-value">
+        4
+        <span class="kpi-unit">/ 10 daerah</span>
+      </div>
+      <div class="kpi-sub">Kukar, Berau, Kubar, Kutim</div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="matrix-heading">
+    <div class="panel-head">
+      <h2 id="matrix-heading">Perbandingan lintas indikator tahun referensi 2024</h2>
+      <span class="panel-meta">Klik nama wilayah untuk membuka rincian metrik &amp; tren 2023–2025</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Kabupaten / kota</th>
+            <th>Kode Kemendagri</th>
+            <th>Kode BPS</th>
+            <th class="n">Penduduk (jiwa)</th>
+            <th class="n">Tenaga medis</th>
+            <th class="n">Dokter umum</th>
+            <th class="n">RS (unit)</th>
+            <th class="n">Puskesmas</th>
+            <th class="n">Rasio / 100rb</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <td>
+                <a class="row-link" href={`/regions/${r.region_code}`}>
+                  {r.region_name}
+                </a>
+              </td>
+              <td class="mono">{r.region_code}</td>
+              <td class="mono">
+                {r.bps_numeric}
+                {r.codeDiffers && <span class="cell-sub">Beda dari {r.kemendagri_numeric}</span>}
+              </td>
+              <td class="n num">{formatMetricValue(r.pop, 'jiwa')}</td>
+              <td class="n num">{formatMetricValue(r.docTotal, 'orang')}</td>
+              <td class="n num">{formatMetricValue(r.docGen, 'orang')}</td>
+              <td class="n num">{formatMetricValue(r.rs, 'unit')}</td>
+              <td class="n num">{formatMetricValue(r.pkm, 'unit')}</td>
+              <td class="n num">{formatMetricValue(r.ratio, 'orang/100.000 penduduk')}</td>
+            </tr>
+          ))}
+          {provDetail && (
+            <tr>
+              <td>
+                <a class="row-link" href="/regions/64">Provinsi Kalimantan Timur</a>
+              </td>
+              <td class="mono">64</td>
+              <td class="mono">6400</td>
+              <td class="n num">{formatMetricValue(valOf('64', 'population_count'), 'jiwa')}</td>
+              <td class="n num">{formatMetricValue(valOf('64', 'doctor_total_count'), 'orang')}</td>
+              <td class="n num">{formatMetricValue(valOf('64', 'doctor_general_count'), 'orang')}</td>
+              <td class="n num">{formatMetricValue(valOf('64', 'hospital_total_count'), 'unit')}</td>
+              <td class="n num">{formatMetricValue(valOf('64', 'puskesmas_total_count'), 'unit')}</td>
+              <td class="n num">{formatMetricValue(valOf('64', 'doctor_per_100k'), 'orang/100.000 penduduk')}</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</AppShell>

@@ -1,0 +1,125 @@
+{
+  "data": [
+    {
+      "region_code": "64",
+      "region_name": "Provinsi Kalimantan Timur",
+      "short_name": "Kalimantan Timur",
+      "region_level": "province",
+      "parent_region_code": null,
+      "kemendagri_numeric": "64",
+      "bps_numeric": "6400",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    },
+    {
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "parent_region_code": "64",
+      "kemendagri_numeric": "6401",
+      "bps_numeric": "6401",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    },
+    {
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "parent_region_code": "64",
+      "kemendagri_numeric": "6402",
+      "bps_numeric": "6403",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    },
+    {
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "parent_region_code": "64",
+      "kemendagri_numeric": "6403",
+      "bps_numeric": "6405",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    },
+    {
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "parent_region_code": "64",
+      "kemendagri_numeric": "6407",
+      "bps_numeric": "6402",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    },
+    {
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "parent_region_code": "64",
+      "kemendagri_numeric": "6408",
+      "bps_numeric": "6404",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    },
+    {
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "parent_region_code": "64",
+      "kemendagri_numeric": "6409",
+      "bps_numeric": "6409",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    },
+    {
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "parent_region_code": "64",
+      "kemendagri_numeric": "6411",
+      "bps_numeric": "6411",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    },
+    {
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "parent_region_code": "64",
+      "kemendagri_numeric": "6471",
+      "bps_numeric": "6471",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    },
+    {
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "parent_region_code": "64",
+      "kemendagri_numeric": "6472",
+      "bps_numeric": "6472",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    },
+    {
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "parent_region_code": "64",
+      "kemendagri_numeric": "6474",
+      "bps_numeric": "6474",
+      "code_system": "Kepmendagri 100.1.1-6117/2022",
+      "code_valid_from": "2022-11-09"
+    }
+  ]
+}

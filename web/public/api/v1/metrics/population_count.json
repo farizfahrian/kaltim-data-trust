@@ -1,0 +1,21 @@
+{
+  "metric_code": "population_count",
+  "label": "Jumlah Penduduk",
+  "short_label": "Penduduk",
+  "unit": "jiwa",
+  "kind": "source",
+  "priority": "P0",
+  "operational_definition": "Jumlah penduduk kabupaten/kota tahun referensi 2024 yang digunakan Dinas Kesehatan Prov. Kaltim sebagai denominator resmi rasio tenaga kesehatan.",
+  "formula": "Nilai kolom JUMLAH PENDUDUK dari SRC-POP-NAKES dalam satuan jiwa utuh (total 10 kab/kota = 4.045.858 jiwa)",
+  "numerator_source": "SRC-POP-NAKES",
+  "denominator_source": null,
+  "sources": [
+    "SRC-POP-NAKES"
+  ],
+  "aggregation_rule": "sum_regencies_if_reconciled",
+  "valid_periods": [
+    2024
+  ],
+  "limitations": "Hanya digunakan sebagai denominator untuk indikator tahun 2024 yang sama; dilarang dipakai untuk menghitung rasio tahun 2023 atau 2025.",
+  "methodology_version": "1.0.0"
+}

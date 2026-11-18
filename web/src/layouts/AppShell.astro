@@ -1,0 +1,183 @@
+---
+import '../styles/app.css';
+import { snapshotData } from '../lib/format';
+
+interface Props {
+  title: string;
+  activeNav: 'overview' | 'regions' | 'datasets' | 'metrics' | 'methodology' | 'about';
+  crumb: string;
+}
+
+const { title, activeNav, crumb } = Astro.props;
+const snap = snapshotData.snapshot;
+const quarantinedCount = snapshotData.datasets.filter((d) => d.quality_status === 'blocked').length;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · Kaltim Data Trust</title>
+    <meta
+      name="description"
+      content="Prototipe riset independen tata kelola kualitas data, standarisasi kode wilayah Kemendagri–BPS, dan analitik kesehatan publik Kalimantan Timur dengan pelacakan sumber penuh."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-sheet">Lewati ke konten utama</a>
+
+    <div class="app-frame">
+      <aside class="sidebar" id="app-sidebar" aria-label="Navigasi ruang kerja">
+        <div class="mobile-close-row">
+          <span class="brand-name">Navigasi</span>
+          <button type="button" class="btn" id="sidebar-close-btn">Tutup</button>
+        </div>
+
+        <a href="/" class="brand-row">
+          <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+            <rect x="13" y="3" width="8" height="8" rx="1.5" fill="currentColor" />
+            <rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+            <path d="M14.5 17.2l2.1 2.1 3.9-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span class="brand-text">
+            <span class="brand-name">Kaltim Data Trust</span>
+            <span class="brand-scope">Kesehatan Publik · Kaltim</span>
+          </span>
+        </a>
+
+        <div class="group-label">Analitik daerah</div>
+        <nav class="nav-list" aria-label="Menu analitik">
+          <a href="/" class="nav-item" aria-current={activeNav === 'overview' ? 'page' : undefined}>
+            <span class="nav-item-main">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M4 19h16M7 15V9m5 6V5m5 10v-4" stroke-linecap="round" />
+              </svg>
+              <span>Ringkasan wilayah</span>
+            </span>
+          </a>
+          <a href="/regions" class="nav-item" aria-current={activeNav === 'regions' ? 'page' : undefined}>
+            <span class="nav-item-main">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M3 6.5l6-2 6 2 6-2v13l-6 2-6-2-6 2v-13zM9 4.5v13m6-11v13" stroke-linejoin="round" />
+              </svg>
+              <span>Kabupaten &amp; kota</span>
+            </span>
+          </a>
+          <a href="/metrics" class="nav-item" aria-current={activeNav === 'metrics' ? 'page' : undefined}>
+            <span class="nav-item-main">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M5 7h14M5 12h10M5 17h14" stroke-linecap="round" />
+              </svg>
+              <span>Kamus indikator</span>
+            </span>
+          </a>
+        </nav>
+
+        <div class="group-label">Tata kelola data</div>
+        <nav class="nav-list" aria-label="Menu tata kelola">
+          <a href="/datasets" class="nav-item" aria-current={activeNav === 'datasets' ? 'page' : undefined}>
+            <span class="nav-item-main">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <ellipse cx="12" cy="6" rx="7" ry="3" />
+                <path d="M5 6v6c0 1.66 3.13 3 7 3s7-1.34 7-3V6M5 12v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
+              </svg>
+              <span>Audit sumber</span>
+            </span>
+            {quarantinedCount > 0 && (
+              <span class="nav-queue-badge" title="Dataset tertahan oleh Quality Gate">
+                {quarantinedCount} gagal
+              </span>
+            )}
+          </a>
+          <a href="/methodology" class="nav-item" aria-current={activeNav === 'methodology' ? 'page' : undefined}>
+            <span class="nav-item-main">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M9 4h10v16H5V8l4-4z" stroke-linejoin="round" />
+                <path d="M9 4v4H5m4 5h6m-6 4h6" stroke-linecap="round" />
+              </svg>
+              <span>Metodologi &amp; SQL</span>
+            </span>
+          </a>
+          <a href="/about" class="nav-item" aria-current={activeNav === 'about' ? 'page' : undefined}>
+            <span class="nav-item-main">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <circle cx="12" cy="12" r="8.5" />
+                <path d="M12 11v5m0-8h.01" stroke-linecap="round" />
+              </svg>
+              <span>Tentang &amp; lisensi</span>
+            </span>
+          </a>
+        </nav>
+
+        <div class="sidebar-foot">
+          <div>
+            Snapshot aktif: <span class="mono">{snap.snapshot_id.slice(0, 13)}</span>
+          </div>
+          <span class="disclaimer-tag">
+            Prototipe riset independen · Bukan sistem resmi Pemprov/Diskominfo Kaltim.
+          </span>
+        </div>
+      </aside>
+
+      <div class="main-column">
+        <header class="topbar">
+          <div class="topbar-left">
+            <button
+              type="button"
+              class="btn menu-toggle"
+              id="sidebar-open-btn"
+              aria-controls="app-sidebar"
+              aria-expanded="false"
+            >
+              Menu
+            </button>
+            <span class="topbar-crumb">{crumb}</span>
+          </div>
+          <div class="topbar-right">
+            <span class="topbar-crumb hide-xs">Diperiksa 18 Nov 2026 · 5 sumber aktif</span>
+            <a class="btn" href="/api/v1/manifest.json">Manifest JSON</a>
+          </div>
+        </header>
+
+        <main class="sheet" id="main-sheet">
+          <slot />
+
+          <footer class="sheet-footer">
+            <span>
+              Kaltim Data Trust · Riset rekayasa kualitas data publik independen oleh Fariz Fahrian (bukan portal resmi pemerintah).
+            </span>
+            <span>
+              Sumber data asli: <a class="row-link" href="https://data.kaltimprov.go.id/organization/dinas-kesehatan" target="_blank" rel="noopener noreferrer">Dinas Kesehatan via Satu Data Kaltim</a>
+            </span>
+          </footer>
+        </main>
+      </div>
+    </div>
+
+    <script is:inline>
+      (() => {
+        const sidebar = document.getElementById('app-sidebar');
+        const openBtn = document.getElementById('sidebar-open-btn');
+        const closeBtn = document.getElementById('sidebar-close-btn');
+        if (!sidebar || !openBtn) return;
+        const setOpen = (open) => {
+          sidebar.classList.toggle('open', open);
+          openBtn.setAttribute('aria-expanded', String(open));
+        };
+        openBtn.addEventListener('click', () => setOpen(true));
+        if (closeBtn) closeBtn.addEventListener('click', () => setOpen(false));
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && sidebar.classList.contains('open')) setOpen(false);
+        });
+      })();
+    </script>
+  </body>
+</html>

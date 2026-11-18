@@ -1,0 +1,28 @@
+# Never commit external unverified/unlicensed raw datasets (PRD Section 4.1 & 11.3)
+data/raw/*
+!data/raw/.gitkeep
+data/exports/*
+!data/exports/.gitkeep
+data/*.db
+data/*.db-journal
+
+# Python
+.venv/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Node / Astro / Cloudflare
+node_modules/
+web/dist/
+web/.astro/
+web/.wrangler/
+web/.taste-skill/inspect/
+
+# Secrets & OS
+.env
+.env.*
+!.env.example
+.DS_Store

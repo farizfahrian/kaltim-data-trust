@@ -1,0 +1,223 @@
+{
+  "meta": {
+    "metric_code": "puskesmas_non_inpatient_count",
+    "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+    "short_label": "Puskesmas Non Rawat Inap",
+    "unit": "unit",
+    "kind": "source",
+    "formula": "Nilai kolom 2024 dari SRC-PKM-NRI setelah pemadanan kode BPS ke kode Kemendagri",
+    "operational_definition": "Puskesmas yang menyelenggarakan pelayanan rawat jalan tingkat pertama (tanpa rawat inap kecuali persalinan normal).",
+    "limitations": "Nilai 0 pada Kabupaten Mahakam Ulu adalah nol faktual terverifikasi (seluruh 6 Puskesmas di Mahakam Ulu berstatus Rawat Inap).",
+    "year": 2025,
+    "available_years": [
+      2024
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-PKM-NRI"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 0,
+    "missing_or_blocked_count": 10,
+    "province_observation": null,
+    "min_region": null,
+    "max_region": null
+  },
+  "data": [
+    {
+      "observation_id": null,
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": null,
+      "unit": "unit",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": null,
+      "unit": "unit",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": null,
+      "unit": "unit",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": null,
+      "unit": "unit",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": null,
+      "unit": "unit",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": null,
+      "unit": "unit",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": null,
+      "unit": "unit",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": null,
+      "unit": "unit",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": null,
+      "unit": "unit",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": null,
+      "unit": "unit",
+      "quality_status": "warning",
+      "missing_reason": "missing_in_source",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    }
+  ]
+}

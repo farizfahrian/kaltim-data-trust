@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: kdt
+      POSTGRES_PASSWORD: kdt_local_dev
+      POSTGRES_DB: kaltim_data_trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - kdt_pgdata:/var/lib/postgresql/data
+      - ./sql/schema_postgres.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kdt -d kaltim_data_trust"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    image: python:3.12-slim
+    working_dir: /workspace/pipeline
+    volumes:
+      - ./:/workspace
+    environment:
+      KDT_DATABASE_URL: postgresql+psycopg://kdt:kdt_local_dev@postgres:5432/kaltim_data_trust
+    command: >
+      sh -c "pip install --no-cache-dir '.[postgres]' &&
+             uvicorn kdt.api:app --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    image: node:22-alpine
+    working_dir: /workspace/web
+    volumes:
+      - ./:/workspace
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 4321"
+    ports:
+      - "4321:4321"
+
+volumes:
+  kdt_pgdata:

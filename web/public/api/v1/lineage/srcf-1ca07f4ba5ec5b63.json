@@ -1,0 +1,33 @@
+{
+  "observation_id": "srcf-1ca07f4ba5ec5b63",
+  "observation_kind": "source",
+  "region_code": "64.11",
+  "region_name": "Kabupaten Mahakam Ulu",
+  "year": 2024,
+  "metric_code": "puskesmas_inpatient_count",
+  "metric_label": "Jumlah Puskesmas Rawat Inap",
+  "value": 6,
+  "unit": "unit",
+  "quality_status": "validated",
+  "missing_reason": null,
+  "formula": "Nilai kolom 2024 dari SRC-PKM-RI setelah pemadanan kode BPS ke kode Kemendagri",
+  "transformation_version": "1.0.0",
+  "upstream_inputs": [
+    {
+      "role": "direct_source",
+      "fact_id": "srcf-1ca07f4ba5ec5b63",
+      "metric_code": "puskesmas_inpatient_count",
+      "value": 6,
+      "unit": "unit",
+      "source_id": "SRC-PKM-RI",
+      "source_title": "Jumlah Puskesmas Rawat Inap Tahun 2024",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-rawat-inap-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-rawat-inap-tahun-2024",
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R10C4",
+      "run_id": "run-765a3718acc958e9",
+      "source_sha256": "f927d32043e6e448d0f0b246b858691515306a96d36fabc8cf8e50a00f743b29",
+      "retrieved_at": "2026-11-18T06:54:20"
+    }
+  ]
+}

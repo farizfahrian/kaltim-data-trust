@@ -1,0 +1,22 @@
+{
+  "metric_code": "doctor_general_per_100k",
+  "label": "Dokter Umum per 100.000 Penduduk",
+  "short_label": "Dokter Umum / 100rb Penduduk",
+  "unit": "orang/100.000 penduduk",
+  "kind": "derived",
+  "priority": "P0",
+  "operational_definition": "Rasio jumlah Dokter Umum terhadap 100.000 penduduk pada kabupaten/kota di tahun referensi 2024.",
+  "formula": "(doctor_general_count / population_count) * 100000",
+  "numerator_source": "SRC-DOC",
+  "denominator_source": "SRC-POP-NAKES",
+  "sources": [
+    "SRC-DOC",
+    "SRC-POP-NAKES"
+  ],
+  "aggregation_rule": "weighted_by_denominator",
+  "valid_periods": [
+    2024
+  ],
+  "limitations": "Tidak mencerminkan distribusi antar-kecamatan pedalaman vs perkotaan di dalam satu kabupaten.",
+  "methodology_version": "1.0.0"
+}

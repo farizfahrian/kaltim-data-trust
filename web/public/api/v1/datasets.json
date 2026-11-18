@@ -1,0 +1,196 @@
+{
+  "data": [
+    {
+      "source_id": "SRC-DOC",
+      "title": "Distribusi Tenaga Dokter di Provinsi Kalimantan Timur Tahun 2022 - 2025",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/id/dataset/distribusi-tenaga-dokter-di-provinsi-kalimantan-timur",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/2c14404c-7069-4448-9848-2584fb54786b/resource/e61b504d-6ca8-4ebe-b71e-7ac32b50ce45/download/1-dokter.xlsx",
+      "reported_format": "CSV",
+      "actual_format": "XLSX",
+      "region_code_system": "kemendagri_with_name_authority",
+      "license_status": "No License Provided in CKAN header; Metadata Indikator Dinkes states 'Apakah dapat diakses umum: Ya'",
+      "publication_allowed": "curated_aggregates_with_attribution_no_raw_redistribution",
+      "quality_status": "warning",
+      "latest_run": {
+        "run_id": "run-69d998f354a8537f",
+        "status": "PUBLISHED",
+        "source_sha256": "f427719f44070b01021ab25e8a5fe7cded0e39de75f3ded705bbd87b62eac8ad",
+        "file_size_bytes": 29159,
+        "retrieved_at": "2026-11-18T06:50:55",
+        "input_row_count": 66,
+        "output_row_count": 132,
+        "quarantined_row_count": 11,
+        "rules_summary": {
+          "pass": 9,
+          "warn": 5,
+          "fail": 0
+        }
+      },
+      "known_limitations": [
+        "Resource berlabel CSV di katalog CKAN namun byte aktual adalah kontainer ZIP/XLSX (PK\\x03\\x04) dengan SHA-256 identik terhadap 1-dokter.xlsx.",
+        "Baris R65 (Bontang) memiliki kode wilayah salah ketik 6472.0 (duplikat kode Samarinda); sistem memetakan melalui nama wilayah resmi dan mencatat temuan audit DQ-003.",
+        "Baris 'Dokter' dihitung dengan rumus =SUM termasuk Dokter Gigi & Dokter Gigi Spesialis (setara Tenaga Medis Permenkes 18/2022).",
+        "Tahun 2022 pada Berau dan Kutai Barat memiliki nilai subkategori Dokter Umum > nilai total Dokter sehingga diblokir oleh DQ-007.",
+        "Kolom TH 2026 pada sheet belum selesai tahun berjalan dan dikecualikan dari publikasi."
+      ]
+    },
+    {
+      "source_id": "SRC-DOC-RATIO-BAD",
+      "title": "Distribusi Jumlah dan Rasio Tenaga Medis di Provinsi Kalimantan Timur Tahun 2024 (Quarantined Audit Target)",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/distribusi-jumlah-dan-rasio-tenaga-medis-di-provinsi-kalimantan-timur-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/distribusi-jumlah-dan-rasio-tenaga-medis-di-provinsi-kalimantan-timur-tahun-2024",
+      "reported_format": "XLSX",
+      "actual_format": "XLSX",
+      "region_code_system": "name_only",
+      "license_status": "No License Provided in CKAN header",
+      "publication_allowed": "quarantined_audit_only",
+      "quality_status": "blocked",
+      "latest_run": {
+        "run_id": "run-aab7f6cb86c756e0",
+        "status": "QUARANTINED",
+        "source_sha256": "aa5b1aee1547e95ea7c24342ba542975c6a61c2b63a80664c236fb20c2d0b343",
+        "file_size_bytes": 10808,
+        "retrieved_at": "2026-11-18T06:54:25",
+        "input_row_count": 11,
+        "output_row_count": 0,
+        "quarantined_row_count": 11,
+        "rules_summary": {
+          "pass": 11,
+          "warn": 1,
+          "fail": 2
+        }
+      },
+      "known_limitations": [
+        "DIKARANTINA PENUH oleh Quality Gate: kolom Rasio Dokter Umum terkorupsi menjadi serial waktu Excel (1.877 hari alih-alih 45.30 per 100rb penduduk), kolom Jumlah Penduduk terpotong pemisah ribuan menjadi desimal (286.991 jiwa terbaca float 286.990999), dan baris total provinsi Tenaga Kesehatan Teregistrasi tertulis '27.04' alih-alih 27.040."
+      ]
+    },
+    {
+      "source_id": "SRC-PKM-NRI",
+      "title": "Jumlah Puskesmas Non Rawat Inap Tahun 2024",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-non-rawat-inap-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-non-rawat-inap-tahun-2024",
+      "reported_format": "XLSX",
+      "actual_format": "XLSX",
+      "region_code_system": "bps",
+      "license_status": "No License Provided in CKAN header; Metadata Indikator R14 states 'Apakah dapat diakses umum: Ya'",
+      "publication_allowed": "curated_aggregates_with_attribution_no_raw_redistribution",
+      "quality_status": "validated",
+      "latest_run": {
+        "run_id": "run-759d7e82fc7f53c0",
+        "status": "PUBLISHED",
+        "source_sha256": "c6f54da0db4bfde880f5c4db6e79f95e14fd29c9b04711b808d96597e3dd7f68",
+        "file_size_bytes": 23932,
+        "retrieved_at": "2026-11-18T06:54:20",
+        "input_row_count": 11,
+        "output_row_count": 11,
+        "quarantined_row_count": 0,
+        "rules_summary": {
+          "pass": 14,
+          "warn": 0,
+          "fail": 0
+        }
+      },
+      "known_limitations": [
+        "Kolom KODE menggunakan sistem kode BPS; dipadankan secara eksplisit ke kode Kemendagri kanonik dengan validasi silang nama wilayah."
+      ]
+    },
+    {
+      "source_id": "SRC-PKM-RI",
+      "title": "Jumlah Puskesmas Rawat Inap Tahun 2024",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-rawat-inap-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-rawat-inap-tahun-2024",
+      "reported_format": "XLSX",
+      "actual_format": "XLSX",
+      "region_code_system": "bps",
+      "license_status": "No License Provided in CKAN header; Metadata Indikator R11 states 'Apakah dapat diakses umum: Ya'",
+      "publication_allowed": "curated_aggregates_with_attribution_no_raw_redistribution",
+      "quality_status": "validated",
+      "latest_run": {
+        "run_id": "run-765a3718acc958e9",
+        "status": "PUBLISHED",
+        "source_sha256": "f927d32043e6e448d0f0b246b858691515306a96d36fabc8cf8e50a00f743b29",
+        "file_size_bytes": 23901,
+        "retrieved_at": "2026-11-18T06:54:20",
+        "input_row_count": 11,
+        "output_row_count": 11,
+        "quarantined_row_count": 0,
+        "rules_summary": {
+          "pass": 14,
+          "warn": 0,
+          "fail": 0
+        }
+      },
+      "known_limitations": [
+        "Kolom KODE menggunakan sistem kode BPS (6402=Kutai Barat, 6403=Kutai Kartanegara, 6404=Kutai Timur, 6405=Berau), berbeda dengan SRC-DOC & SRC-RS yang memakai Kemendagri."
+      ]
+    },
+    {
+      "source_id": "SRC-POP-NAKES",
+      "title": "Rasio Tenaga Kesehatan di Provinsi Kalimantan Timur Tahun 2024 (Denominator Penduduk)",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (berdasarkan proyeksi/registrasi penduduk kab/kota 2024)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/rasio-tenaga-kesehatan-di-provinsi-kalimantan-timur-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/6073c398-fc1b-44ac-956c-470d4c2e44e3/resource/5f3bf720-ffd6-45a3-a2f0-d2fd3c8f4d33/download/5-rasio-tenaga-kesehatan.xlsx",
+      "reported_format": "XLSX",
+      "actual_format": "XLSX",
+      "region_code_system": "name_only",
+      "license_status": "No License Provided in CKAN header",
+      "publication_allowed": "curated_aggregates_with_attribution_no_raw_redistribution",
+      "quality_status": "validated",
+      "latest_run": {
+        "run_id": "run-31fed06b254651e9",
+        "status": "PUBLISHED",
+        "source_sha256": "f0589145f52b99429ff876f0ea4fddf589e725a6d13251be3a38579a0914515c",
+        "file_size_bytes": 10864,
+        "retrieved_at": "2026-11-18T06:58:31",
+        "input_row_count": 11,
+        "output_row_count": 11,
+        "quarantined_row_count": 0,
+        "rules_summary": {
+          "pass": 14,
+          "warn": 0,
+          "fail": 0
+        }
+      },
+      "known_limitations": [
+        "Halaman tabel langsung kaltim.bps.go.id memblokir pengunduhan terotomasi (HTTP 403 anti-bot), sehingga denominator penduduk 2024 diambil dari publikasi resmi Dinkes Kaltim 2024 yang memuat bilangan bulat utuh (total 4.045.858 jiwa) dan terverifikasi konsisten terhadap ringkasan publikasi Kalimantan Timur Dalam Angka 2024.",
+        "Kolom SDM yang ditingkatkan kompetensinya berisi sentinel 'TAD' (Tidak Ada Data) dan tidak dipublikasikan."
+      ]
+    },
+    {
+      "source_id": "SRC-RS",
+      "title": "Jumlah Rumah Sakit Tahun 2024",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/jumlah-rumah-sakit-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/jumlah-rumah-sakit-tahun-2024",
+      "reported_format": "XLSX",
+      "actual_format": "XLSX",
+      "region_code_system": "kemendagri",
+      "license_status": "No License Provided in CKAN header; Metadata Indikator R5 states 'Apakah dapat diakses umum: Ya'",
+      "publication_allowed": "curated_aggregates_with_attribution_no_raw_redistribution",
+      "quality_status": "validated",
+      "latest_run": {
+        "run_id": "run-86629f74a35351e7",
+        "status": "PUBLISHED",
+        "source_sha256": "0815eaf574d3c16fc6d3da2a3f78ae5f783128d120c9a104ab015bd0601414ef",
+        "file_size_bytes": 9314,
+        "retrieved_at": "2026-11-18T06:54:20",
+        "input_row_count": 11,
+        "output_row_count": 11,
+        "quarantined_row_count": 0,
+        "rules_summary": {
+          "pass": 14,
+          "warn": 0,
+          "fail": 0
+        }
+      },
+      "known_limitations": [
+        "Menggantikan kandidat URL katalog lama (jumlah-fasilitas-pelayanan-kesehatan-...-2023-2025) yang mengembalikan HTTP 404 saat audit 18 Nov 2026.",
+        "Header kolom wilayah bernama 'RUMAH SAKIT UMUM' meskipun judul dan Metadata Indikator mendefinisikan variabel sebagai Jumlah Rumah Sakit (total 47 unit provinsi)."
+      ]
+    }
+  ]
+}

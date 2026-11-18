@@ -1,0 +1,153 @@
+manifest_version: "1.0.0"
+sources:
+  - source_id: "SRC-DOC"
+    title: "Distribusi Tenaga Dokter di Provinsi Kalimantan Timur Tahun 2022 - 2025"
+    publisher: "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)"
+    dataset_url: "https://data.kaltimprov.go.id/id/dataset/distribusi-tenaga-dokter-di-provinsi-kalimantan-timur"
+    resource_url: "https://data.kaltimprov.go.id/dataset/2c14404c-7069-4448-9848-2584fb54786b/resource/e61b504d-6ca8-4ebe-b71e-7ac32b50ce45/download/1-dokter.xlsx"
+    retrieved_at_utc: "2026-11-18T06:50:55Z"
+    original_filename: "1 TENAGA DOKTER.csv (download: 1-dokter.xlsx)"
+    local_raw_filename: "src-doc_0_1-dokter.xlsx"
+    expected_sha256: "f427719f44070b01021ab25e8a5fe7cded0e39de75f3ded705bbd87b62eac8ad"
+    size_bytes: 29159
+    reported_format: "CSV"
+    actual_format: "XLSX"
+    license_statement: "No License Provided in CKAN header; Metadata Indikator Dinkes states 'Apakah dapat diakses umum: Ya'"
+    publication_allowed: "curated_aggregates_with_attribution_no_raw_redistribution"
+    reference_years: [2022, 2023, 2024, 2025]
+    published_years: [2023, 2024, 2025]
+    raw_grain: "region_block × doctor_category × year_columns"
+    normalized_grain: "region_code, reference_year, metric_code"
+    region_code_system: "kemendagri_with_name_authority"
+    parser_adapter: "dinkes_doctor_blocks_xlsx"
+    known_limitations:
+      - "Resource berlabel CSV di katalog CKAN namun byte aktual adalah kontainer ZIP/XLSX (PK\\x03\\x04) dengan SHA-256 identik terhadap 1-dokter.xlsx."
+      - "Baris R65 (Bontang) memiliki kode wilayah salah ketik 6472.0 (duplikat kode Samarinda); sistem memetakan melalui nama wilayah resmi dan mencatat temuan audit DQ-003."
+      - "Baris 'Dokter' dihitung dengan rumus =SUM termasuk Dokter Gigi & Dokter Gigi Spesialis (setara Tenaga Medis Permenkes 18/2022)."
+      - "Tahun 2022 pada Berau dan Kutai Barat memiliki nilai subkategori Dokter Umum > nilai total Dokter sehingga diblokir oleh DQ-007."
+      - "Kolom TH 2026 pada sheet belum selesai tahun berjalan dan dikecualikan dari publikasi."
+
+  - source_id: "SRC-RS"
+    title: "Jumlah Rumah Sakit Tahun 2024"
+    publisher: "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)"
+    dataset_url: "https://data.kaltimprov.go.id/dataset/jumlah-rumah-sakit-tahun-2024"
+    resource_url: "https://data.kaltimprov.go.id/dataset/jumlah-rumah-sakit-tahun-2024"
+    retrieved_at_utc: "2026-11-18T06:54:20Z"
+    original_filename: "Jumlah Rumah Sakit Tahun 2024.xlsx"
+    local_raw_filename: "src-rs-2024_0_jumlah-rumah-sakit-2024.xlsx"
+    expected_sha256: "0815eaf574d3c16fc6d3da2a3f78ae5f783128d120c9a104ab015bd0601414ef"
+    size_bytes: 9314
+    reported_format: "XLSX"
+    actual_format: "XLSX"
+    license_statement: "No License Provided in CKAN header; Metadata Indikator R5 states 'Apakah dapat diakses umum: Ya'"
+    publication_allowed: "curated_aggregates_with_attribution_no_raw_redistribution"
+    reference_years: [2024]
+    published_years: [2024]
+    raw_grain: "region_row × year_2024"
+    normalized_grain: "region_code, reference_year, metric_code"
+    region_code_system: "kemendagri"
+    parser_adapter: "dinkes_single_year_table_xlsx"
+    metric_code: "hospital_total_count"
+    unit: "unit"
+    known_limitations:
+      - "Menggantikan kandidat URL katalog lama (jumlah-fasilitas-pelayanan-kesehatan-...-2023-2025) yang mengembalikan HTTP 404 saat audit 18 Nov 2026."
+      - "Header kolom wilayah bernama 'RUMAH SAKIT UMUM' meskipun judul dan Metadata Indikator mendefinisikan variabel sebagai Jumlah Rumah Sakit (total 47 unit provinsi)."
+
+  - source_id: "SRC-PKM-RI"
+    title: "Jumlah Puskesmas Rawat Inap Tahun 2024"
+    publisher: "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)"
+    dataset_url: "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-rawat-inap-tahun-2024"
+    resource_url: "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-rawat-inap-tahun-2024"
+    retrieved_at_utc: "2026-11-18T06:54:20Z"
+    original_filename: "Jumlah Puskesmas Rawat Inap Tahun 2024.xlsx"
+    local_raw_filename: "src-pkm-ri-2024_0_jumlah-puskesmas-rawat-inap-2024.xlsx"
+    expected_sha256: "f927d32043e6e448d0f0b246b858691515306a96d36fabc8cf8e50a00f743b29"
+    size_bytes: 23901
+    reported_format: "XLSX"
+    actual_format: "XLSX"
+    license_statement: "No License Provided in CKAN header; Metadata Indikator R11 states 'Apakah dapat diakses umum: Ya'"
+    publication_allowed: "curated_aggregates_with_attribution_no_raw_redistribution"
+    reference_years: [2024]
+    published_years: [2024]
+    raw_grain: "region_row × year_2024"
+    normalized_grain: "region_code, reference_year, metric_code"
+    region_code_system: "bps"
+    parser_adapter: "dinkes_single_year_table_xlsx"
+    metric_code: "puskesmas_inpatient_count"
+    unit: "unit"
+    known_limitations:
+      - "Kolom KODE menggunakan sistem kode BPS (6402=Kutai Barat, 6403=Kutai Kartanegara, 6404=Kutai Timur, 6405=Berau), berbeda dengan SRC-DOC & SRC-RS yang memakai Kemendagri."
+
+  - source_id: "SRC-PKM-NRI"
+    title: "Jumlah Puskesmas Non Rawat Inap Tahun 2024"
+    publisher: "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)"
+    dataset_url: "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-non-rawat-inap-tahun-2024"
+    resource_url: "https://data.kaltimprov.go.id/dataset/jumlah-puskesmas-non-rawat-inap-tahun-2024"
+    retrieved_at_utc: "2026-11-18T06:54:20Z"
+    original_filename: "Jumlah Puskesmas Non Rawat Inap Tahun 2024.xlsx"
+    local_raw_filename: "src-pkm-nri-2024_0_jumlah-puskesmas-non-rawat-inap-2024.xlsx"
+    expected_sha256: "c6f54da0db4bfde880f5c4db6e79f95e14fd29c9b04711b808d96597e3dd7f68"
+    size_bytes: 23932
+    reported_format: "XLSX"
+    actual_format: "XLSX"
+    license_statement: "No License Provided in CKAN header; Metadata Indikator R14 states 'Apakah dapat diakses umum: Ya'"
+    publication_allowed: "curated_aggregates_with_attribution_no_raw_redistribution"
+    reference_years: [2024]
+    published_years: [2024]
+    raw_grain: "region_row × year_2024"
+    normalized_grain: "region_code, reference_year, metric_code"
+    region_code_system: "bps"
+    parser_adapter: "dinkes_single_year_table_xlsx"
+    metric_code: "puskesmas_non_inpatient_count"
+    unit: "unit"
+    known_limitations:
+      - "Kolom KODE menggunakan sistem kode BPS; dipadankan secara eksplisit ke kode Kemendagri kanonik dengan validasi silang nama wilayah."
+
+  - source_id: "SRC-POP-NAKES"
+    title: "Rasio Tenaga Kesehatan di Provinsi Kalimantan Timur Tahun 2024 (Denominator Penduduk)"
+    publisher: "Dinas Kesehatan Provinsi Kalimantan Timur (berdasarkan proyeksi/registrasi penduduk kab/kota 2024)"
+    dataset_url: "https://data.kaltimprov.go.id/dataset/rasio-tenaga-kesehatan-di-provinsi-kalimantan-timur-tahun-2024"
+    resource_url: "https://data.kaltimprov.go.id/dataset/6073c398-fc1b-44ac-956c-470d4c2e44e3/resource/5f3bf720-ffd6-45a3-a2f0-d2fd3c8f4d33/download/5-rasio-tenaga-kesehatan.xlsx"
+    retrieved_at_utc: "2026-11-18T06:58:31Z"
+    original_filename: "5 RASIO TENAGA KESEHATAN.xlsx"
+    local_raw_filename: "src-rasio-nakes-2024.xlsx"
+    expected_sha256: "f0589145f52b99429ff876f0ea4fddf589e725a6d13251be3a38579a0914515c"
+    size_bytes: 10864
+    reported_format: "XLSX"
+    actual_format: "XLSX"
+    license_statement: "No License Provided in CKAN header"
+    publication_allowed: "curated_aggregates_with_attribution_no_raw_redistribution"
+    reference_years: [2024]
+    published_years: [2024]
+    raw_grain: "region_row × population_and_workforce_2024"
+    normalized_grain: "region_code, reference_year, metric_code"
+    region_code_system: "name_only"
+    parser_adapter: "dinkes_population_nakes_2024_xlsx"
+    metric_code: "population_count"
+    unit: "jiwa"
+    known_limitations:
+      - "Halaman tabel langsung kaltim.bps.go.id memblokir pengunduhan terotomasi (HTTP 403 anti-bot), sehingga denominator penduduk 2024 diambil dari publikasi resmi Dinkes Kaltim 2024 yang memuat bilangan bulat utuh (total 4.045.858 jiwa) dan terverifikasi konsisten terhadap ringkasan publikasi Kalimantan Timur Dalam Angka 2024."
+      - "Kolom SDM yang ditingkatkan kompetensinya berisi sentinel 'TAD' (Tidak Ada Data) dan tidak dipublikasikan."
+
+  - source_id: "SRC-DOC-RATIO-BAD"
+    title: "Distribusi Jumlah dan Rasio Tenaga Medis di Provinsi Kalimantan Timur Tahun 2024 (Quarantined Audit Target)"
+    publisher: "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)"
+    dataset_url: "https://data.kaltimprov.go.id/dataset/distribusi-jumlah-dan-rasio-tenaga-medis-di-provinsi-kalimantan-timur-tahun-2024"
+    resource_url: "https://data.kaltimprov.go.id/dataset/distribusi-jumlah-dan-rasio-tenaga-medis-di-provinsi-kalimantan-timur-tahun-2024"
+    retrieved_at_utc: "2026-11-18T06:54:25Z"
+    original_filename: "Distribusi Jumlah dan Rasio Tenaga Medis di Provinsi Kalimantan Timur Tahun 2024.xlsx"
+    local_raw_filename: "src-doc-ratio-2024_0_distribusi-jumlah-dan-rasio-tenaga-medis-prov-kaltim-tahun-2024.xlsx"
+    expected_sha256: "aa5b1aee1547e95ea7c24342ba542975c6a61c2b63a80664c236fb20c2d0b343"
+    size_bytes: 10808
+    reported_format: "XLSX"
+    actual_format: "XLSX"
+    license_statement: "No License Provided in CKAN header"
+    publication_allowed: "quarantined_audit_only"
+    reference_years: [2024]
+    published_years: []
+    raw_grain: "region_row × corrupted_ratio_columns"
+    normalized_grain: "region_code, reference_year, metric_code"
+    region_code_system: "name_only"
+    parser_adapter: "dinkes_corrupted_ratio_2024_xlsx"
+    known_limitations:
+      - "DIKARANTINA PENUH oleh Quality Gate: kolom Rasio Dokter Umum terkorupsi menjadi serial waktu Excel (1.877 hari alih-alih 45.30 per 100rb penduduk), kolom Jumlah Penduduk terpotong pemisah ribuan menjadi desimal (286.991 jiwa terbaca float 286.990999), dan baris total provinsi Tenaga Kesehatan Teregistrasi tertulis '27.04' alih-alih 27.040."

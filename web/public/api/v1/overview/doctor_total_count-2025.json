@@ -1,0 +1,251 @@
+{
+  "meta": {
+    "metric_code": "doctor_total_count",
+    "metric_label": "Jumlah Tenaga Medis Kedokteran",
+    "short_label": "Tenaga Medis (Dokter & Dokter Gigi)",
+    "unit": "orang",
+    "kind": "source",
+    "formula": "Nilai baris 'Dokter' resmi dari SRC-DOC (terverifikasi sama dengan Dokter Umum + Dokter Spesialis + Dokter Gigi + Dokter Gigi Spesialis pada 2023–2025)",
+    "operational_definition": "Jumlah seluruh tenaga medis kedokteran yang tercatat pada SISDMK di kabupaten/kota, mencakup Dokter Umum, Dokter Spesialis, Dokter Gigi, dan Dokter Gigi Spesialis (sesuai rumus eksplisit =SUM pada lembar sumber 1-dokter.xlsx dan definisi Tenaga Medis Permenkes 18/2022).",
+    "limitations": "Catatan katalog CKAN menyebut tanpa dokter gigi, namun rumus sel Excel (=SUM) pada file sumber menjumlahkan keempat subkategori termasuk dokter gigi. Tahun 2022 diblokir karena gagal uji konsistensi subkategori pada Berau (185 < 197) dan Kutai Barat (120 < 184).",
+    "year": 2025,
+    "available_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-DOC"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 10,
+    "missing_or_blocked_count": 0,
+    "province_observation": {
+      "observation_id": "srcf-5f76e65d71125519",
+      "region_code": "64",
+      "region_name": "Provinsi Kalimantan Timur",
+      "short_name": "Kalimantan Timur",
+      "region_level": "province",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 4270,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R73C6",
+      "lineage_url": "/api/v1/lineage/srcf-5f76e65d71125519"
+    },
+    "min_region": {
+      "region_code": "64.11",
+      "short_name": "Mahakam Ulu",
+      "value": 21
+    },
+    "max_region": {
+      "region_code": "64.72",
+      "short_name": "Samarinda",
+      "value": 1238
+    }
+  },
+  "data": [
+    {
+      "observation_id": "srcf-5d2864f4f5e95f8c",
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 241,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R3C6",
+      "lineage_url": "/api/v1/lineage/srcf-5d2864f4f5e95f8c"
+    },
+    {
+      "observation_id": "srcf-1514bf4c35c752d2",
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 375,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R10C6",
+      "lineage_url": "/api/v1/lineage/srcf-1514bf4c35c752d2"
+    },
+    {
+      "observation_id": "srcf-e2cf0305e0ac5e1a",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 213,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R17C6",
+      "lineage_url": "/api/v1/lineage/srcf-e2cf0305e0ac5e1a"
+    },
+    {
+      "observation_id": "srcf-4a81a20c30c5587a",
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 140,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R24C6",
+      "lineage_url": "/api/v1/lineage/srcf-4a81a20c30c5587a"
+    },
+    {
+      "observation_id": "srcf-f225a6b04c85557d",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 345,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R31C6",
+      "lineage_url": "/api/v1/lineage/srcf-f225a6b04c85557d"
+    },
+    {
+      "observation_id": "srcf-703b41ab89e95e75",
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 192,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R38C6",
+      "lineage_url": "/api/v1/lineage/srcf-703b41ab89e95e75"
+    },
+    {
+      "observation_id": "srcf-edb4ad60c5e85471",
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 21,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R45C6",
+      "lineage_url": "/api/v1/lineage/srcf-edb4ad60c5e85471"
+    },
+    {
+      "observation_id": "srcf-bc4968b916cc568c",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 1171,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R52C6",
+      "lineage_url": "/api/v1/lineage/srcf-bc4968b916cc568c"
+    },
+    {
+      "observation_id": "srcf-4fb98c70a929507a",
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 1238,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R59C6",
+      "lineage_url": "/api/v1/lineage/srcf-4fb98c70a929507a"
+    },
+    {
+      "observation_id": "srcf-8f9d56ab14f7587d",
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 334,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R66C6",
+      "lineage_url": "/api/v1/lineage/srcf-8f9d56ab14f7587d"
+    }
+  ]
+}

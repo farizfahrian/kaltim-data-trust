@@ -1,0 +1,33 @@
+{
+  "observation_id": "srcf-b7aaa62d84f550fb",
+  "observation_kind": "source",
+  "region_code": "64.03",
+  "region_name": "Kabupaten Berau",
+  "year": 2024,
+  "metric_code": "hospital_total_count",
+  "metric_label": "Jumlah Rumah Sakit",
+  "value": 2,
+  "unit": "unit",
+  "quality_status": "validated",
+  "missing_reason": null,
+  "formula": "Nilai kolom 2024 dari SRC-RS (terverifikasi 10 kab/kota = 47 unit)",
+  "transformation_version": "1.0.0",
+  "upstream_inputs": [
+    {
+      "role": "direct_source",
+      "fact_id": "srcf-b7aaa62d84f550fb",
+      "metric_code": "hospital_total_count",
+      "value": 2,
+      "unit": "unit",
+      "source_id": "SRC-RS",
+      "source_title": "Jumlah Rumah Sakit Tahun 2024",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/jumlah-rumah-sakit-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/jumlah-rumah-sakit-tahun-2024",
+      "source_locator": "Sheet2!R4C4",
+      "run_id": "run-86629f74a35351e7",
+      "source_sha256": "0815eaf574d3c16fc6d3da2a3f78ae5f783128d120c9a104ab015bd0601414ef",
+      "retrieved_at": "2026-11-18T06:54:20"
+    }
+  ]
+}

@@ -1,0 +1,245 @@
+{
+  "meta": {
+    "metric_code": "facility_total_count",
+    "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+    "short_label": "Faskes Utama (RS + Puskesmas)",
+    "unit": "fasilitas",
+    "kind": "derived",
+    "formula": "hospital_total_count + puskesmas_inpatient_count + puskesmas_non_inpatient_count",
+    "operational_definition": "Jumlah fasilitas pelayanan kesehatan publik/rujukan utama yang terverifikasi pada level kabupaten/kota tahun 2024, terdiri atas Rumah Sakit dan Puskesmas Induk (Rawat Inap + Non Rawat Inap).",
+    "limitations": "Dataset katalog klinik swasta/praktik mandiri 2024 tidak tersedia (HTTP 404 pada slug lama), sehingga cakupan dibatasi secara eksplisit pada Rumah Sakit + Puskesmas Induk (total provinsi 47 + 188 = 235 fasilitas).",
+    "year": 2025,
+    "available_years": [
+      2024
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-RS",
+      "SRC-PKM-RI",
+      "SRC-PKM-NRI"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 0,
+    "missing_or_blocked_count": 10,
+    "province_observation": null,
+    "min_region": null,
+    "max_region": null
+  },
+  "data": [
+    {
+      "observation_id": null,
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": null,
+      "unit": "fasilitas",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": null,
+      "unit": "fasilitas",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": null,
+      "unit": "fasilitas",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": null,
+      "unit": "fasilitas",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": null,
+      "unit": "fasilitas",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": null,
+      "unit": "fasilitas",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": null,
+      "unit": "fasilitas",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": null,
+      "unit": "fasilitas",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": null,
+      "unit": "fasilitas",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    },
+    {
+      "observation_id": null,
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": null,
+      "unit": "fasilitas",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": null,
+      "lineage_url": null
+    }
+  ]
+}

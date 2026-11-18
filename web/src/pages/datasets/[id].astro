@@ -1,0 +1,192 @@
+---
+import AppShell from '../../layouts/AppShell.astro';
+import { snapshotData, statusLabel, statusPillClass } from '../../lib/format';
+
+export function getStaticPaths() {
+  return snapshotData.datasets.map((d) => ({
+    params: { id: d.source_id },
+    props: { sourceId: d.source_id },
+  }));
+}
+
+const { sourceId } = Astro.props;
+const detail = (snapshotData.datasets_detail as Record<string, any>)[sourceId];
+const run = detail.latest_run;
+
+function rulePill(status: string): string {
+  if (status === 'pass') return 'pill pos';
+  if (status === 'warn') return 'pill warn';
+  return 'pill neg';
+}
+---
+
+<AppShell
+  title={`${detail.source_id} Audit`}
+  activeNav="datasets"
+  crumb={`Audit sumber / ${detail.source_id}`}
+>
+  <div class="snapshot-notice" role="status">
+    <span>
+      Lisensi publikasi ulang sumber belum ditentukan pada header CKAN ({detail.license_status}). Aplikasi ini tidak mendistribusikan ulang file mentah (.xlsx/.csv).
+    </span>
+    <a href={detail.dataset_url} target="_blank" rel="noopener noreferrer">
+      Lihat dataset pada situs resmi penerbit ↗
+    </a>
+  </div>
+
+  <div class="title-row">
+    <div>
+      <h1>
+        <span class="mono">{detail.source_id}</span> · {detail.title}
+      </h1>
+      <p class="finding">
+        Penerbit: {detail.publisher} · Format dilaporkan <span class="mono">{detail.reported_format}</span>, byte terverifikasi <span class="mono">{detail.actual_format}</span> · Sistem kode wilayah: <span class="mono">{detail.region_code_system}</span>.
+      </p>
+    </div>
+    <div class="title-actions">
+      <a class="btn" href="/datasets">Semua sumber</a>
+      <a class="btn primary" href={detail.dataset_url} target="_blank" rel="noopener noreferrer">
+        Buka halaman Satu Data ↗
+      </a>
+    </div>
+  </div>
+
+  <section class="kpis" aria-label="Metrik proses impor">
+    <div class="kpi lead">
+      <div class="kpi-label">Status eksekusi pipeline</div>
+      <div class="kpi-value">{run?.status || 'NOT_RUN'}</div>
+      <div class="kpi-sub mono">{run?.run_id || '—'}</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Fakta terkurasi lolos</div>
+      <div class="kpi-value">
+        {run?.output_row_count ?? 0}
+        <span class="kpi-unit">observasi</span>
+      </div>
+      <div class="kpi-sub">Dari {run?.input_row_count ?? 0} baris non-kosong</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Baris dikarantina</div>
+      <div class="kpi-value">
+        {run?.quarantined_row_count ?? 0}
+        <span class="kpi-unit">baris</span>
+      </div>
+      <div class="kpi-sub">Ditahan agar tidak mencemari UI</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Ukuran &amp; sidik jari byte</div>
+      <div class="kpi-value">
+        {run ? (run.file_size_bytes / 1024).toFixed(1) : '0'}
+        <span class="kpi-unit">KB</span>
+      </div>
+      <div class="kpi-sub mono">{run ? `${run.source_sha256.slice(0, 16)}…` : '—'}</div>
+    </div>
+  </section>
+
+  <div class="grid-12">
+    <section class="panel span-12" aria-labelledby="dq-rules-heading">
+      <div class="panel-head">
+        <h2 id="dq-rules-heading">Hasil pemeriksaan 14 aturan kualitas data (DQ-001 s/d DQ-014)</h2>
+        <span class={statusPillClass(detail.quality_status)}>
+          {statusLabel(detail.quality_status)}
+        </span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Kode rule</th>
+              <th>Dimensi</th>
+              <th>Tingkat</th>
+              <th>Hasil</th>
+              <th class="n">Baris terdampak</th>
+              <th>Temuan pemeriksaan</th>
+            </tr>
+          </thead>
+          <tbody>
+            {detail.quality_rules.map((r: any) => (
+              <tr>
+                <td class="mono">{r.rule_code}</td>
+                <td>{r.dimension}</td>
+                <td>{r.severity}</td>
+                <td>
+                  <span class={rulePill(r.status)}>{r.status.toUpperCase()}</span>
+                </td>
+                <td class="n num">{r.affected_count}</td>
+                <td>{r.message}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel span-7" aria-labelledby="quar-heading">
+      <div class="panel-head">
+        <h2 id="quar-heading">Catatan baris dikarantina (sampel aman)</h2>
+        <span class="panel-meta">Koordinat sel sumber dicatat untuk audit ulang</span>
+      </div>
+
+      {detail.quarantined_samples.length === 0 ? (
+        <div class="empty-frame">
+          Tidak ada baris yang dikarantina pada eksekusi sumber ini (0 baris gagal).
+        </div>
+      ) : (
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Lokasi sel</th>
+                <th>Wilayah / tahun</th>
+                <th>Rule</th>
+                <th>Alasan karantina</th>
+              </tr>
+            </thead>
+            <tbody>
+              {detail.quarantined_samples.map((q: any) => (
+                <tr>
+                  <td class="mono">{q.source_locator}</td>
+                  <td class="mono">
+                    {q.raw_region || '—'} ({q.raw_year || '—'})
+                  </td>
+                  <td class="mono">{q.rule_code}</td>
+                  <td>{q.detail_message}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+
+    <section class="panel span-5" aria-labelledby="caveats-heading">
+      <div class="panel-head">
+        <h2 id="caveats-heading">Catatan temuan audit &amp; keterbatasan</h2>
+      </div>
+
+      <ul style="display:grid;gap:10px;padding-left:18px;color:var(--text);">
+        {detail.known_limitations.map((lim: string) => (
+          <li>{lim}</li>
+        ))}
+      </ul>
+
+      {run && (
+        <div class="kv-list" style="margin-top:16px;">
+          <div class="kv-row">
+            <span class="kv-key">SHA-256 penuh</span>
+            <span class="kv-val mono">{run.source_sha256}</span>
+          </div>
+          <div class="kv-row">
+            <span class="kv-key">Laporan JSON</span>
+            <span class="kv-val">
+              <a class="row-link mono" href={`/api/v1/quality/runs/${run.run_id}.json`}>
+                /api/v1/quality/runs/{run.run_id}.json
+              </a>
+            </span>
+          </div>
+        </div>
+      )}
+    </section>
+  </div>
+</AppShell>

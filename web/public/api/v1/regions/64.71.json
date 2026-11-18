@@ -1,0 +1,745 @@
+{
+  "region": {
+    "region_code": "64.71",
+    "region_name": "Kota Balikpapan",
+    "short_name": "Balikpapan",
+    "region_level": "city",
+    "kemendagri_numeric": "6471",
+    "bps_numeric": "6471",
+    "code_system": "Kepmendagri 100.1.1-6117/2022"
+  },
+  "year": 2024,
+  "metrics": [
+    {
+      "metric_code": "dentist_total_count",
+      "label": "Jumlah Dokter Gigi",
+      "short_label": "Dokter Gigi",
+      "unit": "orang",
+      "kind": "source",
+      "value": 173,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-49035ae044535407",
+      "lineage_url": "/api/v1/lineage/srcf-49035ae044535407",
+      "province_value": 610,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter Gigi' dari SRC-DOC"
+    },
+    {
+      "metric_code": "doctor_general_count",
+      "label": "Jumlah Dokter Umum",
+      "short_label": "Dokter Umum",
+      "unit": "orang",
+      "kind": "source",
+      "value": 557,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-c95a1e7b70335427",
+      "lineage_url": "/api/v1/lineage/srcf-c95a1e7b70335427",
+      "province_value": 2319,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter Umum' dari SRC-DOC (direkonsiliasi silang 100% identik dengan SRC-POP-NAKES untuk 2024)"
+    },
+    {
+      "metric_code": "doctor_general_per_100k",
+      "label": "Dokter Umum per 100.000 Penduduk",
+      "short_label": "Dokter Umum / 100rb Penduduk",
+      "unit": "orang/100.000 penduduk",
+      "kind": "derived",
+      "value": 77.66,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-9fb8606c507e5373",
+      "lineage_url": "/api/v1/lineage/derf-9fb8606c507e5373",
+      "province_value": 57.32,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "formula": "(doctor_general_count / population_count) * 100000"
+    },
+    {
+      "metric_code": "doctor_per_100k",
+      "label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "short_label": "Tenaga Medis / 100rb Penduduk",
+      "unit": "orang/100.000 penduduk",
+      "kind": "derived",
+      "value": 148.21,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-7fccb0fe74aa53a5",
+      "lineage_url": "/api/v1/lineage/derf-7fccb0fe74aa53a5",
+      "province_value": 97.43,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "formula": "(doctor_total_count / population_count) * 100000"
+    },
+    {
+      "metric_code": "doctor_specialist_count",
+      "label": "Jumlah Dokter Spesialis",
+      "short_label": "Dokter Spesialis",
+      "unit": "orang",
+      "kind": "source",
+      "value": 305,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-5261d98dc5c65713",
+      "lineage_url": "/api/v1/lineage/srcf-5261d98dc5c65713",
+      "province_value": 980,
+      "province_quality_status": "warning",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter Spesialis' dari SRC-DOC"
+    },
+    {
+      "metric_code": "doctor_total_count",
+      "label": "Jumlah Tenaga Medis Kedokteran",
+      "short_label": "Tenaga Medis (Dokter & Dokter Gigi)",
+      "unit": "orang",
+      "kind": "source",
+      "value": 1063,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-22ab1826476657de",
+      "lineage_url": "/api/v1/lineage/srcf-22ab1826476657de",
+      "province_value": 3942,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter' resmi dari SRC-DOC (terverifikasi sama dengan Dokter Umum + Dokter Spesialis + Dokter Gigi + Dokter Gigi Spesialis pada 2023–2025)"
+    },
+    {
+      "metric_code": "facility_per_100k",
+      "label": "Fasilitas Kesehatan Utama per 100.000 Penduduk",
+      "short_label": "Faskes Utama / 100rb Penduduk",
+      "unit": "fasilitas/100.000 penduduk",
+      "kind": "derived",
+      "value": 5.44,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-03e898eee445587e",
+      "lineage_url": "/api/v1/lineage/derf-03e898eee445587e",
+      "province_value": 5.81,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI",
+        "SRC-POP-NAKES"
+      ],
+      "formula": "(facility_total_count / population_count) * 100000"
+    },
+    {
+      "metric_code": "facility_total_count",
+      "label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "short_label": "Faskes Utama (RS + Puskesmas)",
+      "unit": "fasilitas",
+      "kind": "derived",
+      "value": 39,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-b6060cfb6af750f9",
+      "lineage_url": "/api/v1/lineage/derf-b6060cfb6af750f9",
+      "province_value": 235,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "formula": "hospital_total_count + puskesmas_inpatient_count + puskesmas_non_inpatient_count"
+    },
+    {
+      "metric_code": "hospital_total_count",
+      "label": "Jumlah Rumah Sakit",
+      "short_label": "Rumah Sakit",
+      "unit": "unit",
+      "kind": "source",
+      "value": 12,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-e65ce580ab26565f",
+      "lineage_url": "/api/v1/lineage/srcf-e65ce580ab26565f",
+      "province_value": 47,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-RS"
+      ],
+      "formula": "Nilai kolom 2024 dari SRC-RS (terverifikasi 10 kab/kota = 47 unit)"
+    },
+    {
+      "metric_code": "population_count",
+      "label": "Jumlah Penduduk",
+      "short_label": "Penduduk",
+      "unit": "jiwa",
+      "kind": "source",
+      "value": 717231,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-3fdade92d61f5437",
+      "lineage_url": "/api/v1/lineage/srcf-3fdade92d61f5437",
+      "province_value": 4045858,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "formula": "Nilai kolom JUMLAH PENDUDUK dari SRC-POP-NAKES dalam satuan jiwa utuh (total 10 kab/kota = 4.045.858 jiwa)"
+    },
+    {
+      "metric_code": "puskesmas_inpatient_count",
+      "label": "Jumlah Puskesmas Rawat Inap",
+      "short_label": "Puskesmas Rawat Inap",
+      "unit": "unit",
+      "kind": "source",
+      "value": 0,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-52105944cb285557",
+      "lineage_url": "/api/v1/lineage/srcf-52105944cb285557",
+      "province_value": 89,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "formula": "Nilai kolom 2024 dari SRC-PKM-RI setelah pemadanan kode BPS ke kode Kemendagri"
+    },
+    {
+      "metric_code": "puskesmas_non_inpatient_count",
+      "label": "Jumlah Puskesmas Non Rawat Inap",
+      "short_label": "Puskesmas Non Rawat Inap",
+      "unit": "unit",
+      "kind": "source",
+      "value": 27,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-74d1cedfe17459d5",
+      "lineage_url": "/api/v1/lineage/srcf-74d1cedfe17459d5",
+      "province_value": 99,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "formula": "Nilai kolom 2024 dari SRC-PKM-NRI setelah pemadanan kode BPS ke kode Kemendagri"
+    },
+    {
+      "metric_code": "puskesmas_total_count",
+      "label": "Jumlah Puskesmas (Induk)",
+      "short_label": "Total Puskesmas",
+      "unit": "unit",
+      "kind": "derived",
+      "value": 27,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-7529af8457fa5b9d",
+      "lineage_url": "/api/v1/lineage/derf-7529af8457fa5b9d",
+      "province_value": 188,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "formula": "puskesmas_inpatient_count + puskesmas_non_inpatient_count"
+    }
+  ],
+  "series": [
+    {
+      "observation_id": "srcf-12d3bce64f235ba5",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 148,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R55C4",
+      "lineage_url": "/api/v1/lineage/srcf-12d3bce64f235ba5"
+    },
+    {
+      "observation_id": "srcf-b948c45f959c5d3b",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 549,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R53C4",
+      "lineage_url": "/api/v1/lineage/srcf-b948c45f959c5d3b"
+    },
+    {
+      "observation_id": "derf-28e6db2d3583594d",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "doctor_general_per_100k",
+      "metric_label": "Dokter Umum per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-28e6db2d3583594d"
+    },
+    {
+      "observation_id": "derf-3c86bdbd2857589f",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-3c86bdbd2857589f"
+    },
+    {
+      "observation_id": "srcf-eb0305ffb894567b",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "doctor_specialist_count",
+      "metric_label": "Jumlah Dokter Spesialis",
+      "value": 273,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R54C4",
+      "lineage_url": "/api/v1/lineage/srcf-eb0305ffb894567b"
+    },
+    {
+      "observation_id": "srcf-c7f08f3f6e3b599e",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2023,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 997,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R52C4",
+      "lineage_url": "/api/v1/lineage/srcf-c7f08f3f6e3b599e"
+    },
+    {
+      "observation_id": "srcf-49035ae044535407",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 173,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R55C5",
+      "lineage_url": "/api/v1/lineage/srcf-49035ae044535407"
+    },
+    {
+      "observation_id": "srcf-c95a1e7b70335427",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 557,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R53C5",
+      "lineage_url": "/api/v1/lineage/srcf-c95a1e7b70335427"
+    },
+    {
+      "observation_id": "derf-9fb8606c507e5373",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "doctor_general_per_100k",
+      "metric_label": "Dokter Umum per 100.000 Penduduk",
+      "value": 77.66,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-9fb8606c507e5373"
+    },
+    {
+      "observation_id": "derf-7fccb0fe74aa53a5",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": 148.21,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-7fccb0fe74aa53a5"
+    },
+    {
+      "observation_id": "srcf-5261d98dc5c65713",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "doctor_specialist_count",
+      "metric_label": "Jumlah Dokter Spesialis",
+      "value": 305,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R54C5",
+      "lineage_url": "/api/v1/lineage/srcf-5261d98dc5c65713"
+    },
+    {
+      "observation_id": "srcf-22ab1826476657de",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 1063,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R52C5",
+      "lineage_url": "/api/v1/lineage/srcf-22ab1826476657de"
+    },
+    {
+      "observation_id": "derf-03e898eee445587e",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "facility_per_100k",
+      "metric_label": "Fasilitas Kesehatan Utama per 100.000 Penduduk",
+      "value": 5.44,
+      "unit": "fasilitas/100.000 penduduk",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-03e898eee445587e"
+    },
+    {
+      "observation_id": "derf-b6060cfb6af750f9",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": 39,
+      "unit": "fasilitas",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-b6060cfb6af750f9"
+    },
+    {
+      "observation_id": "srcf-e65ce580ab26565f",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 12,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R9C4",
+      "lineage_url": "/api/v1/lineage/srcf-e65ce580ab26565f"
+    },
+    {
+      "observation_id": "srcf-3fdade92d61f5437",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 717231,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R9C3",
+      "lineage_url": "/api/v1/lineage/srcf-3fdade92d61f5437"
+    },
+    {
+      "observation_id": "srcf-52105944cb285557",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 0,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R11C4",
+      "lineage_url": "/api/v1/lineage/srcf-52105944cb285557"
+    },
+    {
+      "observation_id": "srcf-74d1cedfe17459d5",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 27,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R11C4",
+      "lineage_url": "/api/v1/lineage/srcf-74d1cedfe17459d5"
+    },
+    {
+      "observation_id": "derf-7529af8457fa5b9d",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 27,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-7529af8457fa5b9d"
+    },
+    {
+      "observation_id": "srcf-85b331c07dbe5404",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 215,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R55C6",
+      "lineage_url": "/api/v1/lineage/srcf-85b331c07dbe5404"
+    },
+    {
+      "observation_id": "srcf-6df260f4c11d54d2",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 595,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R53C6",
+      "lineage_url": "/api/v1/lineage/srcf-6df260f4c11d54d2"
+    },
+    {
+      "observation_id": "derf-8904ab69b6a2565e",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "doctor_general_per_100k",
+      "metric_label": "Dokter Umum per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-8904ab69b6a2565e"
+    },
+    {
+      "observation_id": "derf-f442bce763005cc4",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-f442bce763005cc4"
+    },
+    {
+      "observation_id": "srcf-b13a91558fef5457",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "doctor_specialist_count",
+      "metric_label": "Jumlah Dokter Spesialis",
+      "value": 330,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R54C6",
+      "lineage_url": "/api/v1/lineage/srcf-b13a91558fef5457"
+    },
+    {
+      "observation_id": "srcf-bc4968b916cc568c",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 1171,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R52C6",
+      "lineage_url": "/api/v1/lineage/srcf-bc4968b916cc568c"
+    }
+  ]
+}

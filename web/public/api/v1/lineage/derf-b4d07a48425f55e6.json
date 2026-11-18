@@ -1,0 +1,50 @@
+{
+  "observation_id": "derf-b4d07a48425f55e6",
+  "observation_kind": "derived",
+  "region_code": "64.03",
+  "region_name": "Kabupaten Berau",
+  "year": 2024,
+  "metric_code": "doctor_general_per_100k",
+  "metric_label": "Dokter Umum per 100.000 Penduduk",
+  "value": 57.67,
+  "unit": "orang/100.000 penduduk",
+  "quality_status": "validated",
+  "missing_reason": null,
+  "formula": "(doctor_general_count / population_count) * 100000",
+  "methodology_version": "1.0.0",
+  "derivation_run_id": "drun-f6697c1732925abe",
+  "upstream_inputs": [
+    {
+      "role": "numerator",
+      "fact_id": "srcf-9bf89f6198a35d1e",
+      "metric_code": "doctor_general_count",
+      "value": 151,
+      "unit": "orang",
+      "source_id": "SRC-DOC",
+      "source_title": "Distribusi Tenaga Dokter di Provinsi Kalimantan Timur Tahun 2022 - 2025",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/id/dataset/distribusi-tenaga-dokter-di-provinsi-kalimantan-timur",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/2c14404c-7069-4448-9848-2584fb54786b/resource/e61b504d-6ca8-4ebe-b71e-7ac32b50ce45/download/1-dokter.xlsx",
+      "source_locator": "1-dokter!R18C5",
+      "run_id": "run-69d998f354a8537f",
+      "source_sha256": "f427719f44070b01021ab25e8a5fe7cded0e39de75f3ded705bbd87b62eac8ad",
+      "retrieved_at": "2026-11-18T06:50:55"
+    },
+    {
+      "role": "denominator",
+      "fact_id": "srcf-edd79f61b0cd5435",
+      "metric_code": "population_count",
+      "value": 261833,
+      "unit": "jiwa",
+      "source_id": "SRC-POP-NAKES",
+      "source_title": "Rasio Tenaga Kesehatan di Provinsi Kalimantan Timur Tahun 2024 (Denominator Penduduk)",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (berdasarkan proyeksi/registrasi penduduk kab/kota 2024)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/rasio-tenaga-kesehatan-di-provinsi-kalimantan-timur-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/6073c398-fc1b-44ac-956c-470d4c2e44e3/resource/5f3bf720-ffd6-45a3-a2f0-d2fd3c8f4d33/download/5-rasio-tenaga-kesehatan.xlsx",
+      "source_locator": "Sheet1!R4C3",
+      "run_id": "run-31fed06b254651e9",
+      "source_sha256": "f0589145f52b99429ff876f0ea4fddf589e725a6d13251be3a38579a0914515c",
+      "retrieved_at": "2026-11-18T06:58:31"
+    }
+  ]
+}

@@ -1,0 +1,745 @@
+{
+  "region": {
+    "region_code": "64.08",
+    "region_name": "Kabupaten Kutai Timur",
+    "short_name": "Kutai Timur",
+    "region_level": "regency",
+    "kemendagri_numeric": "6408",
+    "bps_numeric": "6404",
+    "code_system": "Kepmendagri 100.1.1-6117/2022"
+  },
+  "year": 2024,
+  "metrics": [
+    {
+      "metric_code": "dentist_total_count",
+      "label": "Jumlah Dokter Gigi",
+      "short_label": "Dokter Gigi",
+      "unit": "orang",
+      "kind": "source",
+      "value": 42,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-7a24c9c900285be1",
+      "lineage_url": "/api/v1/lineage/srcf-7a24c9c900285be1",
+      "province_value": 610,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter Gigi' dari SRC-DOC"
+    },
+    {
+      "metric_code": "doctor_general_count",
+      "label": "Jumlah Dokter Umum",
+      "short_label": "Dokter Umum",
+      "unit": "orang",
+      "kind": "source",
+      "value": 206,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-a447aa017ff95dd7",
+      "lineage_url": "/api/v1/lineage/srcf-a447aa017ff95dd7",
+      "province_value": 2319,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter Umum' dari SRC-DOC (direkonsiliasi silang 100% identik dengan SRC-POP-NAKES untuk 2024)"
+    },
+    {
+      "metric_code": "doctor_general_per_100k",
+      "label": "Dokter Umum per 100.000 Penduduk",
+      "short_label": "Dokter Umum / 100rb Penduduk",
+      "unit": "orang/100.000 penduduk",
+      "kind": "derived",
+      "value": 44.49,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-15d52f0eb1a95c3d",
+      "lineage_url": "/api/v1/lineage/derf-15d52f0eb1a95c3d",
+      "province_value": 57.32,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "formula": "(doctor_general_count / population_count) * 100000"
+    },
+    {
+      "metric_code": "doctor_per_100k",
+      "label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "short_label": "Tenaga Medis / 100rb Penduduk",
+      "unit": "orang/100.000 penduduk",
+      "kind": "derived",
+      "value": 67.82,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-6bb8d37b314c52a1",
+      "lineage_url": "/api/v1/lineage/derf-6bb8d37b314c52a1",
+      "province_value": 97.43,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "formula": "(doctor_total_count / population_count) * 100000"
+    },
+    {
+      "metric_code": "doctor_specialist_count",
+      "label": "Jumlah Dokter Spesialis",
+      "short_label": "Dokter Spesialis",
+      "unit": "orang",
+      "kind": "source",
+      "value": 62,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-c2fcb45e9add5528",
+      "lineage_url": "/api/v1/lineage/srcf-c2fcb45e9add5528",
+      "province_value": 980,
+      "province_quality_status": "warning",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter Spesialis' dari SRC-DOC"
+    },
+    {
+      "metric_code": "doctor_total_count",
+      "label": "Jumlah Tenaga Medis Kedokteran",
+      "short_label": "Tenaga Medis (Dokter & Dokter Gigi)",
+      "unit": "orang",
+      "kind": "source",
+      "value": 314,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-3e971d4f848855cd",
+      "lineage_url": "/api/v1/lineage/srcf-3e971d4f848855cd",
+      "province_value": 3942,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-DOC"
+      ],
+      "formula": "Nilai baris 'Dokter' resmi dari SRC-DOC (terverifikasi sama dengan Dokter Umum + Dokter Spesialis + Dokter Gigi + Dokter Gigi Spesialis pada 2023–2025)"
+    },
+    {
+      "metric_code": "facility_per_100k",
+      "label": "Fasilitas Kesehatan Utama per 100.000 Penduduk",
+      "short_label": "Faskes Utama / 100rb Penduduk",
+      "unit": "fasilitas/100.000 penduduk",
+      "kind": "derived",
+      "value": 5.18,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-e5c905d98c915023",
+      "lineage_url": "/api/v1/lineage/derf-e5c905d98c915023",
+      "province_value": 5.81,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI",
+        "SRC-POP-NAKES"
+      ],
+      "formula": "(facility_total_count / population_count) * 100000"
+    },
+    {
+      "metric_code": "facility_total_count",
+      "label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "short_label": "Faskes Utama (RS + Puskesmas)",
+      "unit": "fasilitas",
+      "kind": "derived",
+      "value": 24,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-dcb8c4ad748b55f8",
+      "lineage_url": "/api/v1/lineage/derf-dcb8c4ad748b55f8",
+      "province_value": 235,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "formula": "hospital_total_count + puskesmas_inpatient_count + puskesmas_non_inpatient_count"
+    },
+    {
+      "metric_code": "hospital_total_count",
+      "label": "Jumlah Rumah Sakit",
+      "short_label": "Rumah Sakit",
+      "unit": "unit",
+      "kind": "source",
+      "value": 3,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-1e55d069b1de52e6",
+      "lineage_url": "/api/v1/lineage/srcf-1e55d069b1de52e6",
+      "province_value": 47,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-RS"
+      ],
+      "formula": "Nilai kolom 2024 dari SRC-RS (terverifikasi 10 kab/kota = 47 unit)"
+    },
+    {
+      "metric_code": "population_count",
+      "label": "Jumlah Penduduk",
+      "short_label": "Penduduk",
+      "unit": "jiwa",
+      "kind": "source",
+      "value": 462993,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-51ca552df918581c",
+      "lineage_url": "/api/v1/lineage/srcf-51ca552df918581c",
+      "province_value": 4045858,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "formula": "Nilai kolom JUMLAH PENDUDUK dari SRC-POP-NAKES dalam satuan jiwa utuh (total 10 kab/kota = 4.045.858 jiwa)"
+    },
+    {
+      "metric_code": "puskesmas_inpatient_count",
+      "label": "Jumlah Puskesmas Rawat Inap",
+      "short_label": "Puskesmas Rawat Inap",
+      "unit": "unit",
+      "kind": "source",
+      "value": 18,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-881dd2d9b688510e",
+      "lineage_url": "/api/v1/lineage/srcf-881dd2d9b688510e",
+      "province_value": 89,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "formula": "Nilai kolom 2024 dari SRC-PKM-RI setelah pemadanan kode BPS ke kode Kemendagri"
+    },
+    {
+      "metric_code": "puskesmas_non_inpatient_count",
+      "label": "Jumlah Puskesmas Non Rawat Inap",
+      "short_label": "Puskesmas Non Rawat Inap",
+      "unit": "unit",
+      "kind": "source",
+      "value": 3,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "srcf-80501dc26a695a48",
+      "lineage_url": "/api/v1/lineage/srcf-80501dc26a695a48",
+      "province_value": 99,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "formula": "Nilai kolom 2024 dari SRC-PKM-NRI setelah pemadanan kode BPS ke kode Kemendagri"
+    },
+    {
+      "metric_code": "puskesmas_total_count",
+      "label": "Jumlah Puskesmas (Induk)",
+      "short_label": "Total Puskesmas",
+      "unit": "unit",
+      "kind": "derived",
+      "value": 21,
+      "quality_status": "validated",
+      "missing_reason": null,
+      "observation_id": "derf-508f4b41b11b5d88",
+      "lineage_url": "/api/v1/lineage/derf-508f4b41b11b5d88",
+      "province_value": 188,
+      "province_quality_status": "validated",
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "formula": "puskesmas_inpatient_count + puskesmas_non_inpatient_count"
+    }
+  ],
+  "series": [
+    {
+      "observation_id": "srcf-dd382423d2c9550d",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 36,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R34C4",
+      "lineage_url": "/api/v1/lineage/srcf-dd382423d2c9550d"
+    },
+    {
+      "observation_id": "srcf-07006276fc345d97",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 178,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R32C4",
+      "lineage_url": "/api/v1/lineage/srcf-07006276fc345d97"
+    },
+    {
+      "observation_id": "derf-d5f897d715f0527f",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_general_per_100k",
+      "metric_label": "Dokter Umum per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-d5f897d715f0527f"
+    },
+    {
+      "observation_id": "derf-e5a18f6995bc5cc8",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-e5a18f6995bc5cc8"
+    },
+    {
+      "observation_id": "srcf-59a1b9ca7fea5f01",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_specialist_count",
+      "metric_label": "Jumlah Dokter Spesialis",
+      "value": 56,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R33C4",
+      "lineage_url": "/api/v1/lineage/srcf-59a1b9ca7fea5f01"
+    },
+    {
+      "observation_id": "srcf-943100c691d15cb8",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2023,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 274,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R31C4",
+      "lineage_url": "/api/v1/lineage/srcf-943100c691d15cb8"
+    },
+    {
+      "observation_id": "srcf-7a24c9c900285be1",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 42,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R34C5",
+      "lineage_url": "/api/v1/lineage/srcf-7a24c9c900285be1"
+    },
+    {
+      "observation_id": "srcf-a447aa017ff95dd7",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 206,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R32C5",
+      "lineage_url": "/api/v1/lineage/srcf-a447aa017ff95dd7"
+    },
+    {
+      "observation_id": "derf-15d52f0eb1a95c3d",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_general_per_100k",
+      "metric_label": "Dokter Umum per 100.000 Penduduk",
+      "value": 44.49,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-15d52f0eb1a95c3d"
+    },
+    {
+      "observation_id": "derf-6bb8d37b314c52a1",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": 67.82,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-6bb8d37b314c52a1"
+    },
+    {
+      "observation_id": "srcf-c2fcb45e9add5528",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_specialist_count",
+      "metric_label": "Jumlah Dokter Spesialis",
+      "value": 62,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R33C5",
+      "lineage_url": "/api/v1/lineage/srcf-c2fcb45e9add5528"
+    },
+    {
+      "observation_id": "srcf-3e971d4f848855cd",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 314,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R31C5",
+      "lineage_url": "/api/v1/lineage/srcf-3e971d4f848855cd"
+    },
+    {
+      "observation_id": "derf-e5c905d98c915023",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "facility_per_100k",
+      "metric_label": "Fasilitas Kesehatan Utama per 100.000 Penduduk",
+      "value": 5.18,
+      "unit": "fasilitas/100.000 penduduk",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-e5c905d98c915023"
+    },
+    {
+      "observation_id": "derf-dcb8c4ad748b55f8",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "facility_total_count",
+      "metric_label": "Jumlah Fasilitas Kesehatan Utama (RS & Puskesmas)",
+      "value": 24,
+      "unit": "fasilitas",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS",
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-dcb8c4ad748b55f8"
+    },
+    {
+      "observation_id": "srcf-1e55d069b1de52e6",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "hospital_total_count",
+      "metric_label": "Jumlah Rumah Sakit",
+      "value": 3,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-RS"
+      ],
+      "source_locator": "Sheet2!R6C4",
+      "lineage_url": "/api/v1/lineage/srcf-1e55d069b1de52e6"
+    },
+    {
+      "observation_id": "srcf-51ca552df918581c",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 462993,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R6C3",
+      "lineage_url": "/api/v1/lineage/srcf-51ca552df918581c"
+    },
+    {
+      "observation_id": "srcf-881dd2d9b688510e",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Rawat Inap",
+      "value": 18,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI"
+      ],
+      "source_locator": "Jumlah Puskesmas Rawat Inap!R7C4",
+      "lineage_url": "/api/v1/lineage/srcf-881dd2d9b688510e"
+    },
+    {
+      "observation_id": "srcf-80501dc26a695a48",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_non_inpatient_count",
+      "metric_label": "Jumlah Puskesmas Non Rawat Inap",
+      "value": 3,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "Puskesmas Non Rawat Inap!R7C4",
+      "lineage_url": "/api/v1/lineage/srcf-80501dc26a695a48"
+    },
+    {
+      "observation_id": "derf-508f4b41b11b5d88",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "puskesmas_total_count",
+      "metric_label": "Jumlah Puskesmas (Induk)",
+      "value": 21,
+      "unit": "unit",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-PKM-RI",
+        "SRC-PKM-NRI"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-508f4b41b11b5d88"
+    },
+    {
+      "observation_id": "srcf-b21f5caf660b5848",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "dentist_total_count",
+      "metric_label": "Jumlah Dokter Gigi",
+      "value": 50,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R34C6",
+      "lineage_url": "/api/v1/lineage/srcf-b21f5caf660b5848"
+    },
+    {
+      "observation_id": "srcf-6065ede1ddec5fc9",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_general_count",
+      "metric_label": "Jumlah Dokter Umum",
+      "value": 216,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R32C6",
+      "lineage_url": "/api/v1/lineage/srcf-6065ede1ddec5fc9"
+    },
+    {
+      "observation_id": "derf-d774fe8d8317535f",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_general_per_100k",
+      "metric_label": "Dokter Umum per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-d774fe8d8317535f"
+    },
+    {
+      "observation_id": "derf-f48f64cac0d85761",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_per_100k",
+      "metric_label": "Tenaga Medis Kedokteran per 100.000 Penduduk",
+      "value": null,
+      "unit": "orang/100.000 penduduk",
+      "quality_status": "not_comparable",
+      "missing_reason": "year_mismatch",
+      "sources": [
+        "SRC-DOC",
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "derived",
+      "lineage_url": "/api/v1/lineage/derf-f48f64cac0d85761"
+    },
+    {
+      "observation_id": "srcf-8cbb323ad3b95d42",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_specialist_count",
+      "metric_label": "Jumlah Dokter Spesialis",
+      "value": 73,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R33C6",
+      "lineage_url": "/api/v1/lineage/srcf-8cbb323ad3b95d42"
+    },
+    {
+      "observation_id": "srcf-f225a6b04c85557d",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2025,
+      "metric_code": "doctor_total_count",
+      "metric_label": "Jumlah Tenaga Medis Kedokteran",
+      "value": 345,
+      "unit": "orang",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-DOC"
+      ],
+      "source_locator": "1-dokter!R31C6",
+      "lineage_url": "/api/v1/lineage/srcf-f225a6b04c85557d"
+    }
+  ]
+}

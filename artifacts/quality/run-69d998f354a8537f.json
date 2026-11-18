@@ -1,0 +1,271 @@
+{
+  "run_id": "run-69d998f354a8537f",
+  "source_id": "SRC-DOC",
+  "source_title": "Distribusi Tenaga Dokter di Provinsi Kalimantan Timur Tahun 2022 - 2025",
+  "status": "PUBLISHED",
+  "source_sha256": "f427719f44070b01021ab25e8a5fe7cded0e39de75f3ded705bbd87b62eac8ad",
+  "actual_format": "XLSX",
+  "file_size_bytes": 29159,
+  "mapping_version": "1.0.0",
+  "transformation_version": "1.0.0",
+  "retrieved_at": "2026-11-18T06:50:55",
+  "started_at": "2026-11-18T07:19:23.158182",
+  "input_row_count": 66,
+  "output_row_count": 132,
+  "quarantined_row_count": 11,
+  "is_synthetic": false,
+  "rules": [
+    {
+      "rule_code": "DQ-001",
+      "dimension": "Validity",
+      "status": "warn",
+      "severity": "warning",
+      "affected_count": 1,
+      "message": "Struktur kolom valid, namun label format/ekstensi berbeda dari byte file asli.",
+      "details": {
+        "format_warnings": [
+          "Metadata melaporkan format 'CSV', tetapi inspeksi byte membuktikan 'XLSX'."
+        ],
+        "actual_format": "XLSX"
+      }
+    },
+    {
+      "rule_code": "DQ-002",
+      "dimension": "Uniqueness",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Seluruh kunci bisnis (wilayah × tahun × metrik) unik tanpa penghitungan ganda.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-003",
+      "dimension": "Referential Integrity",
+      "status": "warn",
+      "severity": "warning",
+      "affected_count": 16,
+      "message": "Semua wilayah terpetakan ke master resmi; salah ketik kode sumber dicatat pada jejak audit.",
+      "details": {
+        "code_typo_notes": [
+          "Kode sumber '6472' merujuk ke Samarinda (64.72), tetapi nama wilayah tertulis 'Bontang' (64.74); dipetakan ke 64.74 sesuai kebijakan otoritas nama dan dicatat pada audit."
+        ]
+      }
+    },
+    {
+      "rule_code": "DQ-004",
+      "dimension": "Validity",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Parsing numerik valid; 0 nilai kosong disimpan sebagai NULL bermakna (bukan 0).",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-005",
+      "dimension": "Validity",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Semua metrik cacah bernilai non-negatif dan bulat utuh.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-006",
+      "dimension": "Timeliness",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Tahun referensi valid dan berada dalam periode sumber yang dideklarasikan.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-007",
+      "dimension": "Consistency",
+      "status": "warn",
+      "severity": "warning",
+      "affected_count": 11,
+      "message": "Anomali subkategori pada tahun historis non-publikasi (2022) otomatis diblokir; periode publikasi aktif (2023–2025) konsisten 100%.",
+      "details": {
+        "blocked_historical_violations": [
+          "64.03 (2022): total=185 < jumlah subkategori=299",
+          "64.07 (2022): total=120 < jumlah subkategori=275"
+        ]
+      }
+    },
+    {
+      "rule_code": "DQ-008",
+      "dimension": "Consistency",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Kunci wilayah dan tahun referensi siap untuk pemeriksaan kompatibilitas lintas sumber.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-009",
+      "dimension": "Consistency",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Satuan dan konversi skala sesuai dengan kamus metrik.",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-010",
+      "dimension": "Traceability",
+      "status": "pass",
+      "severity": "critical",
+      "affected_count": 0,
+      "message": "Provenance lengkap (SHA-256 f427719f4407…, URL penerbit, dan koordinat sel tersimpan).",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-011",
+      "dimension": "Accuracy Evidence",
+      "status": "warn",
+      "severity": "warning",
+      "affected_count": 1,
+      "message": "Terdapat selisih minor antara penjumlahan 10 kab/kota dan baris agregat provinsi; diberi penanda warning.",
+      "details": {
+        "discrepancies": [
+          "doctor_specialist_count (2024): jumlah 10 kab/kota=930 vs baris provinsi=980 (selisih=+50)"
+        ]
+      }
+    },
+    {
+      "rule_code": "DQ-012",
+      "dimension": "Consistency",
+      "status": "warn",
+      "severity": "warning",
+      "affected_count": 4,
+      "message": "Perubahan tahunan >40% ditandai untuk tinjauan konteks domain (tidak dikoreksi otomatis).",
+      "details": {
+        "flagged_changes": [
+          "64.09 doctor_total_count (2024→2025): 128 → 192 (+50.0%)",
+          "64.09 doctor_general_count (2024→2025): 67 → 103 (+53.7%)",
+          "64.09 doctor_specialist_count (2024→2025): 27 → 43 (+59.3%)",
+          "64.72 dentist_total_count (2023→2024): 109 → 170 (+56.0%)"
+        ]
+      }
+    },
+    {
+      "rule_code": "DQ-013",
+      "dimension": "Timeliness",
+      "status": "pass",
+      "severity": "warning",
+      "affected_count": 0,
+      "message": "Periode referensi mencakup baseline mutakhir (hingga 2025).",
+      "details": {}
+    },
+    {
+      "rule_code": "DQ-014",
+      "dimension": "Completeness",
+      "status": "pass",
+      "severity": "warning",
+      "affected_count": 0,
+      "message": "Cakupan lengkap 10/10 kabupaten/kota Kalimantan Timur terpenuhi.",
+      "details": {}
+    }
+  ],
+  "quarantined_samples": [
+    {
+      "source_locator": "1-dokter!R3C3",
+      "raw_region": "64.01",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    },
+    {
+      "source_locator": "1-dokter!R10C3",
+      "raw_region": "64.02",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    },
+    {
+      "source_locator": "1-dokter!R17C3",
+      "raw_region": "64.03",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    },
+    {
+      "source_locator": "1-dokter!R24C3",
+      "raw_region": "64.07",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    },
+    {
+      "source_locator": "1-dokter!R31C3",
+      "raw_region": "64.08",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    },
+    {
+      "source_locator": "1-dokter!R38C3",
+      "raw_region": "64.09",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    },
+    {
+      "source_locator": "1-dokter!R45C3",
+      "raw_region": "64.11",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    },
+    {
+      "source_locator": "1-dokter!R52C3",
+      "raw_region": "64.71",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    },
+    {
+      "source_locator": "1-dokter!R59C3",
+      "raw_region": "64.72",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    },
+    {
+      "source_locator": "1-dokter!R66C3",
+      "raw_region": "64.74",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    },
+    {
+      "source_locator": "1-dokter!R73C3",
+      "raw_region": "64",
+      "raw_year": "2022",
+      "raw_metric": "doctor_total_count",
+      "rule_code": "DQ-007",
+      "reason_code": "subtype_exceeds_total",
+      "detail_message": "Tahun 2022 diblokir karena subkategori melebihi total pada sumber."
+    }
+  ]
+}

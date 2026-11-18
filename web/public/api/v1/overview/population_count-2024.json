@@ -1,0 +1,249 @@
+{
+  "meta": {
+    "metric_code": "population_count",
+    "metric_label": "Jumlah Penduduk",
+    "short_label": "Penduduk",
+    "unit": "jiwa",
+    "kind": "source",
+    "formula": "Nilai kolom JUMLAH PENDUDUK dari SRC-POP-NAKES dalam satuan jiwa utuh (total 10 kab/kota = 4.045.858 jiwa)",
+    "operational_definition": "Jumlah penduduk kabupaten/kota tahun referensi 2024 yang digunakan Dinas Kesehatan Prov. Kaltim sebagai denominator resmi rasio tenaga kesehatan.",
+    "limitations": "Hanya digunakan sebagai denominator untuk indikator tahun 2024 yang sama; dilarang dipakai untuk menghitung rasio tahun 2023 atau 2025.",
+    "year": 2024,
+    "available_years": [
+      2024
+    ],
+    "snapshot_id": "snap-427145497d10cce4",
+    "sources": [
+      "SRC-POP-NAKES"
+    ],
+    "methodology_version": "1.0.0",
+    "published_at": "2026-11-18T07:19:24.075784",
+    "demo_data": false
+  },
+  "summary": {
+    "total_target_regions": 10,
+    "valid_region_count": 10,
+    "missing_or_blocked_count": 0,
+    "province_observation": {
+      "observation_id": "srcf-0cab44593ec55dff",
+      "region_code": "64",
+      "region_name": "Provinsi Kalimantan Timur",
+      "short_name": "Kalimantan Timur",
+      "region_level": "province",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 4045858,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R12C3",
+      "lineage_url": "/api/v1/lineage/srcf-0cab44593ec55dff"
+    },
+    "min_region": {
+      "region_code": "64.11",
+      "short_name": "Mahakam Ulu",
+      "value": 34246
+    },
+    "max_region": {
+      "region_code": "64.72",
+      "short_name": "Samarinda",
+      "value": 858079
+    }
+  },
+  "data": [
+    {
+      "observation_id": "srcf-7cf7cb32f54a568b",
+      "region_code": "64.01",
+      "region_name": "Kabupaten Paser",
+      "short_name": "Paser",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 286991,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R2C3",
+      "lineage_url": "/api/v1/lineage/srcf-7cf7cb32f54a568b"
+    },
+    {
+      "observation_id": "srcf-af5cf02551e854fd",
+      "region_code": "64.02",
+      "region_name": "Kabupaten Kutai Kartanegara",
+      "short_name": "Kutai Kartanegara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 789767,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R3C3",
+      "lineage_url": "/api/v1/lineage/srcf-af5cf02551e854fd"
+    },
+    {
+      "observation_id": "srcf-edd79f61b0cd5435",
+      "region_code": "64.03",
+      "region_name": "Kabupaten Berau",
+      "short_name": "Berau",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 261833,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R4C3",
+      "lineage_url": "/api/v1/lineage/srcf-edd79f61b0cd5435"
+    },
+    {
+      "observation_id": "srcf-f2970e600fae50e1",
+      "region_code": "64.07",
+      "region_name": "Kabupaten Kutai Barat",
+      "short_name": "Kutai Barat",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 178743,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R5C3",
+      "lineage_url": "/api/v1/lineage/srcf-f2970e600fae50e1"
+    },
+    {
+      "observation_id": "srcf-51ca552df918581c",
+      "region_code": "64.08",
+      "region_name": "Kabupaten Kutai Timur",
+      "short_name": "Kutai Timur",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 462993,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R6C3",
+      "lineage_url": "/api/v1/lineage/srcf-51ca552df918581c"
+    },
+    {
+      "observation_id": "srcf-676c52abefc151f5",
+      "region_code": "64.09",
+      "region_name": "Kabupaten Penajam Paser Utara",
+      "short_name": "Penajam Paser Utara",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 267686,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R7C3",
+      "lineage_url": "/api/v1/lineage/srcf-676c52abefc151f5"
+    },
+    {
+      "observation_id": "srcf-6527ec43a8d05da3",
+      "region_code": "64.11",
+      "region_name": "Kabupaten Mahakam Ulu",
+      "short_name": "Mahakam Ulu",
+      "region_level": "regency",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 34246,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R8C3",
+      "lineage_url": "/api/v1/lineage/srcf-6527ec43a8d05da3"
+    },
+    {
+      "observation_id": "srcf-3fdade92d61f5437",
+      "region_code": "64.71",
+      "region_name": "Kota Balikpapan",
+      "short_name": "Balikpapan",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 717231,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R9C3",
+      "lineage_url": "/api/v1/lineage/srcf-3fdade92d61f5437"
+    },
+    {
+      "observation_id": "srcf-126fe74a0b58561c",
+      "region_code": "64.72",
+      "region_name": "Kota Samarinda",
+      "short_name": "Samarinda",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 858079,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R10C3",
+      "lineage_url": "/api/v1/lineage/srcf-126fe74a0b58561c"
+    },
+    {
+      "observation_id": "srcf-cf9247158c385277",
+      "region_code": "64.74",
+      "region_name": "Kota Bontang",
+      "short_name": "Bontang",
+      "region_level": "city",
+      "year": 2024,
+      "metric_code": "population_count",
+      "metric_label": "Jumlah Penduduk",
+      "value": 188289,
+      "unit": "jiwa",
+      "quality_status": "validated",
+      "missing_reason": null,
+      "sources": [
+        "SRC-POP-NAKES"
+      ],
+      "source_locator": "Sheet1!R11C3",
+      "lineage_url": "/api/v1/lineage/srcf-cf9247158c385277"
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+---
+import AppShell from '../../layouts/AppShell.astro';
+import { snapshotData, statusLabel, statusPillClass, shortHash } from '../../lib/format';
+
+const datasets = snapshotData.datasets;
+const publishedCount = datasets.filter((d) => d.latest_run?.status === 'PUBLISHED').length;
+const quarantinedCount = datasets.filter((d) => d.latest_run?.status === 'QUARANTINED').length;
+const totalCuratedRows = datasets.reduce(
+  (acc, d) => acc + (d.latest_run?.status === 'PUBLISHED' ? d.latest_run.output_row_count : 0),
+  0
+);
+const totalQuarantinedRows = datasets.reduce(
+  (acc, d) => acc + (d.latest_run?.quarantined_row_count ?? 0),
+  0
+);
+---
+
+<AppShell
+  title="Audit Sumber & Quality Gate"
+  activeNav="datasets"
+  crumb="Tata kelola data / Katalog sumber & hasil Quality Gate"
+>
+  <div class="title-row">
+    <div>
+      <h1>Katalog Sumber Data &amp; Pemeriksaan Kualitas</h1>
+      <p class="finding">
+        Setiap file pemerintah diaudit secara byte-level (deteksi kontainer ZIP/XLSX vs label CSV, checksum SHA-256, jembatan kode wilayah, dan 14 aturan DQ) sebelum diizinkan masuk ke snapshot publik.
+      </p>
+    </div>
+  </div>
+
+  <section class="kpis" aria-label="Ringkasan audit dataset">
+    <div class="kpi lead">
+      <div class="kpi-label">Sumber lolos &amp; terbit</div>
+      <div class="kpi-value">
+        {publishedCount}
+        <span class="kpi-unit">/ {datasets.length} paket diaudit</span>
+      </div>
+      <div class="kpi-sub">Seluruhnya ber-checksum SHA-256</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Sumber dikarantina penuh</div>
+      <div class="kpi-value">
+        {quarantinedCount}
+        <span class="kpi-unit">paket korup</span>
+      </div>
+      <div class="kpi-sub">SRC-DOC-RATIO-BAD ditolak gate</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Fakta sumber terkurasi</div>
+      <div class="kpi-value">
+        {totalCuratedRows}
+        <span class="kpi-unit">observasi</span>
+      </div>
+      <div class="kpi-sub">Siap ditelusuri ke sel Excel</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Baris dikarantina</div>
+      <div class="kpi-value">
+        {totalQuarantinedRows}
+        <span class="kpi-unit">baris</span>
+      </div>
+      <div class="kpi-sub">11 historis 2022 + 11 rasio korup</div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="ds-table-heading">
+    <div class="panel-head">
+      <h2 id="ds-table-heading">Inventaris sumber Satu Data Kalimantan Timur</h2>
+      <span class="panel-meta">Klik ID atau judul dataset untuk melihat hasil 14 aturan DQ &amp; sampel karantina</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID &amp; judul sumber</th>
+            <th>Format katalog → byte</th>
+            <th>Sistem kode</th>
+            <th class="n">Fakta valid</th>
+            <th class="n">Karantina</th>
+            <th>Aturan (Lulus/Warn/Gagal)</th>
+            <th>Status gate</th>
+          </tr>
+        </thead>
+        <tbody>
+          {datasets.map((d) => {
+            const rs = d.latest_run?.rules_summary;
+            return (
+              <tr>
+                <td>
+                  <a class="row-link" href={`/datasets/${d.source_id}`}>
+                    <span class="mono">{d.source_id}</span> — {d.title}
+                  </a>
+                  <span class="cell-sub">
+                    SHA-256: <span class="mono">{shortHash(d.latest_run?.source_sha256)}</span> · {d.publisher}
+                  </span>
+                </td>
+                <td class="mono">
+                  {d.reported_format} → {d.actual_format}
+                </td>
+                <td class="mono">{d.region_code_system}</td>
+                <td class="n num">{d.latest_run?.output_row_count ?? 0}</td>
+                <td class="n num">{d.latest_run?.quarantined_row_count ?? 0}</td>
+                <td class="mono">
+                  {rs ? `${rs.pass} pass · ${rs.warn} warn · ${rs.fail} fail` : '—'}
+                </td>
+                <td>
+                  <span class={statusPillClass(d.quality_status)}>
+                    {statusLabel(d.quality_status)}
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</AppShell>

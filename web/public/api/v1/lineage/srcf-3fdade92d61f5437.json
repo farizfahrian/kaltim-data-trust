@@ -1,0 +1,33 @@
+{
+  "observation_id": "srcf-3fdade92d61f5437",
+  "observation_kind": "source",
+  "region_code": "64.71",
+  "region_name": "Kota Balikpapan",
+  "year": 2024,
+  "metric_code": "population_count",
+  "metric_label": "Jumlah Penduduk",
+  "value": 717231,
+  "unit": "jiwa",
+  "quality_status": "validated",
+  "missing_reason": null,
+  "formula": "Nilai kolom JUMLAH PENDUDUK dari SRC-POP-NAKES dalam satuan jiwa utuh (total 10 kab/kota = 4.045.858 jiwa)",
+  "transformation_version": "1.0.0",
+  "upstream_inputs": [
+    {
+      "role": "direct_source",
+      "fact_id": "srcf-3fdade92d61f5437",
+      "metric_code": "population_count",
+      "value": 717231,
+      "unit": "jiwa",
+      "source_id": "SRC-POP-NAKES",
+      "source_title": "Rasio Tenaga Kesehatan di Provinsi Kalimantan Timur Tahun 2024 (Denominator Penduduk)",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (berdasarkan proyeksi/registrasi penduduk kab/kota 2024)",
+      "dataset_url": "https://data.kaltimprov.go.id/dataset/rasio-tenaga-kesehatan-di-provinsi-kalimantan-timur-tahun-2024",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/6073c398-fc1b-44ac-956c-470d4c2e44e3/resource/5f3bf720-ffd6-45a3-a2f0-d2fd3c8f4d33/download/5-rasio-tenaga-kesehatan.xlsx",
+      "source_locator": "Sheet1!R9C3",
+      "run_id": "run-31fed06b254651e9",
+      "source_sha256": "f0589145f52b99429ff876f0ea4fddf589e725a6d13251be3a38579a0914515c",
+      "retrieved_at": "2026-11-18T06:58:31"
+    }
+  ]
+}

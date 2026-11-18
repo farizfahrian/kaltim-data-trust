@@ -1,0 +1,34 @@
+{
+  "observation_id": "derf-d774fe8d8317535f",
+  "observation_kind": "derived",
+  "region_code": "64.08",
+  "region_name": "Kabupaten Kutai Timur",
+  "year": 2025,
+  "metric_code": "doctor_general_per_100k",
+  "metric_label": "Dokter Umum per 100.000 Penduduk",
+  "value": null,
+  "unit": "orang/100.000 penduduk",
+  "quality_status": "not_comparable",
+  "missing_reason": "year_mismatch",
+  "formula": "(doctor_general_count / population_count) * 100000",
+  "methodology_version": "1.0.0",
+  "derivation_run_id": "drun-f6697c1732925abe",
+  "upstream_inputs": [
+    {
+      "role": "numerator",
+      "fact_id": "srcf-6065ede1ddec5fc9",
+      "metric_code": "doctor_general_count",
+      "value": 216,
+      "unit": "orang",
+      "source_id": "SRC-DOC",
+      "source_title": "Distribusi Tenaga Dokter di Provinsi Kalimantan Timur Tahun 2022 - 2025",
+      "publisher": "Dinas Kesehatan Provinsi Kalimantan Timur (via Satu Data Kaltim)",
+      "dataset_url": "https://data.kaltimprov.go.id/id/dataset/distribusi-tenaga-dokter-di-provinsi-kalimantan-timur",
+      "resource_url": "https://data.kaltimprov.go.id/dataset/2c14404c-7069-4448-9848-2584fb54786b/resource/e61b504d-6ca8-4ebe-b71e-7ac32b50ce45/download/1-dokter.xlsx",
+      "source_locator": "1-dokter!R32C6",
+      "run_id": "run-69d998f354a8537f",
+      "source_sha256": "f427719f44070b01021ab25e8a5fe7cded0e39de75f3ded705bbd87b62eac8ad",
+      "retrieved_at": "2026-11-18T06:50:55"
+    }
+  ]
+}
