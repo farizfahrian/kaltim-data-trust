@@ -75,8 +75,9 @@ body {
 h1, h2, h3, h4, p, figure, ul, ol, dl, dd, pre { margin: 0; }
 ul[class], ol[class] { padding: 0; list-style: none; }
 img, svg { display: block; max-width: 100%; }
-button, input, select { font: inherit; color: inherit; }
-a { color: inherit; text-decoration: none; }
+button, input, select { font: inherit; color: inherit; accent-color: var(--accent); }
+a { color: inherit; text-decoration: none; text-underline-offset: 2px; }
+::selection { background: #d6eaee; color: var(--text); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
 .num, table, .kpi-value, .bar-val { font-variant-numeric: tabular-nums; }
@@ -736,11 +737,30 @@ th.n button.sort-btn { margin-left: auto; }
   color: var(--muted);
 }
 
-/* ---------- Thematic GIS Map (/map, P1 FR-017) ---------- */
+/* ---------- Thematic GIS Map (/map, P1 FR-017 + Synchronized Spatial Motion) ---------- */
+:root {
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn[aria-pressed="true"] {
+  background: var(--active);
+  border-color: var(--accent);
+  color: var(--text);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
 .map-stage-wrap {
   position: relative;
   width: 100%;
-  height: 456px;
+  height: 468px;
   background: #eaf1f3;
   border: 1px solid var(--border);
   border-radius: var(--radius-control);
@@ -753,7 +773,7 @@ th.n button.sort-btn { margin-left: auto; }
 }
 .map-stage-wrap .leaflet-container {
   background: transparent !important;
-  font-family: var(--font-sans) !important;
+  font-family: var(--font) !important;
   outline: none;
 }
 .map-stage-wrap .leaflet-bar {
@@ -768,7 +788,7 @@ th.n button.sort-btn { margin-left: auto; }
   width: 30px !important;
   height: 30px !important;
   line-height: 28px !important;
-  font-family: var(--font-sans) !important;
+  font-family: var(--font) !important;
   font-size: 16px !important;
   font-weight: 500 !important;
   color: var(--text) !important;
@@ -788,7 +808,7 @@ th.n button.sort-btn { margin-left: auto; }
   border-radius: var(--radius-control) !important;
   box-shadow: none !important;
   padding: 6px 10px !important;
-  font: 13px/18px var(--font-sans) !important;
+  font: 13px/18px var(--font) !important;
 }
 .map-stage-wrap .leaflet-tooltip::before {
   display: none;
@@ -796,6 +816,130 @@ th.n button.sort-btn { margin-left: auto; }
 .map-stage-wrap .osm-muted-tiles {
   filter: grayscale(0.75) opacity(0.55);
 }
+
+/* Smooth in-place choropleth fill & spotlight transitions */
+.map-stage-wrap svg path.kdt-geo-poly {
+  cursor: pointer;
+  transition:
+    fill 320ms var(--ease-expo),
+    fill-opacity 200ms var(--ease-expo),
+    stroke 180ms ease,
+    stroke-width 180ms ease;
+}
+.map-stage-wrap svg path.kdt-city-dot {
+  cursor: pointer;
+  transition:
+    fill 320ms var(--ease-expo),
+    fill-opacity 200ms var(--ease-expo),
+    stroke-width 180ms ease;
+}
+.map-stage-wrap svg path.kdt-compare-arc {
+  pointer-events: none;
+}
+.equator-tag {
+  font: 500 12px/16px var(--mono);
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Floating Live Cartographic HUD (anchored in open SW margin of Kaltim) */
+.map-hud {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 500;
+  max-width: min(292px, calc(100% - 20px));
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  pointer-events: none;
+  display: grid;
+  gap: 2px;
+  transition: opacity var(--t-hover) ease, transform var(--t-ui) var(--ease-expo);
+}
+.map-hud-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.map-hud-val {
+  font-size: 13px;
+  color: var(--text);
+}
+.map-hud-coord {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Smooth Animated Compare Drawer (0fr -> 1fr grid reveal, zero layout thrash) */
+.compare-drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 280ms var(--ease-expo),
+    opacity 200ms ease,
+    margin-bottom 280ms var(--ease-expo);
+  margin-bottom: 0;
+}
+.compare-drawer[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-bottom: 12px;
+}
+.compare-drawer-inner {
+  overflow: hidden;
+}
+.compare-box {
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  padding: 10px 12px;
+  display: grid;
+  gap: 8px;
+}
+.compare-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+}
+.compare-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.compare-stat {
+  display: grid;
+  gap: 2px;
+}
+.compare-stat-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+.compare-stat-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
 .map-ssr-svg {
   width: 100%;
   height: 100%;
@@ -822,22 +966,50 @@ th.n button.sort-btn { margin-left: auto; }
   flex-wrap: wrap;
   gap: 6px;
 }
+
+/* Interactive Quartile Legend Filter Chips */
 .map-legend-grid {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px 14px;
+  gap: 6px 8px;
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid var(--rule);
   font-size: 13px;
   color: var(--text);
 }
-.legend-bin {
+button.legend-bin, .legend-bin {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--text);
   white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--t-hover) ease,
+    border-color var(--t-hover) ease,
+    opacity var(--t-hover) ease;
+}
+button.legend-bin:hover {
+  background: var(--raised);
+  border-color: var(--control);
+}
+button.legend-bin[aria-pressed="true"] {
+  background: var(--active);
+  border-color: var(--accent);
+  font-weight: 500;
+}
+.legend-count {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
 }
 .legend-swatch {
   width: 12px;
@@ -856,33 +1028,137 @@ th.n button.sort-btn { margin-left: auto; }
   flex-wrap: wrap;
   gap: 6px 12px;
 }
+
+/* FLIP Rank List with Proportional ScaleX Micro-Bars */
 .rank-list {
   display: grid;
+  position: relative;
 }
 .rank-row {
   display: grid;
   grid-template-columns: 24px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 10px;
-  min-height: 40px;
+  gap: 8px;
+  min-height: 42px;
   padding: 6px 8px;
-  border-radius: 6px;
+  border-radius: var(--radius-control);
   cursor: pointer;
+  transition:
+    background-color var(--t-hover) ease,
+    opacity 200ms ease;
 }
 .rank-row + .rank-row {
   border-top: 1px solid var(--rule);
-  border-radius: 0;
 }
-.rank-row:hover {
+.rank-row:hover,
+.rank-row[data-hovered="true"] {
   background: var(--raised);
 }
 .rank-row[aria-selected="true"] {
   background: var(--active);
-  border-radius: 6px;
+}
+.rank-row[data-compare-b="true"] {
+  outline: 1px dashed var(--accent);
+  outline-offset: -1px;
+}
+.rank-row[data-dimmed="true"] {
+  opacity: 0.34;
 }
 .rank-idx {
   font-size: var(--fs-small);
   color: var(--muted);
+}
+.rank-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.rank-title-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.rank-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rank-mini-track {
+  position: relative;
+  height: 5px;
+  background: var(--raised);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.rank-row[aria-selected="true"] .rank-mini-track {
+  background: rgba(255, 255, 255, 0.7);
+}
+.rank-mini-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--chart-1);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition:
+    transform 340ms var(--ease-expo),
+    background-color 300ms var(--ease-expo);
+}
+.rank-mini-ref {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: var(--text);
+  opacity: 0.65;
+}
+.rank-val-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+.rank-delta {
+  font-size: 12px;
+  color: var(--muted);
+}
+.rank-delta.pos { color: var(--positive); }
+.rank-delta.neg { color: var(--negative); }
+
+/* 3-Year Trajectory Strip inside Evidence Panel */
+.year-strip-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 10px;
+}
+.year-cell-btn {
+  display: grid;
+  gap: 2px;
+  padding: 6px 8px;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  cursor: pointer;
+  transition: background-color var(--t-hover) ease, border-color var(--t-hover) ease;
+}
+.year-cell-btn:hover {
+  background: var(--raised);
+}
+.year-cell-btn[aria-current="true"] {
+  background: var(--active);
+  border-color: var(--accent);
+}
+.year-cell-yr {
+  font-size: 12px;
+  color: var(--muted);
+}
+.year-cell-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
 }
 
 /* ---------- Mobile & Tablet (< 960px) ---------- */
@@ -934,9 +1210,20 @@ th.n button.sort-btn { margin-left: auto; }
   .filter-controls { width: 100%; }
   .select-control { width: 100%; }
   .bar-row { grid-template-columns: 108px minmax(0, 1fr) 72px; }
-  .map-stage-wrap { height: 360px; }
+  .map-stage-wrap { height: 380px; }
+  .compare-metrics-grid { grid-template-columns: minmax(0, 1fr); }
+  .map-hud { bottom: 8px; left: 8px; max-width: calc(100% - 16px); padding: 6px 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; }
+  .sidebar,
+  .compare-drawer,
+  .rank-mini-fill,
+  .map-hud {
+    transition-duration: 0.01ms !important;
+  }
+  .map-stage-wrap svg path.kdt-geo-poly,
+  .map-stage-wrap svg path.kdt-city-dot {
+    transition: fill 120ms linear, fill-opacity 120ms linear !important;
+  }
 }

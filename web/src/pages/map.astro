@@ -14,6 +14,9 @@ const defaultMetric = 'doctor_per_100k';
 const defaultYear = '2024';
 const ov = snapshotData.overviews[defaultMetric][defaultYear];
 const regionsMeta = Object.fromEntries(snapshotData.regions.map((r) => [r.region_code, r]));
+const geoPropsByCode = Object.fromEntries(
+  geoFc.features.map((f: any) => [f.properties.region_code, f.properties])
+);
 
 // Monochromatic 4-class teal ramp (app-screens.md §6.4: single hue ramp, neutral grey for missing/blocked)
 const CHOROPLETH_RAMP = ['#d6eaee', '#8ec1cd', '#448fa2', '#1b6c80'];
@@ -33,18 +36,27 @@ function computeQuantileBreaks(vals: number[]): number[] {
   return [sorted[0], q(0.25), q(0.5), q(0.75), sorted[sorted.length - 1]];
 }
 
+function binForValue(val: number | null, breaks: number[]): number {
+  if (val === null || val === undefined || breaks.length < 5) return 4;
+  if (val <= breaks[1]) return 0;
+  if (val <= breaks[2]) return 1;
+  if (val <= breaks[3]) return 2;
+  return 3;
+}
+
 function colorForValue(val: number | null, breaks: number[]): string {
-  if (val === null || val === undefined || breaks.length < 5) return MISSING_FILL;
-  if (val <= breaks[1]) return CHOROPLETH_RAMP[0];
-  if (val <= breaks[2]) return CHOROPLETH_RAMP[1];
-  if (val <= breaks[3]) return CHOROPLETH_RAMP[2];
-  return CHOROPLETH_RAMP[3];
+  const b = binForValue(val, breaks);
+  return b === 4 ? MISSING_FILL : CHOROPLETH_RAMP[b];
 }
 
 const validVals = ov.data
   .filter((r) => r.value !== null && (r.quality_status === 'validated' || r.quality_status === 'warning'))
   .map((r) => r.value as number);
 const initialBreaks = computeQuantileBreaks(validVals);
+const initialBinCounts = [0, 0, 0, 0, 0];
+ov.data.forEach((r) => {
+  initialBinCounts[binForValue(r.value, initialBreaks)] += 1;
+});
 const byReg = Object.fromEntries(ov.data.map((r) => [r.region_code, r]));
 
 // Build SSR equirectangular SVG projection (Kalimantan Timur straddles 0° Equator: cos(lat) ≈ 1.00)
@@ -61,9 +73,9 @@ const offsetY = (svgH - (maxLat - minLat) * scale) / 2;
 
 const projX = (lon: number) => (offsetX + (lon - minLon) * scale).toFixed(1);
 const projY = (lat: number) => (offsetY + (maxLat - lat) * scale).toFixed(1);
+const equatorY = projY(0);
 
 function ringToSvgPath(ring: number[][]): string {
-  // Decimate dense vertices slightly for compact SSR SVG while keeping full precision in /api/v1/geo/regions.json
   const step = ring.length > 400 ? 3 : ring.length > 150 ? 2 : 1;
   const pts: string[] = [];
   for (let i = 0; i < ring.length; i += step) {
@@ -97,15 +109,39 @@ const ssrFeatures = geoFc.features.map((f: any) => {
 });
 
 const sortedRows = [...ov.data].sort((a, b) => (b.value ?? -1) - (a.value ?? -1));
+const maxInitVal = Math.max(...validVals, 1);
+const provInitVal = ov.summary.province_observation?.value ?? null;
+const isInitRatio = ov.meta.unit.includes('/') || ov.meta.unit.includes('%');
 const defaultSelected = sortedRows[0];
+const defaultGeo = geoPropsByCode[defaultSelected.region_code];
+const defaultCompareCode = sortedRows[sortedRows.length - 1]?.region_code || '64.02';
+
 const defaultLineage = defaultSelected?.observation_id
   ? (snapshotData.lineages as Record<string, any>)[defaultSelected.observation_id]
   : null;
+
+const overviewsMap = snapshotData.overviews as Record<string, Record<string, any>>;
+const defaultSeries3Y = ['2023', '2024', '2025'].map((yr) => {
+  const yrOv = overviewsMap[defaultMetric]?.[yr];
+  const rec = yrOv?.data.find((d: any) => d.region_code === defaultSelected.region_code);
+  return {
+    year: yr,
+    value: rec?.value ?? null,
+    unit: yrOv?.meta.unit || ov.meta.unit,
+  };
+});
+
+const fmtInitCoord = (lat: number, lon: number) => {
+  const ns = lat >= 0 ? 'LU' : 'LS';
+  const f = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return `${f.format(Math.abs(lat))}° ${ns} · ${f.format(lon)}° BT`;
+};
 
 const clientPayload = {
   overviews: snapshotData.overviews,
   lineages: snapshotData.lineages,
   regionsMeta,
+  geoPropsByCode,
 };
 ---
 
@@ -131,11 +167,15 @@ const clientPayload = {
     <div class="filter-controls" style="padding-bottom:0;">
       <label for="map-metric-select" class="panel-meta">Indikator peta</label>
       <select id="map-metric-select" class="select-control" aria-label="Pilih indikator peta tematik">
-        {snapshotData.metrics.map((m) => (
-          <option value={m.metric_code} selected={m.metric_code === defaultMetric}>
-            {m.short_label} ({m.unit})
-          </option>
-        ))}
+        {snapshotData.metrics.map((m) => {
+          const mOv = overviewsMap[m.metric_code]?.['2024'];
+          const multiYr = (mOv?.meta.available_years?.length ?? 0) >= 2;
+          return (
+            <option value={m.metric_code} selected={m.metric_code === defaultMetric}>
+              {m.short_label} ({m.unit}{multiYr ? ' · 2023–2025' : ' · 2024'})
+            </option>
+          );
+        })}
       </select>
 
       <div class="segmented" role="group" aria-label="Tahun referensi peta">
@@ -149,10 +189,23 @@ const clientPayload = {
           </button>
         ))}
       </div>
+
+      <button
+        type="button"
+        class="btn"
+        id="map-play-btn"
+        disabled={(ov.meta.available_years?.length ?? 0) < 2}
+        title="Pilih indikator dengan seri 2023–2025 untuk memutar perubahan lintas tahun"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" id="map-play-icon">
+          <polygon points="7,5 19,12 7,19" stroke-linejoin="round"></polygon>
+        </svg>
+        <span id="map-play-label">Putar 2023–2025</span>
+      </button>
     </div>
 
-    <span class="panel-meta">
-      Metode klasifikasi: Kuartil 4-kelas · Kode Kemendagri ↔ BPS tervalidasi (10/10 cocok)
+    <span class="panel-meta" id="map-method-meta">
+      Kuartil 4-kelas · Klik kelas warna untuk sorot spasial
     </span>
   </div>
 
@@ -164,13 +217,23 @@ const clientPayload = {
       </div>
 
       <div class="map-toolbar">
-        <div class="map-preset-group" role="group" aria-label="Fokus area peta">
-          <button type="button" class="btn" data-cam-preset="all">Seluruh Kaltim</button>
-          <button type="button" class="btn" data-cam-preset="cities">
+        <div class="map-preset-group" role="group" aria-label="Fokus area dan alat analisis spasial">
+          <button type="button" class="btn" data-cam-preset="all" aria-pressed="true">
+            Seluruh Kaltim
+          </button>
+          <button type="button" class="btn" data-cam-preset="cities" aria-pressed="false">
             Koridor 3 kota
           </button>
-          <button type="button" class="btn" data-cam-preset="mahakam">
+          <button type="button" class="btn" data-cam-preset="mahakam" aria-pressed="false">
             Hulu Mahakam
+          </button>
+          <button type="button" class="btn" id="compare-mode-btn" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="12" r="3"></circle>
+              <path d="M9 12h6" stroke-linecap="round" stroke-dasharray="2 2"></path>
+            </svg>
+            <span>Bandingkan 2 wilayah</span>
           </button>
         </div>
 
@@ -180,7 +243,67 @@ const clientPayload = {
         </label>
       </div>
 
+      <div class="compare-drawer" id="compare-drawer" data-open="false" aria-hidden="true">
+        <div class="compare-drawer-inner">
+          <div class="compare-box">
+            <div class="compare-controls-row">
+              <span>
+                <strong>Wilayah A:</strong> <span id="cmp-a-label">{defaultSelected.short_name} ({defaultSelected.region_code})</span>
+              </span>
+              <div style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <label for="cmp-b-select" style="color:var(--muted);">vs Wilayah B:</label>
+                <select id="cmp-b-select" class="select-control" style="height:28px;padding:0 8px;">
+                  {snapshotData.regions
+                    .filter((r) => r.region_level !== 'province')
+                    .map((r) => (
+                      <option value={r.region_code} selected={r.region_code === defaultCompareCode}>
+                        {r.short_name} ({r.region_code})
+                      </option>
+                    ))}
+                </select>
+                <button type="button" class="btn" id="cmp-swap-btn" style="height:28px;padding:0 8px;">
+                  Tukar
+                </button>
+              </div>
+            </div>
+
+            <div class="compare-metrics-grid">
+              <div class="compare-stat">
+                <span class="compare-stat-label">Selisih nilai (A &minus; B)</span>
+                <span class="compare-stat-val num" id="cmp-delta-val">—</span>
+              </div>
+              <div class="compare-stat">
+                <span class="compare-stat-label">Rasio ketimpangan</span>
+                <span class="compare-stat-val num" id="cmp-ratio-val">—</span>
+              </div>
+              <div class="compare-stat">
+                <span class="compare-stat-label">Jarak lurus pusat wilayah</span>
+                <span class="compare-stat-val num" id="cmp-dist-val">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="map-stage-wrap">
+        <div class="map-hud" id="map-hud" aria-live="polite">
+          <div class="map-hud-head">
+            <span style="display:inline-flex;align-items:center;gap:6px;min-width:0;">
+              <span class="legend-swatch" id="hud-swatch" style={`background:${colorForValue(defaultSelected.value, initialBreaks)}`}></span>
+              <span id="hud-region-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                {defaultSelected.short_name}
+              </span>
+            </span>
+            <span class="mono" style="color:var(--muted);font-weight:500;" id="hud-rank-badge">#1/10</span>
+          </div>
+          <div class="map-hud-val num" id="hud-region-val">
+            {formatMetricValue(defaultSelected.value, ov.meta.unit)} {formatShortUnit(ov.meta.unit)}
+          </div>
+          <div class="map-hud-coord" id="hud-coord">
+            {fmtInitCoord(defaultGeo.label_lat, defaultGeo.label_lon)}
+          </div>
+        </div>
+
         <svg
           class="map-ssr-svg"
           id="kaltim-ssr-svg"
@@ -190,6 +313,16 @@ const clientPayload = {
           style="position:absolute;inset:0;z-index:1;"
         >
           <g>
+            <line
+              x1="0"
+              y1={equatorY}
+              x2={svgW}
+              y2={equatorY}
+              stroke="#526066"
+              stroke-width="1"
+              stroke-dasharray="4 4"
+              opacity="0.5"
+            />
             {ssrFeatures.map((sf: any) => (
               <path
                 d={sf.d}
@@ -217,34 +350,40 @@ const clientPayload = {
               ))}
           </g>
         </svg>
-        <div id="kaltim-map-canvas" class="map-canvas" style="position:relative;z-index:2;" aria-label="Peta choropleth 10 kabupaten dan kota Kalimantan Timur"></div>
+
+        <div id="kaltim-map-canvas" class="map-canvas" style="position:relative;z-index:2;" aria-label="Peta choropleth interaktif 10 kabupaten dan kota Kalimantan Timur"></div>
       </div>
 
-      <div class="map-legend-grid" id="map-legend" aria-label="Legenda klasifikasi choropleth">
+      <div class="map-legend-grid" id="map-legend" role="group" aria-label="Filter sorotan kelas kuartil">
         {initialBreaks.length === 5 && (
           <>
-            <span class="legend-bin">
+            <button type="button" class="legend-bin" data-bin="0" aria-pressed="false">
               <span class="legend-swatch" style={`background:${CHOROPLETH_RAMP[0]}`}></span>
-              <span class="num">{formatMetricValue(initialBreaks[0], ov.meta.unit)}–{formatMetricValue(initialBreaks[1], ov.meta.unit)}</span>
-            </span>
-            <span class="legend-bin">
+              <span class="num">Q1 {formatMetricValue(initialBreaks[0], ov.meta.unit)}–{formatMetricValue(initialBreaks[1], ov.meta.unit)}</span>
+              <span class="legend-count">({initialBinCounts[0]})</span>
+            </button>
+            <button type="button" class="legend-bin" data-bin="1" aria-pressed="false">
               <span class="legend-swatch" style={`background:${CHOROPLETH_RAMP[1]}`}></span>
-              <span class="num">&le; {formatMetricValue(initialBreaks[2], ov.meta.unit)}</span>
-            </span>
-            <span class="legend-bin">
+              <span class="num">Q2 &le; {formatMetricValue(initialBreaks[2], ov.meta.unit)}</span>
+              <span class="legend-count">({initialBinCounts[1]})</span>
+            </button>
+            <button type="button" class="legend-bin" data-bin="2" aria-pressed="false">
               <span class="legend-swatch" style={`background:${CHOROPLETH_RAMP[2]}`}></span>
-              <span class="num">&le; {formatMetricValue(initialBreaks[3], ov.meta.unit)}</span>
-            </span>
-            <span class="legend-bin">
+              <span class="num">Q3 &le; {formatMetricValue(initialBreaks[3], ov.meta.unit)}</span>
+              <span class="legend-count">({initialBinCounts[2]})</span>
+            </button>
+            <button type="button" class="legend-bin" data-bin="3" aria-pressed="false">
               <span class="legend-swatch" style={`background:${CHOROPLETH_RAMP[3]}`}></span>
-              <span class="num">&le; {formatMetricValue(initialBreaks[4], ov.meta.unit)}</span>
-            </span>
+              <span class="num">Q4 &le; {formatMetricValue(initialBreaks[4], ov.meta.unit)}</span>
+              <span class="legend-count">({initialBinCounts[3]})</span>
+            </button>
           </>
         )}
-        <span class="legend-bin">
+        <button type="button" class="legend-bin" data-bin="4" aria-pressed="false">
           <span class="legend-swatch" style={`background:${MISSING_FILL}`}></span>
-          <span>Tidak tersedia / tak sepadan</span>
-        </span>
+          <span>Tak sepadan</span>
+          <span class="legend-count">({initialBinCounts[4]})</span>
+        </button>
       </div>
 
       <div class="map-attribution-line">
@@ -259,32 +398,60 @@ const clientPayload = {
       <section class="panel" aria-labelledby="map-rank-heading">
         <div class="panel-head">
           <h2 id="map-rank-heading">Daftar peringkat wilayah</h2>
-          <span class="panel-meta" id="map-rank-unit">{formatShortUnit(ov.meta.unit)}</span>
+          <span class="panel-meta" id="map-rank-unit">
+            {formatShortUnit(ov.meta.unit)}{isInitRatio && provInitVal !== null ? ` · garis = Prov. ${formatMetricValue(provInitVal, ov.meta.unit)}` : ''}
+          </span>
         </div>
 
         <div class="rank-list" id="map-rank-list" role="listbox" aria-label="Pilih wilayah pada peta">
-          {sortedRows.map((row, idx) => (
-            <div
-              class="rank-row"
-              role="option"
-              tabindex="0"
-              aria-selected={idx === 0 ? 'true' : 'false'}
-              data-map-select={row.region_code}
-            >
-              <span class="rank-idx num">{idx + 1}.</span>
-              <span>
-                <span class="legend-swatch" style={`background:${colorForValue(row.value, initialBreaks)};vertical-align:-1px;margin-right:6px;`}></span>
-                <span>{row.short_name}</span>
-              </span>
-              <span class="num">{formatMetricValue(row.value, ov.meta.unit)}</span>
-            </div>
-          ))}
+          {sortedRows.map((row, idx) => {
+            const barScale = row.value !== null ? Math.max(0.03, Math.min(1, row.value / maxInitVal)) : 0;
+            const c = colorForValue(row.value, initialBreaks);
+            const refPct =
+              isInitRatio && provInitVal !== null
+                ? Math.min(100, (provInitVal / maxInitVal) * 100).toFixed(1)
+                : null;
+            return (
+              <div
+                class="rank-row"
+                role="option"
+                tabindex="0"
+                aria-selected={idx === 0 ? 'true' : 'false'}
+                data-map-select={row.region_code}
+              >
+                <span class="rank-idx num" data-rank-idx>{idx + 1}.</span>
+                <div class="rank-main">
+                  <div class="rank-title-line">
+                    <span class="legend-swatch" data-rank-swatch style={`background:${c};`}></span>
+                    <span class="rank-name">{row.short_name}</span>
+                  </div>
+                  <div class="rank-mini-track">
+                    <span
+                      class="rank-mini-fill"
+                      data-rank-bar
+                      style={`transform:scaleX(${barScale.toFixed(3)});background:${c === MISSING_FILL ? '#cfd6da' : '#1b6c80'};`}
+                    ></span>
+                    <span
+                      class="rank-mini-ref"
+                      data-rank-ref
+                      style={refPct ? `left:${refPct}%;display:block;` : 'display:none;'}
+                      title={provInitVal !== null ? `Angka Provinsi: ${formatMetricValue(provInitVal, ov.meta.unit)}` : ''}
+                    ></span>
+                  </div>
+                </div>
+                <div class="rank-val-col">
+                  <span class="num" data-rank-num>{formatMetricValue(row.value, ov.meta.unit)}</span>
+                  <span class="rank-delta num" data-rank-delta style="display:none;"></span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
       <section class="panel" aria-labelledby="map-lin-heading">
         <div class="panel-head">
-          <h2 id="map-lin-heading">Bukti wilayah terpilih</h2>
+          <h2 id="map-lin-heading">Bukti &amp; lintasan wilayah</h2>
           <span class={statusPillClass(defaultSelected.quality_status)} id="map-lin-pill">
             {statusLabel(defaultSelected.quality_status, defaultSelected.missing_reason)}
           </span>
@@ -304,9 +471,31 @@ const clientPayload = {
             </span>
           </div>
           <div class="kv-row">
+            <span class="kv-key" id="map-bench-key">Selisih thd Provinsi</span>
+            <span class="kv-val num" id="map-bench-val">
+              {provInitVal !== null && defaultSelected.value !== null
+                ? `+${formatMetricValue(defaultSelected.value - provInitVal, ov.meta.unit)} di atas Prov. (${formatMetricValue(provInitVal, ov.meta.unit)})`
+                : '—'}
+            </span>
+          </div>
+          <div class="kv-row">
             <span class="kv-key">Sumber pembentuk</span>
             <span class="kv-val mono" id="map-lin-src">{defaultSelected.sources.join(', ')}</span>
           </div>
+        </div>
+
+        <div class="year-strip-3" id="map-year-strip" role="group" aria-label="Lintasan nilai wilayah 2023 hingga 2025">
+          {defaultSeries3Y.map((item) => (
+            <button
+              type="button"
+              class="year-cell-btn"
+              data-strip-year={item.year}
+              aria-current={item.year === defaultYear ? 'true' : 'false'}
+            >
+              <span class="year-cell-yr">Tahun {item.year}</span>
+              <span class="year-cell-val num">{formatMetricValue(item.value, item.unit)}</span>
+            </button>
+          ))}
         </div>
 
         <div id="map-lin-steps" style="display:grid;gap:8px;margin-top:10px;">
@@ -351,8 +540,12 @@ const clientPayload = {
       const CITIES_BOUNDS: L.LatLngBoundsExpression = [[-1.35, 116.62], [0.25, 117.62]];
       const MAHAKAM_BOUNDS: L.LatLngBoundsExpression = [[-1.18, 113.80], [1.55, 116.55]];
 
+      const prefersReducedMotion = () =>
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       const intFmt = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 });
       const decFmt = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const oneDecFmt = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
       const fmtVal = (v: number | null | undefined, unit: string) => {
         if (v === null || v === undefined) return '—';
@@ -372,6 +565,20 @@ const clientPayload = {
         return 'Belum diperiksa';
       };
 
+      const fmtCoord = (lat: number, lon: number) =>
+        `${decFmt.format(Math.abs(lat))}° ${lat >= 0 ? 'LU' : 'LS'} · ${decFmt.format(lon)}° BT`;
+
+      function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+        const R = 6371;
+        const toRad = (d: number) => (d * Math.PI) / 180;
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a =
+          Math.sin(dLat / 2) ** 2 +
+          Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+        return 2 * R * Math.asin(Math.sqrt(a));
+      }
+
       function quantiles(vals: number[]): number[] {
         const s = [...vals].sort((a, b) => a - b);
         if (!s.length) return [];
@@ -384,12 +591,17 @@ const clientPayload = {
         return [s[0], q(0.25), q(0.5), q(0.75), s[s.length - 1]];
       }
 
+      function binFor(v: number | null, brk: number[]): number {
+        if (v === null || v === undefined || brk.length < 5) return 4;
+        if (v <= brk[1]) return 0;
+        if (v <= brk[2]) return 1;
+        if (v <= brk[3]) return 2;
+        return 3;
+      }
+
       function fillFor(v: number | null, brk: number[]): string {
-        if (v === null || v === undefined || brk.length < 5) return MISSING;
-        if (v <= brk[1]) return RAMP[0];
-        if (v <= brk[2]) return RAMP[1];
-        if (v <= brk[3]) return RAMP[2];
-        return RAMP[3];
+        const b = binFor(v, brk);
+        return b === 4 ? MISSING : RAMP[b];
       }
 
       const params = new URLSearchParams(window.location.search);
@@ -397,132 +609,365 @@ const clientPayload = {
         metric: params.get('metric') && store.overviews[params.get('metric')!] ? params.get('metric')! : 'doctor_per_100k',
         year: ['2023', '2024', '2025'].includes(params.get('year') || '') ? params.get('year')! : '2024',
         selectedRegion: params.get('region') || '64.74',
+        compareMode: params.get('compare') ? true : false,
+        compareRegion: params.get('compare') || '64.02',
+        hoveredRegion: null as string | null,
+        lockedBin: null as number | null,
+        hoveredBin: null as number | null,
+        activePreset: 'all',
       };
 
       const selectEl = document.getElementById('map-metric-select') as HTMLSelectElement;
       const yearBtns = Array.from(document.querySelectorAll('[data-map-year]'));
+      const presetBtns = Array.from(document.querySelectorAll('[data-cam-preset]'));
       const rankList = document.getElementById('map-rank-list')!;
       const legendEl = document.getElementById('map-legend')!;
       const osmToggle = document.getElementById('osm-basemap-toggle') as HTMLInputElement;
+      const playBtn = document.getElementById('map-play-btn') as HTMLButtonElement;
+      const playIcon = document.getElementById('map-play-icon')!;
+      const playLabel = document.getElementById('map-play-label')!;
+      const compareBtn = document.getElementById('compare-mode-btn') as HTMLButtonElement;
+      const compareDrawer = document.getElementById('compare-drawer')!;
+      const cmpBSelect = document.getElementById('cmp-b-select') as HTMLSelectElement;
+      const cmpSwapBtn = document.getElementById('cmp-swap-btn') as HTMLButtonElement;
+
+      // Persistent Rank Row DOM references for FLIP reordering + value tweening
+      const rowEls = new Map<string, HTMLElement>();
+      const prevNumeric = new Map<string, number | null>();
+      const rafHandles = new Map<string, number>();
+      let prevUnit = store.overviews['doctor_per_100k']['2024'].meta.unit as string;
+
+      Array.from(rankList.querySelectorAll<HTMLElement>('[data-map-select]')).forEach((el) => {
+        const code = el.getAttribute('data-map-select')!;
+        rowEls.set(code, el);
+        const initRec = store.overviews['doctor_per_100k']['2024'].data.find((d: any) => d.region_code === code);
+        prevNumeric.set(code, initRec?.value ?? null);
+      });
 
       let geoData: any = null;
       let lMap: L.Map | null = null;
-      let geoLayer: L.GeoJSON | null = null;
-      let cityLayer: L.LayerGroup | null = null;
+      const polyByCode = new Map<string, L.Path>();
+      const cityDotByCode = new Map<string, L.CircleMarker>();
       let osmLayer: L.TileLayer | null = null;
+      let activeReticle: L.CircleMarker | null = null;
+      let compareReticle: L.CircleMarker | null = null;
+      let compareArc: L.Polyline | null = null;
+      let playTimer: number | null = null;
+
+      function stopPlayback() {
+        if (playTimer !== null) {
+          window.clearInterval(playTimer);
+          playTimer = null;
+        }
+        playBtn.setAttribute('aria-pressed', 'false');
+        playIcon.innerHTML = `<polygon points="7,5 19,12 7,19" stroke-linejoin="round"></polygon>`;
+        playLabel.textContent = 'Putar 2023–2025';
+      }
 
       function updateUrl() {
         const p = new URLSearchParams();
         p.set('metric', state.metric);
         p.set('year', state.year);
         if (state.selectedRegion) p.set('region', state.selectedRegion);
+        if (state.compareMode && state.compareRegion) p.set('compare', state.compareRegion);
         window.history.replaceState({}, '', `${window.location.pathname}?${p.toString()}`);
       }
 
-      function tooltipHtml(name: string, code: string, valText: string, unit: string, statusText: string) {
-        return `<div><strong>${name}</strong> <span class="mono">(${code})</span><br/><span>${valText} ${unit}</span> · <span style="color:#52565a;">${statusText}</span></div>`;
+      function tooltipHtml(name: string, code: string, rankIdx: number, valText: string, unit: string, statusText: string) {
+        return `<div><strong>${name}</strong> <span class="mono">(${code} · #${rankIdx})</span><br/><span>${valText} ${unit}</span> · <span style="color:#52565a;">${statusText}</span></div>`;
       }
 
-      function syncLeafletLayers(flyToSelected = false) {
-        if (!lMap || !geoData) return;
-        const ov = store.overviews[state.metric][state.year];
-        const unit = ov.meta.unit;
-        const byReg: Record<string, any> = {};
-        ov.data.forEach((r: any) => { byReg[r.region_code] = r; });
+      function smoothFlyBounds(bounds: L.LatLngBoundsExpression, padPx = 20, maxZ = 10) {
+        if (!lMap) return;
+        if (prefersReducedMotion()) {
+          lMap.fitBounds(bounds, { padding: [padPx, padPx], maxZoom: maxZ, animate: false });
+        } else {
+          lMap.flyToBounds(bounds, {
+            padding: [padPx, padPx],
+            maxZoom: maxZ,
+            duration: 0.52,
+            easeLinearity: 0.22,
+          });
+        }
+      }
 
-        const validVals = ov.data
-          .filter((r: any) => r.value !== null && (r.quality_status === 'validated' || r.quality_status === 'warning'))
-          .map((r: any) => r.value as number);
-        const brk = quantiles(validVals);
+      function updateHud(rows: any[], brk: number[], unit: string, provVal: number | null, isRatio: boolean, pointerCoord?: [number, number]) {
+        const focusCode = state.hoveredRegion || state.selectedRegion;
+        const idx = rows.findIndex((r: any) => r.region_code === focusCode);
+        const rec = idx >= 0 ? rows[idx] : rows[0];
+        if (!rec) return;
 
-        if (geoLayer) lMap.removeLayer(geoLayer);
-        if (cityLayer) lMap.removeLayer(cityLayer);
+        const gProps = store.geoPropsByCode[rec.region_code];
+        (document.getElementById('hud-swatch') as HTMLElement).style.background = fillFor(rec.value, brk);
+        document.getElementById('hud-region-name')!.textContent = rec.short_name;
+        document.getElementById('hud-rank-badge')!.textContent = `#${(idx >= 0 ? idx : 0) + 1}/10`;
 
-        let selectedPolyLayer: L.Path | null = null;
+        let valSummary = rec.value !== null ? `${fmtVal(rec.value, unit)} ${shortUnit(unit)}` : stLabel(rec.quality_status, rec.missing_reason);
+        if (rec.value !== null && provVal !== null && isRatio) {
+          const diff = rec.value - provVal;
+          const sign = diff >= 0 ? '+' : '';
+          valSummary += ` (${sign}${fmtVal(diff, unit)} vs Prov.)`;
+        }
+        document.getElementById('hud-region-val')!.textContent = valSummary;
 
-        geoLayer = L.geoJSON(geoData, {
-          style: (feature: any) => {
-            const code = feature?.properties?.region_code;
-            const obs = byReg[code];
-            const val = obs ? obs.value : null;
-            const isSel = code === state.selectedRegion;
-            return {
-              fillColor: fillFor(val, brk),
-              fillOpacity: osmToggle?.checked ? 0.82 : 0.94,
-              color: isSel ? '#131416' : '#ffffff',
-              weight: isSel ? 2.2 : 1.1,
-            };
-          },
-          onEachFeature: (feature: any, layer: L.Layer) => {
-            const code = feature.properties.region_code;
-            const obs = byReg[code];
-            const val = obs ? obs.value : null;
-            const statusText = obs ? stLabel(obs.quality_status, obs.missing_reason) : 'Tidak tersedia';
+        const [lat, lon] = pointerCoord || [gProps?.label_lat ?? 0, gProps?.label_lon ?? 117];
+        document.getElementById('hud-coord')!.textContent = fmtCoord(lat, lon);
+      }
 
-            if (code === state.selectedRegion && 'bringToFront' in layer) {
-              selectedPolyLayer = layer as L.Path;
-            }
+      function drawCompareArcAndStats(byReg: Record<string, any>, unit: string, animateArc = false) {
+        compareBtn.setAttribute('aria-pressed', String(state.compareMode));
+        compareDrawer.setAttribute('data-open', String(state.compareMode));
+        compareDrawer.setAttribute('aria-hidden', String(!state.compareMode));
 
-            layer.bindTooltip(
-              tooltipHtml(feature.properties.region_name, code, fmtVal(val, unit), unit, statusText),
-              { sticky: true, direction: 'top', offset: [0, -6] }
-            );
-
-            layer.on('click', () => {
-              state.selectedRegion = code;
-              renderAll(false);
-            });
-          },
-        }).addTo(lMap);
-
-        if (selectedPolyLayer) {
-          (selectedPolyLayer as L.Path).bringToFront();
+        if (compareArc && lMap) {
+          lMap.removeLayer(compareArc);
+          compareArc = null;
+        }
+        if (compareReticle && lMap) {
+          lMap.removeLayer(compareReticle);
+          compareReticle = null;
         }
 
-        cityLayer = L.layerGroup();
-        geoData.features
-          .filter((f: any) => f.properties.region_level === 'city')
-          .forEach((f: any) => {
-            const code = f.properties.region_code;
-            const obs = byReg[code];
-            const val = obs ? obs.value : null;
-            const isSel = code === state.selectedRegion;
-            const statusText = obs ? stLabel(obs.quality_status, obs.missing_reason) : 'Tidak tersedia';
+        if (!state.compareMode) return;
 
-            const dot = L.circleMarker([f.properties.label_lat, f.properties.label_lon], {
-              radius: isSel ? 7.5 : 6,
-              fillColor: fillFor(val, brk),
-              fillOpacity: 1,
+        if (state.compareRegion === state.selectedRegion) {
+          const alt = Object.keys(store.geoPropsByCode).find((c) => c !== state.selectedRegion) || '64.02';
+          state.compareRegion = alt;
+        }
+        cmpBSelect.value = state.compareRegion;
+
+        const recA = byReg[state.selectedRegion];
+        const recB = byReg[state.compareRegion];
+        const geoA = store.geoPropsByCode[state.selectedRegion];
+        const geoB = store.geoPropsByCode[state.compareRegion];
+
+        document.getElementById('cmp-a-label')!.textContent =
+          `${recA?.short_name || state.selectedRegion} (${state.selectedRegion})`;
+
+        if (recA?.value !== null && recA?.value !== undefined && recB?.value !== null && recB?.value !== undefined) {
+          const diff = recA.value - recB.value;
+          const sign = diff > 0 ? '+' : '';
+          document.getElementById('cmp-delta-val')!.textContent = `${sign}${fmtVal(diff, unit)} ${shortUnit(unit)}`;
+          const hi = Math.max(recA.value, recB.value);
+          const lo = Math.min(recA.value, recB.value);
+          document.getElementById('cmp-ratio-val')!.textContent =
+            lo > 0 ? `${decFmt.format(hi / lo)}× lipat` : '—';
+        } else {
+          document.getElementById('cmp-delta-val')!.textContent = 'Tak sepadan';
+          document.getElementById('cmp-ratio-val')!.textContent = '—';
+        }
+
+        if (geoA && geoB) {
+          const dist = haversineKm(geoA.label_lat, geoA.label_lon, geoB.label_lat, geoB.label_lon);
+          document.getElementById('cmp-dist-val')!.textContent = `${intFmt.format(Math.round(dist))} km`;
+
+          if (lMap) {
+            const lat1 = geoA.label_lat;
+            const lon1 = geoA.label_lon;
+            const lat2 = geoB.label_lat;
+            const lon2 = geoB.label_lon;
+            const midLat = (lat1 + lat2) / 2;
+            const midLon = (lon1 + lon2) / 2;
+            const dLat = lat2 - lat1;
+            const dLon = lon2 - lon1;
+            const ctrlLat = midLat - dLon * 0.18;
+            const ctrlLon = midLon + dLat * 0.18;
+
+            const arcPts: [number, number][] = [];
+            const steps = 36;
+            for (let i = 0; i <= steps; i++) {
+              const t = i / steps;
+              const u = 1 - t;
+              arcPts.push([
+                u * u * lat1 + 2 * u * t * ctrlLat + t * t * lat2,
+                u * u * lon1 + 2 * u * t * ctrlLon + t * t * lon2,
+              ]);
+            }
+
+            compareArc = L.polyline(arcPts, {
               color: '#131416',
-              weight: isSel ? 2.4 : 1.6,
-            });
+              weight: 2,
+              dashArray: '5 4',
+              opacity: 0.86,
+              className: 'kdt-compare-arc',
+              interactive: false,
+            }).addTo(lMap);
 
-            dot.bindTooltip(
-              tooltipHtml(f.properties.region_name, code, fmtVal(val, unit), unit, statusText),
-              { direction: 'top', offset: [0, -8] }
-            );
+            compareReticle = L.circleMarker([lat2, lon2], {
+              radius: 10.5,
+              fill: false,
+              color: '#1b6c80',
+              weight: 2,
+              dashArray: '3 3',
+              interactive: false,
+            }).addTo(lMap);
 
-            dot.on('click', () => {
-              state.selectedRegion = code;
-              renderAll(false);
-            });
-
-            cityLayer!.addLayer(dot);
-          });
-        cityLayer.addTo(lMap);
-
-        if (flyToSelected) {
-          const feat = geoData.features.find((f: any) => f.properties.region_code === state.selectedRegion);
-          if (feat && feat.properties.bbox) {
-            const [minLon, minLat, maxLon, maxLat] = feat.properties.bbox;
-            lMap.fitBounds([[minLat, minLon], [maxLat, maxLon]], { padding: [36, 36], maxZoom: 9.5 });
+            if (animateArc && !prefersReducedMotion()) {
+              const pathEl = (compareArc as any)._path as SVGPathElement | undefined;
+              if (pathEl && typeof pathEl.getTotalLength === 'function') {
+                const len = Math.max(20, pathEl.getTotalLength());
+                pathEl.animate(
+                  [
+                    { strokeDasharray: `${len} ${len}`, strokeDashoffset: `${len}`, opacity: 0.25 },
+                    { strokeDasharray: `${len} ${len}`, strokeDashoffset: '0', opacity: 0.88 },
+                  ],
+                  { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
+                );
+              }
+            }
           }
         }
       }
 
-      function renderAll(flyToSelected = false) {
+      function syncMapStyles(rows: any[], byReg: Record<string, any>, brk: number[], unit: string) {
+        const activeBin = state.hoveredBin !== null ? state.hoveredBin : state.lockedBin;
+        const rankMap: Record<string, number> = {};
+        rows.forEach((r: any, i: number) => { rankMap[r.region_code] = i + 1; });
+
+        // Update SSR fallback if still visible
+        const ssrSvg = document.getElementById('kaltim-ssr-svg');
+        if (ssrSvg && ssrSvg.style.display !== 'none') {
+          ssrSvg.querySelectorAll('[data-region-poly]').forEach((el) => {
+            const code = el.getAttribute('data-region-poly')!;
+            const obs = byReg[code];
+            const val = obs ? obs.value : null;
+            const b = binFor(val, brk);
+            const dimmed = activeBin !== null && b !== activeBin;
+            el.setAttribute('fill', fillFor(val, brk));
+            el.setAttribute('opacity', dimmed ? '0.22' : '1');
+            const isSel = code === state.selectedRegion;
+            el.setAttribute('stroke', isSel ? '#131416' : '#ffffff');
+            el.setAttribute('stroke-width', isSel ? '2' : '1');
+          });
+        }
+
+        if (!lMap || polyByCode.size === 0) return;
+
+        let selectedLayer: L.Path | null = null;
+        let hoveredLayer: L.Path | null = null;
+
+        polyByCode.forEach((layer, code) => {
+          const obs = byReg[code];
+          const val = obs ? obs.value : null;
+          const b = binFor(val, brk);
+          const isSel = code === state.selectedRegion;
+          const isCmpB = state.compareMode && code === state.compareRegion;
+          const isHov = code === state.hoveredRegion;
+          const dimmed = activeBin !== null && b !== activeBin;
+
+          const baseOpacity = osmToggle?.checked ? 0.80 : 0.94;
+          layer.setStyle({
+            fillColor: fillFor(val, brk),
+            fillOpacity: dimmed ? 0.18 : isHov ? 0.98 : baseOpacity,
+            color: isSel ? '#131416' : isCmpB ? '#0f5466' : isHov ? '#2f3336' : '#ffffff',
+            weight: isSel ? 2.3 : isCmpB || isHov ? 1.9 : 1.1,
+            dashArray: isCmpB && !isSel ? '4 3' : undefined,
+          });
+
+          const statusText = obs ? stLabel(obs.quality_status, obs.missing_reason) : 'Tidak tersedia';
+          const gProps = store.geoPropsByCode[code];
+          layer.setTooltipContent(
+            tooltipHtml(gProps?.region_name || code, code, rankMap[code] || 0, fmtVal(val, unit), unit, statusText)
+          );
+
+          if (isSel) selectedLayer = layer;
+          if (isHov) hoveredLayer = layer;
+        });
+
+        if (selectedLayer) (selectedLayer as L.Path).bringToFront();
+        if (hoveredLayer) (hoveredLayer as L.Path).bringToFront();
+
+        cityDotByCode.forEach((dot, code) => {
+          const obs = byReg[code];
+          const val = obs ? obs.value : null;
+          const b = binFor(val, brk);
+          const isSel = code === state.selectedRegion;
+          const isHov = code === state.hoveredRegion;
+          const dimmed = activeBin !== null && b !== activeBin;
+
+          dot.setStyle({
+            fillColor: fillFor(val, brk),
+            fillOpacity: dimmed ? 0.24 : 1,
+            color: '#131416',
+            weight: isSel ? 2.4 : isHov ? 2.1 : 1.6,
+          });
+          dot.setRadius(isSel || isHov ? 7.5 : 6);
+          dot.bringToFront();
+
+          const statusText = obs ? stLabel(obs.quality_status, obs.missing_reason) : 'Tidak tersedia';
+          const gProps = store.geoPropsByCode[code];
+          dot.setTooltipContent(
+            tooltipHtml(gProps?.region_name || code, code, rankMap[code] || 0, fmtVal(val, unit), unit, statusText)
+          );
+        });
+
+        // Active Region Centroid Reticle Ring
+        const selGeo = store.geoPropsByCode[state.selectedRegion];
+        if (selGeo) {
+          if (!activeReticle) {
+            activeReticle = L.circleMarker([selGeo.label_lat, selGeo.label_lon], {
+              radius: 11,
+              fill: false,
+              color: '#131416',
+              weight: 1.5,
+              opacity: 0.78,
+              interactive: false,
+            }).addTo(lMap);
+          } else {
+            activeReticle.setLatLng([selGeo.label_lat, selGeo.label_lon]);
+            activeReticle.bringToFront();
+          }
+        }
+      }
+
+      function tweenRankNumber(el: HTMLElement, code: string, nextVal: number | null, unit: string, canTween: boolean) {
+        const prev = prevNumeric.get(code) ?? null;
+        prevNumeric.set(code, nextVal);
+
+        const existingRaf = rafHandles.get(code);
+        if (existingRaf) window.cancelAnimationFrame(existingRaf);
+
+        if (!canTween || prefersReducedMotion() || prev === null || nextVal === null || prev === nextVal) {
+          el.textContent = fmtVal(nextVal, unit);
+          return;
+        }
+
+        const start = performance.now();
+        const dur = 280;
+        const step = (now: number) => {
+          const t = Math.min(1, (now - start) / dur);
+          const eased = 1 - Math.pow(1 - t, 3);
+          const cur = prev + (nextVal - prev) * eased;
+          const isRatio = unit.includes('/') || unit.includes('%') || !Number.isInteger(nextVal);
+          el.textContent = isRatio ? decFmt.format(cur) : intFmt.format(Math.round(cur));
+          if (t < 1) {
+            rafHandles.set(code, window.requestAnimationFrame(step));
+          } else {
+            el.textContent = fmtVal(nextVal, unit);
+            rafHandles.delete(code);
+          }
+        };
+        rafHandles.set(code, window.requestAnimationFrame(step));
+      }
+
+      function renderAll(opts: { flyToSelected?: boolean; animateCompare?: boolean } = {}) {
         const ov = store.overviews[state.metric][state.year];
-        const unit = ov.meta.unit;
+        const unit = ov.meta.unit as string;
+        const sameUnit = prevUnit === unit;
+        prevUnit = unit;
+
+        const isRatio = unit.includes('/') || unit.includes('%');
+        const provObs = ov.summary.province_observation;
+        const provVal: number | null = provObs?.value ?? null;
+
+        // Previous year lookup for YoY delta badge
+        const prevYrStr = state.year === '2025' ? '2024' : state.year === '2024' ? '2023' : null;
+        const prevYrOv = prevYrStr ? store.overviews[state.metric]?.[prevYrStr] : null;
+        const prevYrByReg: Record<string, number | null> = {};
+        if (prevYrOv) {
+          prevYrOv.data.forEach((d: any) => { prevYrByReg[d.region_code] = d.value; });
+        }
+
         const rows = [...ov.data].sort((a: any, b: any) => {
           if (a.value === null && b.value === null) return a.short_name.localeCompare(b.short_name, 'id');
           if (a.value === null) return 1;
@@ -530,7 +975,10 @@ const clientPayload = {
           return b.value - a.value;
         });
 
-        if (!rows.some((r: any) => r.region_code === state.selectedRegion)) {
+        const byReg: Record<string, any> = {};
+        rows.forEach((r: any) => { byReg[r.region_code] = r; });
+
+        if (!byReg[state.selectedRegion]) {
           state.selectedRegion = rows[0]?.region_code || '64.74';
         }
 
@@ -538,11 +986,19 @@ const clientPayload = {
         yearBtns.forEach((b) =>
           b.setAttribute('aria-pressed', String(b.getAttribute('data-map-year') === state.year))
         );
+        presetBtns.forEach((b) =>
+          b.setAttribute('aria-pressed', String(b.getAttribute('data-cam-preset') === state.activePreset))
+        );
+
+        const multiYearSupported = (ov.meta.available_years?.length ?? 0) >= 2;
+        playBtn.disabled = !multiYearSupported;
+        if (!multiYearSupported && playTimer !== null) stopPlayback();
 
         document.getElementById('map-panel-heading')!.textContent = ov.meta.metric_label;
         document.getElementById('map-sub-meta')!.textContent =
           `Tahun ${state.year} · Agregat kabupaten/kota`;
-        document.getElementById('map-rank-unit')!.textContent = shortUnit(unit);
+        document.getElementById('map-rank-unit')!.textContent =
+          `${shortUnit(unit)}${isRatio && provVal !== null ? ` · garis = Prov. ${fmtVal(provVal, unit)}` : ''}`;
 
         const maxR = ov.summary.max_region;
         const minR = ov.summary.min_region;
@@ -559,59 +1015,139 @@ const clientPayload = {
           .filter((r: any) => r.value !== null && (r.quality_status === 'validated' || r.quality_status === 'warning'))
           .map((r: any) => r.value as number);
         const brk = quantiles(validVals);
+        const maxVal = Math.max(...validVals, 1);
 
-        // Update Legend
+        const binCounts = [0, 0, 0, 0, 0];
+        rows.forEach((r: any) => { binCounts[binFor(r.value, brk)] += 1; });
+
+        if (state.lockedBin !== null && binCounts[state.lockedBin] === 0) {
+          state.lockedBin = null;
+        }
+        const activeBin = state.hoveredBin !== null ? state.hoveredBin : state.lockedBin;
+
+        // Update Interactive Legend Chips
         let legHtml = '';
         if (brk.length === 5) {
-          legHtml += `
-            <span class="legend-bin"><span class="legend-swatch" style="background:${RAMP[0]}"></span><span class="num">${fmtVal(brk[0], unit)}–${fmtVal(brk[1], unit)}</span></span>
-            <span class="legend-bin"><span class="legend-swatch" style="background:${RAMP[1]}"></span><span class="num">&le; ${fmtVal(brk[2], unit)}</span></span>
-            <span class="legend-bin"><span class="legend-swatch" style="background:${RAMP[2]}"></span><span class="num">&le; ${fmtVal(brk[3], unit)}</span></span>
-            <span class="legend-bin"><span class="legend-swatch" style="background:${RAMP[3]}"></span><span class="num">&le; ${fmtVal(brk[4], unit)} (${shortUnit(unit)})</span></span>
-          `;
+          const labels = [
+            `Q1 ${fmtVal(brk[0], unit)}–${fmtVal(brk[1], unit)}`,
+            `Q2 &le; ${fmtVal(brk[2], unit)}`,
+            `Q3 &le; ${fmtVal(brk[3], unit)}`,
+            `Q4 &le; ${fmtVal(brk[4], unit)}`,
+          ];
+          for (let i = 0; i < 4; i++) {
+            legHtml += `
+              <button type="button" class="legend-bin" data-bin="${i}" aria-pressed="${state.lockedBin === i}">
+                <span class="legend-swatch" style="background:${RAMP[i]}"></span>
+                <span class="num">${labels[i]}</span>
+                <span class="legend-count">(${binCounts[i]})</span>
+              </button>`;
+          }
         }
-        legHtml += `<span class="legend-bin"><span class="legend-swatch" style="background:${MISSING}"></span><span>Tidak tersedia / tak sepadan</span></span>`;
+        legHtml += `
+          <button type="button" class="legend-bin" data-bin="4" aria-pressed="${state.lockedBin === 4}">
+            <span class="legend-swatch" style="background:${MISSING}"></span>
+            <span>Tak sepadan</span>
+            <span class="legend-count">(${binCounts[4]})</span>
+          </button>`;
         legendEl.innerHTML = legHtml;
 
-        // Update Rank List
-        rankList.innerHTML = rows
-          .map((r: any, idx: number) => {
-            const c = fillFor(r.value, brk);
-            const sel = r.region_code === state.selectedRegion;
-            return `
-              <div class="rank-row" role="option" tabindex="0" aria-selected="${sel}" data-map-select="${r.region_code}">
-                <span class="rank-idx num">${idx + 1}.</span>
-                <span><span class="legend-swatch" style="background:${c};vertical-align:-1px;margin-right:6px;"></span><span>${r.short_name}</span></span>
-                <span class="num">${fmtVal(r.value, unit)}</span>
-              </div>`;
-          })
-          .join('');
+        // FLIP Rank Reordering + ScaleX Micro-Bars + Tabular Tweening
+        const firstTops = new Map<string, number>();
+        rowEls.forEach((el, code) => firstTops.set(code, el.getBoundingClientRect().top));
 
-        // Update SSR SVG fallback colors if still visible
-        const ssrSvg = document.getElementById('kaltim-ssr-svg');
-        if (ssrSvg && ssrSvg.style.display !== 'none') {
-          const byReg: Record<string, any> = {};
-          rows.forEach((r: any) => { byReg[r.region_code] = r; });
-          ssrSvg.querySelectorAll('[data-region-poly]').forEach((el) => {
-            const code = el.getAttribute('data-region-poly')!;
-            const obs = byReg[code];
-            el.setAttribute('fill', fillFor(obs ? obs.value : null, brk));
-            const isSel = code === state.selectedRegion;
-            el.setAttribute('stroke', isSel ? '#131416' : '#ffffff');
-            el.setAttribute('stroke-width', isSel ? '2' : '1');
-          });
-          ssrSvg.querySelectorAll('[data-city-marker] circle').forEach((el) => {
-            const code = el.parentElement!.getAttribute('data-city-marker')!;
-            const obs = byReg[code];
-            el.setAttribute('fill', fillFor(obs ? obs.value : null, brk));
+        const prevOrder = Array.from(rankList.children).map((c) => c.getAttribute('data-map-select'));
+        const nextOrder = rows.map((r: any) => r.region_code);
+        const orderChanged = prevOrder.some((c, i) => c !== nextOrder[i]);
+
+        rows.forEach((r: any, idx: number) => {
+          const el = rowEls.get(r.region_code);
+          if (!el) return;
+          if (orderChanged) rankList.appendChild(el);
+
+          const b = binFor(r.value, brk);
+          const c = fillFor(r.value, brk);
+          const isSel = r.region_code === state.selectedRegion;
+          const isCmpB = state.compareMode && r.region_code === state.compareRegion;
+          const isHov = r.region_code === state.hoveredRegion;
+          const dimmed = activeBin !== null && b !== activeBin;
+
+          el.setAttribute('aria-selected', String(isSel));
+          el.setAttribute('data-compare-b', String(isCmpB && !isSel));
+          el.setAttribute('data-hovered', String(isHov));
+          el.setAttribute('data-dimmed', String(dimmed));
+
+          (el.querySelector('[data-rank-idx]') as HTMLElement).textContent = `${idx + 1}.`;
+          (el.querySelector('[data-rank-swatch]') as HTMLElement).style.background = c;
+
+          const barEl = el.querySelector('[data-rank-bar]') as HTMLElement;
+          const ratio = r.value !== null ? Math.max(0.03, Math.min(1, r.value / maxVal)) : 0;
+          barEl.style.transform = `scaleX(${ratio.toFixed(3)})`;
+          barEl.style.background = c === MISSING ? '#cfd6da' : '#1b6c80';
+
+          const refEl = el.querySelector('[data-rank-ref]') as HTMLElement;
+          if (isRatio && provVal !== null) {
+            refEl.style.display = 'block';
+            refEl.style.left = `${Math.min(100, (provVal / maxVal) * 100).toFixed(1)}%`;
+          } else {
+            refEl.style.display = 'none';
+          }
+
+          const numEl = el.querySelector('[data-rank-num]') as HTMLElement;
+          tweenRankNumber(numEl, r.region_code, r.value, unit, sameUnit);
+
+          const deltaEl = el.querySelector('[data-rank-delta]') as HTMLElement;
+          const pVal = prevYrByReg[r.region_code];
+          if (r.value !== null && pVal !== null && pVal !== undefined && pVal > 0) {
+            const pct = ((r.value - pVal) / pVal) * 100;
+            const sign = pct > 0 ? '+' : '';
+            deltaEl.style.display = 'block';
+            deltaEl.className = `rank-delta num ${pct > 0.05 ? 'pos' : pct < -0.05 ? 'neg' : ''}`;
+            deltaEl.textContent = `${sign}${oneDecFmt.format(pct)}% thn`;
+          } else {
+            deltaEl.style.display = 'none';
+          }
+        });
+
+        if (orderChanged && !prefersReducedMotion()) {
+          rowEls.forEach((el, code) => {
+            const dy = (firstTops.get(code) ?? 0) - el.getBoundingClientRect().top;
+            if (Math.abs(dy) > 1) {
+              el.animate(
+                [{ transform: `translateY(${dy}px)` }, { transform: 'translateY(0)' }],
+                { duration: 360, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
+              );
+            }
           });
         }
 
-        // Update Leaflet interactive GeoJSON layers
-        syncLeafletLayers(flyToSelected);
+        // Update Map Choropleth Styles, Compare Geodesic Arc & HUD
+        syncMapStyles(rows, byReg, brk, unit);
+        drawCompareArcAndStats(byReg, unit, Boolean(opts.animateCompare));
+        updateHud(rows, brk, unit, provVal, isRatio);
 
-        // Update Selected Evidence Card
-        const activeRow = rows.find((r: any) => r.region_code === state.selectedRegion) || rows[0];
+        if (opts.flyToSelected && lMap) {
+          if (state.compareMode) {
+            const gA = store.geoPropsByCode[state.selectedRegion];
+            const gB = store.geoPropsByCode[state.compareRegion];
+            if (gA?.bbox && gB?.bbox) {
+              const minLon = Math.min(gA.bbox[0], gB.bbox[0]);
+              const minLat = Math.min(gA.bbox[1], gB.bbox[1]);
+              const maxLon = Math.max(gA.bbox[2], gB.bbox[2]);
+              const maxLat = Math.max(gA.bbox[3], gB.bbox[3]);
+              smoothFlyBounds([[minLat, minLon], [maxLat, maxLon]], 36, 9);
+            }
+          } else {
+            const gSel = store.geoPropsByCode[state.selectedRegion];
+            if (gSel?.bbox) {
+              state.activePreset = '';
+              presetBtns.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+              smoothFlyBounds([[gSel.bbox[1], gSel.bbox[0]], [gSel.bbox[3], gSel.bbox[2]]], 36, 9.5);
+            }
+          }
+        }
+
+        // Update Selected Evidence & 3-Year Trajectory Card
+        const activeRow = byReg[state.selectedRegion] || rows[0];
         if (activeRow) {
           const pill = document.getElementById('map-lin-pill')!;
           pill.className = pillClass(activeRow.quality_status);
@@ -622,10 +1158,46 @@ const clientPayload = {
             activeRow.value !== null
               ? `${fmtVal(activeRow.value, unit)} ${unit}`
               : `— (${stLabel(activeRow.quality_status, activeRow.missing_reason)})`;
+
+          const benchKeyEl = document.getElementById('map-bench-key')!;
+          const benchValEl = document.getElementById('map-bench-val')!;
+          if (isRatio) {
+            benchKeyEl.textContent = 'Selisih thd Provinsi';
+            if (activeRow.value !== null && provVal !== null) {
+              const d = activeRow.value - provVal;
+              const word = d >= 0 ? 'di atas' : 'di bawah';
+              benchValEl.textContent = `${d >= 0 ? '+' : ''}${fmtVal(d, unit)} ${word} Prov. (${fmtVal(provVal, unit)})`;
+            } else {
+              benchValEl.textContent = '—';
+            }
+          } else {
+            benchKeyEl.textContent = 'Kontribusi thd Provinsi';
+            if (activeRow.value !== null && provVal !== null && provVal > 0) {
+              const share = (activeRow.value / provVal) * 100;
+              benchValEl.textContent = `${oneDecFmt.format(share)}% dari total Prov. (${fmtVal(provVal, unit)})`;
+            } else {
+              benchValEl.textContent = '—';
+            }
+          }
+
           document.getElementById('map-lin-src')!.textContent = activeRow.sources.join(', ');
           (document.getElementById('map-region-link') as HTMLAnchorElement).href = `/regions/${activeRow.region_code}`;
           document.getElementById('map-bps-code')!.textContent =
             `BPS ${store.regionsMeta[activeRow.region_code]?.bps_numeric || '—'}`;
+
+          // 3-Year Strip
+          const stripEl = document.getElementById('map-year-strip')!;
+          stripEl.innerHTML = ['2023', '2024', '2025']
+            .map((yr) => {
+              const yrOv = store.overviews[state.metric]?.[yr];
+              const rec = yrOv?.data.find((d: any) => d.region_code === activeRow.region_code);
+              return `
+                <button type="button" class="year-cell-btn" data-strip-year="${yr}" aria-current="${yr === state.year}">
+                  <span class="year-cell-yr">Tahun ${yr}</span>
+                  <span class="year-cell-val num">${fmtVal(rec?.value ?? null, unit)}</span>
+                </button>`;
+            })
+            .join('');
 
           const lin = activeRow.observation_id ? store.lineages[activeRow.observation_id] : null;
           const stepsEl = document.getElementById('map-lin-steps')!;
@@ -648,21 +1220,139 @@ const clientPayload = {
         updateUrl();
       }
 
+      // Event Listeners: Metric, Year, Playback, Compare, Legend & Bidirectional Brushing
       selectEl.addEventListener('change', () => {
+        stopPlayback();
         state.metric = selectEl.value;
-        renderAll(false);
+        const mOv = store.overviews[state.metric]?.[state.year];
+        if (mOv && mOv.summary.valid_region_count === 0) {
+          const avail = mOv.meta.available_years;
+          if (avail && avail.length > 0) state.year = String(avail[avail.length - 1]);
+        }
+        renderAll({ animateCompare: state.compareMode });
       });
+
       yearBtns.forEach((b) =>
         b.addEventListener('click', () => {
+          stopPlayback();
           state.year = b.getAttribute('data-map-year')!;
-          renderAll(false);
+          renderAll();
         })
       );
+
+      document.getElementById('map-year-strip')?.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('[data-strip-year]');
+        if (!btn) return;
+        stopPlayback();
+        state.year = btn.getAttribute('data-strip-year')!;
+        renderAll();
+      });
+
+      playBtn.addEventListener('click', () => {
+        if (playTimer !== null) {
+          stopPlayback();
+          return;
+        }
+        const yrs = ['2023', '2024', '2025'];
+        let idx = yrs.indexOf(state.year);
+        if (idx >= yrs.length - 1) idx = -1;
+
+        playBtn.setAttribute('aria-pressed', 'true');
+        playIcon.innerHTML = `<rect x="7" y="5" width="3.5" height="14"></rect><rect x="13.5" y="5" width="3.5" height="14"></rect>`;
+        playLabel.textContent = 'Jeda tren';
+
+        const stepYear = () => {
+          idx += 1;
+          if (idx >= yrs.length) {
+            stopPlayback();
+            return;
+          }
+          state.year = yrs[idx];
+          renderAll();
+          if (idx >= yrs.length - 1) {
+            stopPlayback();
+          }
+        };
+
+        stepYear();
+        if (idx < yrs.length - 1) {
+          playTimer = window.setInterval(stepYear, 1250);
+        }
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && playTimer !== null) stopPlayback();
+      });
+
+      compareBtn.addEventListener('click', () => {
+        state.compareMode = !state.compareMode;
+        renderAll({ flyToSelected: state.compareMode, animateCompare: state.compareMode });
+      });
+
+      cmpBSelect.addEventListener('change', () => {
+        state.compareRegion = cmpBSelect.value;
+        renderAll({ flyToSelected: true, animateCompare: true });
+      });
+
+      cmpSwapBtn.addEventListener('click', () => {
+        const tmp = state.selectedRegion;
+        state.selectedRegion = state.compareRegion;
+        state.compareRegion = tmp;
+        renderAll({ animateCompare: true });
+      });
+
+      // Legend Quartile Hover + Lock-Click Spotlighting
+      legendEl.addEventListener('mouseover', (e) => {
+        const btn = (e.target as HTMLElement).closest('[data-bin]');
+        if (!btn) return;
+        const bin = Number(btn.getAttribute('data-bin'));
+        if (state.hoveredBin !== bin) {
+          state.hoveredBin = bin;
+          renderAll();
+        }
+      });
+      legendEl.addEventListener('mouseleave', () => {
+        if (state.hoveredBin !== null) {
+          state.hoveredBin = null;
+          renderAll();
+        }
+      });
+      legendEl.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('[data-bin]');
+        if (!btn) return;
+        const bin = Number(btn.getAttribute('data-bin'));
+        state.lockedBin = state.lockedBin === bin ? null : bin;
+        state.hoveredBin = null;
+        renderAll();
+      });
+
+      // Rank List Click, Keyboard & Hover Brushing -> Map
+      rankList.addEventListener('mouseover', (e) => {
+        const row = (e.target as HTMLElement).closest('[data-map-select]');
+        const code = row ? row.getAttribute('data-map-select') : null;
+        if (code && state.hoveredRegion !== code) {
+          state.hoveredRegion = code;
+          renderAll();
+        }
+      });
+      rankList.addEventListener('mouseleave', () => {
+        if (state.hoveredRegion !== null) {
+          state.hoveredRegion = null;
+          renderAll();
+        }
+      });
       rankList.addEventListener('click', (e) => {
         const row = (e.target as HTMLElement).closest('[data-map-select]');
         if (!row) return;
-        state.selectedRegion = row.getAttribute('data-map-select')!;
-        renderAll(true);
+        const code = row.getAttribute('data-map-select')!;
+        if ((e as MouseEvent).shiftKey) {
+          state.compareMode = true;
+          state.compareRegion = code;
+          renderAll({ flyToSelected: true, animateCompare: true });
+          return;
+        }
+        state.selectedRegion = code;
+        renderAll({ flyToSelected: true, animateCompare: state.compareMode });
       });
       rankList.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter' && e.key !== ' ') return;
@@ -670,21 +1360,21 @@ const clientPayload = {
         if (!row) return;
         e.preventDefault();
         state.selectedRegion = row.getAttribute('data-map-select')!;
-        renderAll(true);
+        renderAll({ flyToSelected: true, animateCompare: state.compareMode });
       });
 
-      // SSR SVG click support before interactive layer hydrates
+      // SSR SVG fallback click support before Leaflet mounts
       document.getElementById('kaltim-ssr-svg')?.addEventListener('click', (e) => {
         const poly = (e.target as HTMLElement).closest('[data-region-poly]');
         const city = (e.target as HTMLElement).closest('[data-city-marker]');
         const code = poly?.getAttribute('data-region-poly') || city?.getAttribute('data-city-marker');
         if (code) {
           state.selectedRegion = code;
-          renderAll(false);
+          renderAll({ animateCompare: state.compareMode });
         }
       });
 
-      // Hydrate interactive Leaflet SVG vector map (no WebGL / Worker blob issues on mobile browsers)
+      // Hydrate Persistent Leaflet SVG Vector Stage
       const mapContainer = document.getElementById('kaltim-map-canvas')!;
       mapContainer.style.pointerEvents = 'none';
 
@@ -719,7 +1409,116 @@ const clientPayload = {
           lMap.invalidateSize({ pan: false });
           lMap.fitBounds(KALTIM_BOUNDS, { padding: [14, 14], animate: false });
 
-          syncLeafletLayers(false);
+          // 0°00' Khatulistiwa Equator Geodesic Reference Line
+          L.polyline([[0, 113.80], [0, 119.02]], {
+            color: '#526066',
+            weight: 1,
+            dashArray: '4 4',
+            opacity: 0.52,
+            interactive: false,
+          }).addTo(lMap);
+
+          L.marker([0.13, 114.52], {
+            interactive: false,
+            icon: L.divIcon({
+              className: '',
+              html: `<span class="equator-tag">0° Khatulistiwa</span>`,
+              iconSize: [110, 20],
+              iconAnchor: [55, 10],
+            }),
+          }).addTo(lMap);
+
+          // Instantiate Persistent Choropleth Polygons ONCE
+          L.geoJSON(geoData, {
+            style: () => ({
+              fillColor: MISSING,
+              fillOpacity: 0.94,
+              color: '#ffffff',
+              weight: 1.1,
+              className: 'kdt-geo-poly',
+            }),
+            onEachFeature: (feature: any, layer: L.Layer) => {
+              const code = feature.properties.region_code as string;
+              polyByCode.set(code, layer as L.Path);
+
+              layer.bindTooltip('', { sticky: true, direction: 'top', offset: [0, -6] });
+
+              layer.on('mouseover', () => {
+                if (state.hoveredRegion !== code) {
+                  state.hoveredRegion = code;
+                  renderAll();
+                }
+              });
+              layer.on('mouseout', () => {
+                if (state.hoveredRegion === code) {
+                  state.hoveredRegion = null;
+                  renderAll();
+                }
+              });
+              layer.on('click', (ev: any) => {
+                if (ev.originalEvent?.shiftKey) {
+                  state.compareMode = true;
+                  state.compareRegion = code;
+                  renderAll({ animateCompare: true });
+                  return;
+                }
+                const alreadySelected = state.selectedRegion === code;
+                state.selectedRegion = code;
+                renderAll({ flyToSelected: alreadySelected, animateCompare: state.compareMode });
+              });
+            },
+          }).addTo(lMap);
+
+          // Instantiate Persistent Coastal City Enclave Markers ONCE
+          geoData.features
+            .filter((f: any) => f.properties.region_level === 'city')
+            .forEach((f: any) => {
+              const code = f.properties.region_code as string;
+              const dot = L.circleMarker([f.properties.label_lat, f.properties.label_lon], {
+                radius: 6,
+                fillColor: MISSING,
+                fillOpacity: 1,
+                color: '#131416',
+                weight: 1.6,
+                className: 'kdt-city-dot',
+              }).addTo(lMap!);
+
+              dot.bindTooltip('', { direction: 'top', offset: [0, -8] });
+              dot.on('mouseover', () => {
+                if (state.hoveredRegion !== code) {
+                  state.hoveredRegion = code;
+                  renderAll();
+                }
+              });
+              dot.on('mouseout', () => {
+                if (state.hoveredRegion === code) {
+                  state.hoveredRegion = null;
+                  renderAll();
+                }
+              });
+              dot.on('click', () => {
+                const alreadySelected = state.selectedRegion === code;
+                state.selectedRegion = code;
+                renderAll({ flyToSelected: alreadySelected, animateCompare: state.compareMode });
+              });
+
+              cityDotByCode.set(code, dot);
+            });
+
+          // Live Coordinate Tracking on HUD
+          lMap.on('mousemove', (ev: L.LeafletMouseEvent) => {
+            const ov = store.overviews[state.metric][state.year];
+            const unit = ov.meta.unit;
+            const isRatio = unit.includes('/') || unit.includes('%');
+            const provVal = ov.summary.province_observation?.value ?? null;
+            const rows = [...ov.data].sort((a: any, b: any) => (b.value ?? -1) - (a.value ?? -1));
+            const validVals = rows
+              .filter((r: any) => r.value !== null && (r.quality_status === 'validated' || r.quality_status === 'warning'))
+              .map((r: any) => r.value as number);
+            updateHud(rows, quantiles(validVals), unit, provVal, isRatio, [ev.latlng.lat, ev.latlng.lng]);
+          });
+
+          renderAll({ animateCompare: state.compareMode });
 
           if (osmToggle?.checked) {
             osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -732,7 +1531,7 @@ const clientPayload = {
           if (mapContainer.querySelectorAll('svg path').length >= 10) {
             const ssr = document.getElementById('kaltim-ssr-svg');
             if (ssr) ssr.style.display = 'none';
-            document.getElementById('map-engine-label')!.textContent = 'Leaflet SVG · 10/10 wilayah';
+            document.getElementById('map-engine-label')!.textContent = 'Leaflet SVG · Brushing & FLIP aktif';
           }
 
           if ('ResizeObserver' in window) {
@@ -761,16 +1560,19 @@ const clientPayload = {
         } else if (osmLayer) {
           lMap.removeLayer(osmLayer);
         }
-        syncLeafletLayers(false);
+        renderAll();
       });
 
-      document.querySelectorAll('[data-cam-preset]').forEach((btn) => {
+      presetBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
-          const p = btn.getAttribute('data-cam-preset');
+          const p = btn.getAttribute('data-cam-preset')!;
+          state.activePreset = p;
+          presetBtns.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+
           if (lMap) {
-            if (p === 'all') lMap.fitBounds(KALTIM_BOUNDS, { padding: [14, 14] });
-            else if (p === 'cities') lMap.fitBounds(CITIES_BOUNDS, { padding: [24, 24] });
-            else if (p === 'mahakam') lMap.fitBounds(MAHAKAM_BOUNDS, { padding: [20, 20] });
+            if (p === 'all') smoothFlyBounds(KALTIM_BOUNDS, 14, 10);
+            else if (p === 'cities') smoothFlyBounds(CITIES_BOUNDS, 24, 10);
+            else if (p === 'mahakam') smoothFlyBounds(MAHAKAM_BOUNDS, 20, 10);
             return;
           }
           const ssrSvg = document.getElementById('kaltim-ssr-svg');
@@ -781,8 +1583,8 @@ const clientPayload = {
         });
       });
 
-      if (params.has('metric') || params.has('year') || params.has('region')) {
-        renderAll(false);
+      if (params.has('metric') || params.has('year') || params.has('region') || params.has('compare')) {
+        renderAll({ animateCompare: state.compareMode });
       }
     }
   </script>
