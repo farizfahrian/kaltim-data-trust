@@ -7,7 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from kdt.db import create_kdt_engine, init_db
+from kdt.db import PROJECT_ROOT, create_kdt_engine, init_db
+from kdt.geo import GeoAlignmentError, load_and_validate_kaltim_geojson
 from kdt.service import (
     UnknownEntityError,
     get_active_snapshot,
@@ -138,6 +139,14 @@ def create_app(engine: Engine | None = None) -> FastAPI:
             return get_observation_lineage(db, observation_id)
         except UnknownEntityError as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.get("/api/v1/geo/regions")
+    def geo_regions_endpoint():
+        try:
+            geojson_payload, _ = load_and_validate_kaltim_geojson(PROJECT_ROOT / "data")
+            return geojson_payload
+        except GeoAlignmentError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     return app
 

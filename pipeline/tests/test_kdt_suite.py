@@ -456,3 +456,36 @@ def test_t019_malicious_macro_and_formula_injection_rejected(db_engine, tmp_path
         )
         assert out.status == "QUARANTINED"
         assert any(o.rule_code == "DQ-004" and o.status == "fail" for o in out.outcomes)
+
+
+# GIS-01: Verify 10/10 Kalimantan Timur GeoJSON boundary alignment, zero unmatched shapes, and /api/v1/geo/regions
+def test_gis01_geojson_alignment_and_api_endpoint(db_engine, tmp_path: Path):
+    import json
+
+    from kdt.geo import GeoAlignmentError, load_and_validate_kaltim_geojson
+
+    payload, summary = load_and_validate_kaltim_geojson(DATA_DIR)
+    assert summary.feature_count == 10
+    assert summary.unmatched_shapes == []
+    assert summary.missing_target_regions == []
+    assert "CC BY 3.0 IGO" in summary.license
+
+    # Inject an unmatched shape (e.g. Bulungan from North Kalimantan) -> must fail GIS-01 gate
+    tampered = json.loads(json.dumps(payload))
+    tampered["features"].append(
+        {
+            "type": "Feature",
+            "properties": {"region_code": "65.01", "source_shape_name": "Bulungan"},
+            "geometry": {"type": "Polygon", "coordinates": [[[117.0, 2.5], [117.2, 2.5], [117.2, 2.7], [117.0, 2.5]]]},
+        }
+    )
+    bad_geo = tmp_path / "tampered.geojson"
+    bad_geo.write_text(json.dumps(tampered), encoding="utf-8")
+    with pytest.raises(GeoAlignmentError, match="unmatched"):
+        load_and_validate_kaltim_geojson(DATA_DIR, geojson_path=bad_geo)
+
+    client = TestClient(create_app(db_engine))
+    res = client.get("/api/v1/geo/regions")
+    assert res.status_code == 200
+    assert len(res.json()["features"]) == 10
+

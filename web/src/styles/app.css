@@ -736,6 +736,109 @@ th.n button.sort-btn { margin-left: auto; }
   color: var(--muted);
 }
 
+/* ---------- Thematic GIS Map (/map, P1 FR-017) ---------- */
+.map-stage-wrap {
+  position: relative;
+  width: 100%;
+  height: 456px;
+  background: #eaf1f3;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  overflow: hidden;
+}
+.map-canvas {
+  width: 100%;
+  height: 100%;
+}
+.map-ssr-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.map-ssr-svg path[data-region-poly] {
+  cursor: pointer;
+  transition: opacity var(--t-hover) ease;
+}
+.map-ssr-svg path[data-region-poly]:hover {
+  opacity: 0.86;
+}
+.map-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 12px;
+}
+.map-preset-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.map-legend-grid {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px;
+  color: var(--text);
+}
+.legend-bin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.legend-swatch {
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(19, 20, 22, 0.22);
+  border-radius: 2px;
+  display: inline-block;
+  flex: none;
+}
+.map-attribution-line {
+  margin-top: 8px;
+  font-size: var(--fs-small);
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.rank-list {
+  display: grid;
+}
+.rank-row {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.rank-row + .rank-row {
+  border-top: 1px solid var(--rule);
+  border-radius: 0;
+}
+.rank-row:hover {
+  background: var(--raised);
+}
+.rank-row[aria-selected="true"] {
+  background: var(--active);
+  border-radius: 6px;
+}
+.rank-idx {
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
 /* ---------- Mobile & Tablet (< 960px) ---------- */
 .menu-toggle { display: none; }
 .mobile-close-row { display: none; }

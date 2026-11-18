@@ -1,8 +1,10 @@
 {
   "snapshot_id": "snap-427145497d10cce4",
-  "published_at": "2026-11-18T07:19:24.075784",
-  "bundle_sha256": "3b833ad0cd82efdf717f360667791c5bb80e4f369d7f103e9a576f64eb25749d",
+  "published_at": "2026-11-18T08:45:06.822988",
+  "bundle_sha256": "08098748db2c461e74133beff905930603cadcee9ae197f375a0412f4ea3bc30",
   "observation_count": 275,
   "lineage_count": 275,
-  "dataset_count": 6
+  "dataset_count": 6,
+  "geo_feature_count": 10,
+  "geo_license": "CC BY 3.0 IGO (Creative Commons Attribution 3.0 Intergovernmental Organisations)"
 }

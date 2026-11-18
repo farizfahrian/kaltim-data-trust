@@ -1,0 +1,848 @@
+---
+import 'maplibre-gl/dist/maplibre-gl.css';
+import AppShell from '../layouts/AppShell.astro';
+import geoFc from '../../public/api/v1/geo/regions.json';
+import {
+  snapshotData,
+  formatMetricValue,
+  formatShortUnit,
+  statusLabel,
+  statusPillClass,
+} from '../lib/format';
+
+const defaultMetric = 'doctor_per_100k';
+const defaultYear = '2024';
+const ov = snapshotData.overviews[defaultMetric][defaultYear];
+const regionsMeta = Object.fromEntries(snapshotData.regions.map((r) => [r.region_code, r]));
+
+// Monochromatic 4-class teal ramp (app-screens.md §6.4: single hue ramp, neutral grey for missing/blocked)
+const CHOROPLETH_RAMP = ['#d6eaee', '#8ec1cd', '#448fa2', '#1b6c80'];
+const MISSING_FILL = '#dfe5e8';
+
+function computeQuantileBreaks(vals: number[]): number[] {
+  const sorted = [...vals].sort((a, b) => a - b);
+  if (sorted.length === 0) return [];
+  const q = (p: number) => {
+    const pos = (sorted.length - 1) * p;
+    const base = Math.floor(pos);
+    const rest = pos - base;
+    return sorted[base + 1] !== undefined
+      ? sorted[base] + rest * (sorted[base + 1] - sorted[base])
+      : sorted[base];
+  };
+  return [sorted[0], q(0.25), q(0.5), q(0.75), sorted[sorted.length - 1]];
+}
+
+function colorForValue(val: number | null, breaks: number[]): string {
+  if (val === null || val === undefined || breaks.length < 5) return MISSING_FILL;
+  if (val <= breaks[1]) return CHOROPLETH_RAMP[0];
+  if (val <= breaks[2]) return CHOROPLETH_RAMP[1];
+  if (val <= breaks[3]) return CHOROPLETH_RAMP[2];
+  return CHOROPLETH_RAMP[3];
+}
+
+const validVals = ov.data
+  .filter((r) => r.value !== null && (r.quality_status === 'validated' || r.quality_status === 'warning'))
+  .map((r) => r.value as number);
+const initialBreaks = computeQuantileBreaks(validVals);
+const byReg = Object.fromEntries(ov.data.map((r) => [r.region_code, r]));
+
+// Build SSR equirectangular SVG projection (Kalimantan Timur straddles 0° Equator: cos(lat) ≈ 1.00)
+const [minLon, minLat, maxLon, maxLat] = geoFc.bbox as [number, number, number, number];
+const svgW = 640;
+const svgH = 620;
+const pad = 22;
+const scale = Math.min(
+  (svgW - pad * 2) / (maxLon - minLon),
+  (svgH - pad * 2) / (maxLat - minLat)
+);
+const offsetX = (svgW - (maxLon - minLon) * scale) / 2;
+const offsetY = (svgH - (maxLat - minLat) * scale) / 2;
+
+const projX = (lon: number) => (offsetX + (lon - minLon) * scale).toFixed(1);
+const projY = (lat: number) => (offsetY + (maxLat - lat) * scale).toFixed(1);
+
+function ringToSvgPath(ring: number[][]): string {
+  // Decimate dense vertices slightly for compact SSR SVG while keeping full precision in /api/v1/geo/regions.json
+  const step = ring.length > 400 ? 3 : ring.length > 150 ? 2 : 1;
+  const pts: string[] = [];
+  for (let i = 0; i < ring.length; i += step) {
+    pts.push(`${i === 0 ? 'M' : 'L'}${projX(ring[i][0])} ${projY(ring[i][1])}`);
+  }
+  return `${pts.join(' ')} Z`;
+}
+
+function geomToSvgPath(geom: any): string {
+  if (geom.type === 'Polygon') {
+    return geom.coordinates.map((r: number[][]) => ringToSvgPath(r)).join(' ');
+  }
+  return geom.coordinates
+    .map((poly: number[][][]) => poly.map((r: number[][]) => ringToSvgPath(r)).join(' '))
+    .join(' ');
+}
+
+const ssrFeatures = geoFc.features.map((f: any) => {
+  const code = f.properties.region_code as string;
+  const obs = byReg[code];
+  return {
+    code,
+    shortName: f.properties.short_name as string,
+    level: f.properties.region_level as string,
+    cx: projX(f.properties.label_lon),
+    cy: projY(f.properties.label_lat),
+    bbox: f.properties.bbox,
+    d: geomToSvgPath(f.geometry),
+    fill: colorForValue(obs?.value ?? null, initialBreaks),
+  };
+});
+
+const sortedRows = [...ov.data].sort((a, b) => (b.value ?? -1) - (a.value ?? -1));
+const defaultSelected = sortedRows[0];
+const defaultLineage = defaultSelected?.observation_id
+  ? (snapshotData.lineages as Record<string, any>)[defaultSelected.observation_id]
+  : null;
+
+const clientPayload = {
+  overviews: snapshotData.overviews,
+  lineages: snapshotData.lineages,
+  regionsMeta,
+};
+---
+
+<AppShell
+  title="Peta Tematik GIS"
+  activeNav="map"
+  crumb="Analitik daerah / Peta tematik batas administrasi (GIS)"
+>
+  <div class="title-row">
+    <div>
+      <h1>Peta Tematik Kesehatan Kaltim</h1>
+      <p class="finding" id="map-finding">
+        Kepadatan tenaga medis per 100.000 penduduk terkonsentrasi pada tiga enklave kota pesisir (Bontang 156,14 · Balikpapan 148,21 · Samarinda 137,05), sedangkan wilayah kabupaten berarea luas memiliki rasio per kapita lebih rendah.
+      </p>
+    </div>
+    <div class="title-actions">
+      <a class="btn" href="/api/v1/geo/regions.json">GeoJSON resmi</a>
+      <a class="btn primary" href="/">Tabel &amp; grafik</a>
+    </div>
+  </div>
+
+  <div class="tabs-row" style="padding-bottom:10px;">
+    <div class="filter-controls" style="padding-bottom:0;">
+      <label for="map-metric-select" class="panel-meta">Indikator peta</label>
+      <select id="map-metric-select" class="select-control" aria-label="Pilih indikator peta tematik">
+        {snapshotData.metrics.map((m) => (
+          <option value={m.metric_code} selected={m.metric_code === defaultMetric}>
+            {m.short_label} ({m.unit})
+          </option>
+        ))}
+      </select>
+
+      <div class="segmented" role="group" aria-label="Tahun referensi peta">
+        {['2023', '2024', '2025'].map((yr) => (
+          <button
+            type="button"
+            data-map-year={yr}
+            aria-pressed={yr === defaultYear ? 'true' : 'false'}
+          >
+            {yr}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <span class="panel-meta">
+      Metode klasifikasi: Kuartil 4-kelas · Kode Kemendagri ↔ BPS tervalidasi (10/10 cocok)
+    </span>
+  </div>
+
+  <div class="grid-12">
+    <section class="panel span-7" aria-labelledby="map-panel-heading">
+      <div class="panel-head">
+        <h2 id="map-panel-heading">{ov.meta.metric_label}</h2>
+        <span class="panel-meta" id="map-sub-meta">Tahun {ov.meta.year} · Agregat kabupaten/kota</span>
+      </div>
+
+      <div class="map-toolbar">
+        <div class="map-preset-group" role="group" aria-label="Fokus area peta">
+          <button type="button" class="btn" data-cam-preset="all">Seluruh Kaltim</button>
+          <button type="button" class="btn" data-cam-preset="cities">
+            Koridor 3 kota
+          </button>
+          <button type="button" class="btn" data-cam-preset="mahakam">
+            Hulu Mahakam
+          </button>
+        </div>
+
+        <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;">
+          <input type="checkbox" id="osm-basemap-toggle" />
+          <span>Peta dasar jalan (OSM)</span>
+        </label>
+      </div>
+
+      <div class="map-stage-wrap">
+        <svg
+          class="map-ssr-svg"
+          id="kaltim-ssr-svg"
+          viewBox={`0 0 ${svgW} ${svgH}`}
+          role="img"
+          aria-label="Peta tematik batas administrasi 10 kabupaten/kota Kalimantan Timur"
+          style="position:absolute;inset:0;z-index:1;"
+        >
+          <g>
+            {ssrFeatures.map((sf: any) => (
+              <path
+                d={sf.d}
+                fill={sf.fill}
+                stroke={sf.code === defaultSelected.region_code ? '#131416' : '#ffffff'}
+                stroke-width={sf.code === defaultSelected.region_code ? '2' : '1'}
+                data-region-poly={sf.code}
+              >
+                <title>{sf.shortName} ({sf.code})</title>
+              </path>
+            ))}
+            {ssrFeatures
+              .filter((sf: any) => sf.level === 'city')
+              .map((sf: any) => (
+                <g data-city-marker={sf.code} style="cursor:pointer;">
+                  <circle
+                    cx={sf.cx}
+                    cy={sf.cy}
+                    r="5.5"
+                    fill={sf.fill}
+                    stroke="#131416"
+                    stroke-width="1.5"
+                  />
+                </g>
+              ))}
+          </g>
+        </svg>
+        <div id="kaltim-map-canvas" class="map-canvas" style="position:relative;z-index:2;" aria-label="Peta choropleth 10 kabupaten dan kota Kalimantan Timur"></div>
+      </div>
+
+      <div class="map-legend-grid" id="map-legend" aria-label="Legenda klasifikasi choropleth">
+        {initialBreaks.length === 5 && (
+          <>
+            <span class="legend-bin">
+              <span class="legend-swatch" style={`background:${CHOROPLETH_RAMP[0]}`}></span>
+              <span class="num">{formatMetricValue(initialBreaks[0], ov.meta.unit)}–{formatMetricValue(initialBreaks[1], ov.meta.unit)}</span>
+            </span>
+            <span class="legend-bin">
+              <span class="legend-swatch" style={`background:${CHOROPLETH_RAMP[1]}`}></span>
+              <span class="num">&le; {formatMetricValue(initialBreaks[2], ov.meta.unit)}</span>
+            </span>
+            <span class="legend-bin">
+              <span class="legend-swatch" style={`background:${CHOROPLETH_RAMP[2]}`}></span>
+              <span class="num">&le; {formatMetricValue(initialBreaks[3], ov.meta.unit)}</span>
+            </span>
+            <span class="legend-bin">
+              <span class="legend-swatch" style={`background:${CHOROPLETH_RAMP[3]}`}></span>
+              <span class="num">&le; {formatMetricValue(initialBreaks[4], ov.meta.unit)}</span>
+            </span>
+          </>
+        )}
+        <span class="legend-bin">
+          <span class="legend-swatch" style={`background:${MISSING_FILL}`}></span>
+          <span>Tidak tersedia / tak sepadan</span>
+        </span>
+      </div>
+
+      <div class="map-attribution-line">
+        <span>
+          Batas agregat wilayah (bukan lokasi fasilitas individual). Geometri: BPS, WFP &amp; UN OCHA via geoBoundaries (CC BY 3.0 IGO).
+        </span>
+        <span class="mono" id="map-engine-label">Kanvas GIS siap</span>
+      </div>
+    </section>
+
+    <div class="span-5" style="display:grid;gap:var(--gap);">
+      <section class="panel" aria-labelledby="map-rank-heading">
+        <div class="panel-head">
+          <h2 id="map-rank-heading">Daftar peringkat wilayah</h2>
+          <span class="panel-meta" id="map-rank-unit">{formatShortUnit(ov.meta.unit)}</span>
+        </div>
+
+        <div class="rank-list" id="map-rank-list" role="listbox" aria-label="Pilih wilayah pada peta">
+          {sortedRows.map((row, idx) => (
+            <div
+              class="rank-row"
+              role="option"
+              tabindex="0"
+              aria-selected={idx === 0 ? 'true' : 'false'}
+              data-map-select={row.region_code}
+            >
+              <span class="rank-idx num">{idx + 1}.</span>
+              <span>
+                <span class="legend-swatch" style={`background:${colorForValue(row.value, initialBreaks)};vertical-align:-1px;margin-right:6px;`}></span>
+                <span>{row.short_name}</span>
+              </span>
+              <span class="num">{formatMetricValue(row.value, ov.meta.unit)}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="map-lin-heading">
+        <div class="panel-head">
+          <h2 id="map-lin-heading">Bukti wilayah terpilih</h2>
+          <span class={statusPillClass(defaultSelected.quality_status)} id="map-lin-pill">
+            {statusLabel(defaultSelected.quality_status, defaultSelected.missing_reason)}
+          </span>
+        </div>
+
+        <div class="kv-list">
+          <div class="kv-row">
+            <span class="kv-key">Wilayah</span>
+            <span class="kv-val" id="map-lin-name">
+              {defaultSelected.region_name} (<span class="mono">{defaultSelected.region_code}</span>)
+            </span>
+          </div>
+          <div class="kv-row">
+            <span class="kv-key">Nilai &amp; satuan</span>
+            <span class="kv-val num" id="map-lin-val">
+              {formatMetricValue(defaultSelected.value, ov.meta.unit)} {ov.meta.unit}
+            </span>
+          </div>
+          <div class="kv-row">
+            <span class="kv-key">Sumber pembentuk</span>
+            <span class="kv-val mono" id="map-lin-src">{defaultSelected.sources.join(', ')}</span>
+          </div>
+        </div>
+
+        <div id="map-lin-steps" style="display:grid;gap:8px;margin-top:10px;">
+          {defaultLineage?.upstream_inputs?.map((inp: any) => (
+            <div class="lineage-step">
+              <div class="lineage-step-head">
+                <span class="mono">{inp.source_id} ({inp.source_locator})</span>
+                <span class="num">{formatMetricValue(inp.value, inp.unit)} {inp.unit}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;">
+          <a class="row-link" id="map-region-link" href={`/regions/${defaultSelected.region_code}`}>
+            Buka profil lengkap wilayah
+          </a>
+          <span class="mono" style="color:var(--muted);" id="map-bps-code">
+            BPS {regionsMeta[defaultSelected.region_code]?.bps_numeric}
+          </span>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script
+    type="application/json"
+    id="kdt-map-payload"
+    set:html={JSON.stringify(clientPayload)}
+  />
+
+  <script>
+    import * as maplibregl from 'maplibre-gl';
+
+    const payloadEl = document.getElementById('kdt-map-payload');
+    if (payloadEl) {
+      const store = JSON.parse(payloadEl.textContent || '{}');
+      const RAMP = ['#d6eaee', '#8ec1cd', '#448fa2', '#1b6c80'];
+      const MISSING = '#dfe5e8';
+
+      const intFmt = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 });
+      const decFmt = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      const fmtVal = (v: number | null | undefined, unit: string) => {
+        if (v === null || v === undefined) return '—';
+        const isRatio = unit.includes('/') || unit.includes('%') || !Number.isInteger(v);
+        return isRatio ? decFmt.format(v) : intFmt.format(v);
+      };
+      const shortUnit = (u: string) =>
+        u === 'orang/100.000 penduduk' || u === 'fasilitas/100.000 penduduk' ? '/ 100rb pddk' : u;
+      const pillClass = (st: string) =>
+        st === 'validated' ? 'pill pos' : st === 'warning' ? 'pill warn' : st === 'blocked' ? 'pill neg' : 'pill';
+      const stLabel = (st: string, mr?: string | null) => {
+        if (st === 'validated') return 'Tervalidasi';
+        if (st === 'warning') return mr === 'missing_in_source' ? 'Tidak tercatat' : 'Catatan audit';
+        if (st === 'blocked') return 'Diblokir DQ';
+        if (st === 'not_comparable') return 'Tahun tak sepadan';
+        if (st === 'not_computable') return 'Tak dapat dihitung';
+        return 'Belum diperiksa';
+      };
+
+      function quantiles(vals: number[]): number[] {
+        const s = [...vals].sort((a, b) => a - b);
+        if (!s.length) return [];
+        const q = (p: number) => {
+          const pos = (s.length - 1) * p;
+          const b = Math.floor(pos);
+          const r = pos - b;
+          return s[b + 1] !== undefined ? s[b] + r * (s[b + 1] - s[b]) : s[b];
+        };
+        return [s[0], q(0.25), q(0.5), q(0.75), s[s.length - 1]];
+      }
+
+      function fillFor(v: number | null, brk: number[]): string {
+        if (v === null || v === undefined || brk.length < 5) return MISSING;
+        if (v <= brk[1]) return RAMP[0];
+        if (v <= brk[2]) return RAMP[1];
+        if (v <= brk[3]) return RAMP[2];
+        return RAMP[3];
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const state = {
+        metric: params.get('metric') && store.overviews[params.get('metric')!] ? params.get('metric')! : 'doctor_per_100k',
+        year: ['2023', '2024', '2025'].includes(params.get('year') || '') ? params.get('year')! : '2024',
+        selectedRegion: params.get('region') || '64.74',
+      };
+
+      const selectEl = document.getElementById('map-metric-select') as HTMLSelectElement;
+      const yearBtns = Array.from(document.querySelectorAll('[data-map-year]'));
+      const rankList = document.getElementById('map-rank-list')!;
+      const legendEl = document.getElementById('map-legend')!;
+      const osmToggle = document.getElementById('osm-basemap-toggle') as HTMLInputElement;
+
+      let geoData: any = null;
+      let mlMap: maplibregl.Map | null = null;
+      let mlReady = false;
+
+      function updateUrl() {
+        const p = new URLSearchParams();
+        p.set('metric', state.metric);
+        p.set('year', state.year);
+        if (state.selectedRegion) p.set('region', state.selectedRegion);
+        window.history.replaceState({}, '', `${window.location.pathname}?${p.toString()}`);
+      }
+
+      function buildDecoratedGeoJSON() {
+        if (!geoData) return null;
+        const ov = store.overviews[state.metric][state.year];
+        const byReg: Record<string, any> = {};
+        ov.data.forEach((r: any) => { byReg[r.region_code] = r; });
+        const validVals = ov.data
+          .filter((r: any) => r.value !== null && (r.quality_status === 'validated' || r.quality_status === 'warning'))
+          .map((r: any) => r.value as number);
+        const brk = quantiles(validVals);
+
+        return {
+          type: 'FeatureCollection',
+          features: geoData.features.map((f: any) => {
+            const code = f.properties.region_code;
+            const obs = byReg[code];
+            const val = obs ? obs.value : null;
+            return {
+              ...f,
+              properties: {
+                ...f.properties,
+                metricValue: val,
+                formattedValue: fmtVal(val, ov.meta.unit),
+                unit: ov.meta.unit,
+                statusText: obs ? stLabel(obs.quality_status, obs.missing_reason) : 'Tidak tersedia',
+                fillColor: fillFor(val, brk),
+                isSelected: code === state.selectedRegion ? 1 : 0,
+              },
+            };
+          }),
+        };
+      }
+
+      function buildCityPointsGeoJSON(decorated: any) {
+        if (!decorated) return { type: 'FeatureCollection', features: [] };
+        return {
+          type: 'FeatureCollection',
+          features: decorated.features
+            .filter((f: any) => f.properties.region_level === 'city')
+            .map((f: any) => ({
+              type: 'Feature',
+              properties: f.properties,
+              geometry: {
+                type: 'Point',
+                coordinates: [f.properties.label_lon, f.properties.label_lat],
+              },
+            })),
+        };
+      }
+
+      function renderAll(flyToSelected = false) {
+        const ov = store.overviews[state.metric][state.year];
+        const unit = ov.meta.unit;
+        const rows = [...ov.data].sort((a: any, b: any) => {
+          if (a.value === null && b.value === null) return a.short_name.localeCompare(b.short_name, 'id');
+          if (a.value === null) return 1;
+          if (b.value === null) return -1;
+          return b.value - a.value;
+        });
+
+        if (!rows.some((r: any) => r.region_code === state.selectedRegion)) {
+          state.selectedRegion = rows[0]?.region_code || '64.74';
+        }
+
+        selectEl.value = state.metric;
+        yearBtns.forEach((b) =>
+          b.setAttribute('aria-pressed', String(b.getAttribute('data-map-year') === state.year))
+        );
+
+        document.getElementById('map-panel-heading')!.textContent = ov.meta.metric_label;
+        document.getElementById('map-sub-meta')!.textContent =
+          `Tahun ${state.year} · Agregat kabupaten/kota`;
+        document.getElementById('map-rank-unit')!.textContent = shortUnit(unit);
+
+        const maxR = ov.summary.max_region;
+        const minR = ov.summary.min_region;
+        const findingEl = document.getElementById('map-finding')!;
+        if (ov.summary.valid_region_count === 0) {
+          findingEl.textContent =
+            `Pada tahun ${state.year}, seluruh poligon ditampilkan dalam warna abu-abu netral karena indikator ${ov.meta.short_label.toLowerCase()} belum memiliki pembanding sepadan pada tahun ini (tersedia pada 2024).`;
+        } else if (maxR && minR) {
+          findingEl.textContent =
+            `Pada peta tahun ${state.year}, ${maxR.short_name} menempati kelas kuartil tertinggi (${fmtVal(maxR.value, unit)} ${unit}) sementara ${minR.short_name} berada pada titik terendah (${fmtVal(minR.value, unit)} ${unit}).`;
+        }
+
+        const validVals = rows
+          .filter((r: any) => r.value !== null && (r.quality_status === 'validated' || r.quality_status === 'warning'))
+          .map((r: any) => r.value as number);
+        const brk = quantiles(validVals);
+
+        // Update Legend
+        let legHtml = '';
+        if (brk.length === 5) {
+          legHtml += `
+            <span class="legend-bin"><span class="legend-swatch" style="background:${RAMP[0]}"></span><span class="num">${fmtVal(brk[0], unit)}–${fmtVal(brk[1], unit)}</span></span>
+            <span class="legend-bin"><span class="legend-swatch" style="background:${RAMP[1]}"></span><span class="num">&le; ${fmtVal(brk[2], unit)}</span></span>
+            <span class="legend-bin"><span class="legend-swatch" style="background:${RAMP[2]}"></span><span class="num">&le; ${fmtVal(brk[3], unit)}</span></span>
+            <span class="legend-bin"><span class="legend-swatch" style="background:${RAMP[3]}"></span><span class="num">&le; ${fmtVal(brk[4], unit)} (${shortUnit(unit)})</span></span>
+          `;
+        }
+        legHtml += `<span class="legend-bin"><span class="legend-swatch" style="background:${MISSING}"></span><span>Tidak tersedia / tak sepadan</span></span>`;
+        legendEl.innerHTML = legHtml;
+
+        // Update Rank List
+        rankList.innerHTML = rows
+          .map((r: any, idx: number) => {
+            const c = fillFor(r.value, brk);
+            const sel = r.region_code === state.selectedRegion;
+            return `
+              <div class="rank-row" role="option" tabindex="0" aria-selected="${sel}" data-map-select="${r.region_code}">
+                <span class="rank-idx num">${idx + 1}.</span>
+                <span><span class="legend-swatch" style="background:${c};vertical-align:-1px;margin-right:6px;"></span><span>${r.short_name}</span></span>
+                <span class="num">${fmtVal(r.value, unit)}</span>
+              </div>`;
+          })
+          .join('');
+
+        // Update SSR SVG fallback colors if still in DOM
+        const ssrSvg = document.getElementById('kaltim-ssr-svg');
+        if (ssrSvg) {
+          const byReg: Record<string, any> = {};
+          rows.forEach((r: any) => { byReg[r.region_code] = r; });
+          ssrSvg.querySelectorAll('[data-region-poly]').forEach((el) => {
+            const code = el.getAttribute('data-region-poly')!;
+            const obs = byReg[code];
+            el.setAttribute('fill', fillFor(obs ? obs.value : null, brk));
+            const isSel = code === state.selectedRegion;
+            el.setAttribute('stroke', isSel ? '#131416' : '#ffffff');
+            el.setAttribute('stroke-width', isSel ? '2' : '1');
+          });
+          ssrSvg.querySelectorAll('[data-city-marker] circle').forEach((el) => {
+            const code = el.parentElement!.getAttribute('data-city-marker')!;
+            const obs = byReg[code];
+            el.setAttribute('fill', fillFor(obs ? obs.value : null, brk));
+          });
+        }
+
+        // Update MapLibre GL JS source if active
+        if (mlMap && mlReady && geoData) {
+          const dec = buildDecoratedGeoJSON();
+          const src = mlMap.getSource('kaltim') as maplibregl.GeoJSONSource | undefined;
+          if (src && dec) src.setData(dec as any);
+          const cSrc = mlMap.getSource('kaltim-cities') as maplibregl.GeoJSONSource | undefined;
+          if (cSrc && dec) cSrc.setData(buildCityPointsGeoJSON(dec) as any);
+
+          if (flyToSelected) {
+            const feat = geoData.features.find((f: any) => f.properties.region_code === state.selectedRegion);
+            if (feat && feat.properties.bbox) {
+              const [x1, y1, x2, y2] = feat.properties.bbox;
+              mlMap.fitBounds([[x1, y1], [x2, y2]], { padding: 48, maxZoom: 9.5, duration: 450 });
+            }
+          }
+        }
+
+        // Update Selected Evidence Card
+        const activeRow = rows.find((r: any) => r.region_code === state.selectedRegion) || rows[0];
+        if (activeRow) {
+          const pill = document.getElementById('map-lin-pill')!;
+          pill.className = pillClass(activeRow.quality_status);
+          pill.textContent = stLabel(activeRow.quality_status, activeRow.missing_reason);
+          document.getElementById('map-lin-name')!.innerHTML =
+            `${activeRow.region_name} (<span class="mono">${activeRow.region_code}</span>)`;
+          document.getElementById('map-lin-val')!.textContent =
+            activeRow.value !== null
+              ? `${fmtVal(activeRow.value, unit)} ${unit}`
+              : `— (${stLabel(activeRow.quality_status, activeRow.missing_reason)})`;
+          document.getElementById('map-lin-src')!.textContent = activeRow.sources.join(', ');
+          (document.getElementById('map-region-link') as HTMLAnchorElement).href = `/regions/${activeRow.region_code}`;
+          document.getElementById('map-bps-code')!.textContent =
+            `BPS ${store.regionsMeta[activeRow.region_code]?.bps_numeric || '—'}`;
+
+          const lin = activeRow.observation_id ? store.lineages[activeRow.observation_id] : null;
+          const stepsEl = document.getElementById('map-lin-steps')!;
+          if (lin && lin.upstream_inputs && lin.upstream_inputs.length) {
+            stepsEl.innerHTML = lin.upstream_inputs
+              .map(
+                (inp: any) => `
+                <div class="lineage-step">
+                  <div class="lineage-step-head">
+                    <span class="mono">${inp.source_id} (${inp.source_locator})</span>
+                    <span class="num">${fmtVal(inp.value, inp.unit)} ${inp.unit}</span>
+                  </div>
+                </div>`
+              )
+              .join('');
+          } else {
+            stepsEl.innerHTML = `<div class="empty-frame">Nilai tidak dihitung pada periode ini karena tahun sumber tidak sepadan.</div>`;
+          }
+        }
+        updateUrl();
+      }
+
+      selectEl.addEventListener('change', () => {
+        state.metric = selectEl.value;
+        renderAll(false);
+      });
+      yearBtns.forEach((b) =>
+        b.addEventListener('click', () => {
+          state.year = b.getAttribute('data-map-year')!;
+          renderAll(false);
+        })
+      );
+      rankList.addEventListener('click', (e) => {
+        const row = (e.target as HTMLElement).closest('[data-map-select]');
+        if (!row) return;
+        state.selectedRegion = row.getAttribute('data-map-select')!;
+        renderAll(true);
+      });
+      rankList.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const row = (e.target as HTMLElement).closest('[data-map-select]');
+        if (!row) return;
+        e.preventDefault();
+        state.selectedRegion = row.getAttribute('data-map-select')!;
+        renderAll(true);
+      });
+
+      // SSR SVG click support (works immediately & if WebGL is unavailable)
+      document.getElementById('kaltim-ssr-svg')?.addEventListener('click', (e) => {
+        const poly = (e.target as HTMLElement).closest('[data-region-poly]');
+        const city = (e.target as HTMLElement).closest('[data-city-marker]');
+        const code = poly?.getAttribute('data-region-poly') || city?.getAttribute('data-city-marker');
+        if (code) {
+          state.selectedRegion = code;
+          renderAll(false);
+        }
+      });
+
+      // Initialize MapLibre GL JS when WebGL is supported
+      function canUseWebGL(): boolean {
+        try {
+          const c = document.createElement('canvas');
+          const gl = (c.getContext('webgl2') || c.getContext('webgl')) as WebGLRenderingContext | null;
+          if (!gl) return false;
+          const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+          if (dbg) {
+            const renderer = String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '');
+            if (/SwiftShader|llvmpipe|Software/i.test(renderer)) return false;
+          }
+          return true;
+        } catch {
+          return false;
+        }
+      }
+
+      fetch('/api/v1/geo/regions.json')
+        .then((r) => r.json())
+        .then((fc) => {
+          geoData = fc;
+          const container = document.getElementById('kaltim-map-canvas')!;
+          if (!canUseWebGL()) {
+            container.style.pointerEvents = 'none';
+            document.getElementById('map-engine-label')!.textContent = 'GeoJSON Vektor · 10/10 wilayah';
+            return;
+          }
+
+          const decorated = buildDecoratedGeoJSON()!;
+
+          mlMap = new maplibregl.Map({
+            container,
+            canvasContextAttributes: { preserveDrawingBuffer: true },
+            style: {
+              version: 8,
+              sources: {
+                kaltim: {
+                  type: 'geojson',
+                  data: decorated as any,
+                },
+                'kaltim-cities': {
+                  type: 'geojson',
+                  data: buildCityPointsGeoJSON(decorated) as any,
+                },
+              },
+              layers: [
+                {
+                  id: 'bg-water',
+                  type: 'background',
+                  paint: { 'background-color': '#eaf1f3' },
+                },
+                {
+                  id: 'kaltim-fill',
+                  type: 'fill',
+                  source: 'kaltim',
+                  paint: {
+                    'fill-color': ['get', 'fillColor'],
+                    'fill-opacity': 0.9,
+                  },
+                },
+                {
+                  id: 'kaltim-outline',
+                  type: 'line',
+                  source: 'kaltim',
+                  paint: {
+                    'line-color': '#ffffff',
+                    'line-width': 1.2,
+                  },
+                },
+                {
+                  id: 'kaltim-selected',
+                  type: 'line',
+                  source: 'kaltim',
+                  filter: ['==', ['get', 'isSelected'], 1],
+                  paint: {
+                    'line-color': '#131416',
+                    'line-width': 2.4,
+                  },
+                },
+                {
+                  id: 'kaltim-city-dots',
+                  type: 'circle',
+                  source: 'kaltim-cities',
+                  paint: {
+                    'circle-radius': 6,
+                    'circle-color': ['get', 'fillColor'],
+                    'circle-stroke-color': '#131416',
+                    'circle-stroke-width': 1.6,
+                  },
+                },
+              ],
+            },
+            bounds: [[113.83, -2.41], [118.99, 2.63]],
+            fitBoundsOptions: { padding: 20 },
+            attributionControl: false,
+          });
+
+          mlMap.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+
+          const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 10 });
+
+          mlMap.on('load', () => {
+            mlReady = true;
+            document.getElementById('map-engine-label')!.textContent = 'MapLibre GL · GeoJSON';
+            renderAll(false);
+          });
+
+          mlMap.once('idle', () => {
+            if (!mlMap) return;
+            const rendered = mlMap.queryRenderedFeatures(undefined, { layers: ['kaltim-fill'] });
+            if (rendered && rendered.length > 0) {
+              const ssr = document.getElementById('kaltim-ssr-svg');
+              if (ssr) ssr.style.display = 'none';
+            } else {
+              mlMap.remove();
+              mlMap = null;
+              mlReady = false;
+              container.style.pointerEvents = 'none';
+              document.getElementById('map-engine-label')!.textContent = 'GeoJSON Vektor · 10/10 wilayah';
+            }
+          });
+
+          const onHover = (e: any) => {
+            if (!mlMap || !e.features?.length) return;
+            mlMap.getCanvas().style.cursor = 'pointer';
+            const p = e.features[0].properties;
+            popup
+              .setLngLat(e.lngLat)
+              .setHTML(
+                `<div style="font:13px/18px 'IBM Plex Sans',sans-serif;color:#131416;">
+                  <strong>${p.region_name}</strong> <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">(${p.region_code})</span><br/>
+                  <span>${p.formattedValue} ${p.unit}</span> · <span style="color:#52565a;">${p.statusText}</span>
+                </div>`
+              )
+              .addTo(mlMap);
+          };
+
+          mlMap.on('mousemove', 'kaltim-fill', onHover);
+          mlMap.on('mousemove', 'kaltim-city-dots', onHover);
+          mlMap.on('mouseleave', 'kaltim-fill', () => {
+            if (mlMap) mlMap.getCanvas().style.cursor = '';
+            popup.remove();
+          });
+
+          const onClickFeature = (e: any) => {
+            if (!e.features?.length) return;
+            state.selectedRegion = e.features[0].properties.region_code;
+            renderAll(false);
+          };
+          mlMap.on('click', 'kaltim-fill', onClickFeature);
+          mlMap.on('click', 'kaltim-city-dots', onClickFeature);
+        })
+        .catch(() => {
+          document.getElementById('map-engine-label')!.textContent = 'Mode Vektor SVG';
+        });
+
+      osmToggle?.addEventListener('change', () => {
+        if (!mlMap || !mlReady) return;
+        if (!mlMap.getSource('osm-tiles')) {
+          mlMap.addSource('osm-tiles', {
+            type: 'raster',
+            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '© OpenStreetMap contributors',
+          });
+          mlMap.addLayer(
+            {
+              id: 'osm-raster',
+              type: 'raster',
+              source: 'osm-tiles',
+              paint: { 'raster-opacity': 0.55, 'raster-saturation': -0.8 },
+            },
+            'kaltim-fill'
+          );
+        } else {
+          mlMap.setLayoutProperty('osm-raster', 'visibility', osmToggle.checked ? 'visible' : 'none');
+        }
+      });
+
+      document.querySelectorAll('[data-cam-preset]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const p = btn.getAttribute('data-cam-preset');
+          if (mlMap && mlReady) {
+            if (p === 'all') {
+              mlMap.fitBounds([[113.83, -2.41], [118.99, 2.63]], { padding: 20, duration: 450 });
+            } else if (p === 'cities') {
+              mlMap.fitBounds([[116.62, -1.35], [117.62, 0.25]], { padding: 32, duration: 450 });
+            } else if (p === 'mahakam') {
+              mlMap.fitBounds([[113.80, -1.18], [116.55, 1.55]], { padding: 28, duration: 450 });
+            }
+            return;
+          }
+          const ssrSvg = document.getElementById('kaltim-ssr-svg');
+          if (!ssrSvg) return;
+          if (p === 'all') ssrSvg.setAttribute('viewBox', '0 0 640 620');
+          else if (p === 'cities') ssrSvg.setAttribute('viewBox', '320 260 190 220');
+          else if (p === 'mahakam') ssrSvg.setAttribute('viewBox', '10 130 350 320');
+        });
+      });
+
+      if (params.has('metric') || params.has('year') || params.has('region')) {
+        renderAll(false);
+      }
+    }
+  </script>
+</AppShell>

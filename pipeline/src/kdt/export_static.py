@@ -8,6 +8,8 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from kdt.db import PROJECT_ROOT
+from kdt.geo import load_and_validate_kaltim_geojson
 from kdt.models import ImportRun
 from kdt.service import (
     get_active_snapshot,
@@ -104,6 +106,13 @@ def export_static_snapshot(
             lineages[obs_id] = lin
             _write_json(public_api_dir / "lineage" / f"{obs_id}.json", lin)
 
+    # Export verified GeoJSON administrative boundaries (P1 GIS-01 / FR-017)
+    geojson_payload, geo_summary = load_and_validate_kaltim_geojson(PROJECT_ROOT / "data")
+    geo_raw = json.dumps(geojson_payload, separators=(",", ":"), ensure_ascii=False)
+    geo_out_path = public_api_dir / "geo" / "regions.json"
+    geo_out_path.parent.mkdir(parents=True, exist_ok=True)
+    geo_out_path.write_text(geo_raw, encoding="utf-8")
+
     bundle = {
         "snapshot": {
             "snapshot_id": snap.snapshot_id,
@@ -132,6 +141,8 @@ def export_static_snapshot(
         "observation_count": len(all_obs["data"]),
         "lineage_count": len(lineages),
         "dataset_count": len(datasets),
+        "geo_feature_count": geo_summary.feature_count,
+        "geo_license": geo_summary.license,
     }
     _write_json(public_api_dir / "manifest.json", manifest)
     return manifest

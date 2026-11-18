@@ -4,7 +4,7 @@ import { snapshotData } from '../lib/format';
 
 interface Props {
   title: string;
-  activeNav: 'overview' | 'regions' | 'datasets' | 'metrics' | 'methodology' | 'about';
+  activeNav: 'overview' | 'map' | 'regions' | 'datasets' | 'metrics' | 'methodology' | 'about';
   crumb: string;
 }
 
@@ -61,6 +61,15 @@ const quarantinedCount = snapshotData.datasets.filter((d) => d.quality_status ==
                 <path d="M4 19h16M7 15V9m5 6V5m5 10v-4" stroke-linecap="round" />
               </svg>
               <span>Ringkasan wilayah</span>
+            </span>
+          </a>
+          <a href="/map" class="nav-item" aria-current={activeNav === 'map' ? 'page' : undefined}>
+            <span class="nav-item-main">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M12 21s6-5.2 6-10a6 6 0 10-12 0c0 4.8 6 10 6 10z" stroke-linejoin="round" />
+                <circle cx="12" cy="11" r="2.2" />
+              </svg>
+              <span>Peta tematik</span>
             </span>
           </a>
           <a href="/regions" class="nav-item" aria-current={activeNav === 'regions' ? 'page' : undefined}>

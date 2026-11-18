@@ -1,7 +1,7 @@
 {
   "snapshot": {
     "snapshot_id": "snap-427145497d10cce4",
-    "published_at": "2026-11-18T07:19:24.075784",
+    "published_at": "2026-11-18T08:45:06.822988",
     "release_note": "Snapshot terverifikasi data kesehatan publik Kalimantan Timur (baseline 2024 & tren dokter 2023–2025)",
     "demo_data": false,
     "years": [
@@ -500,7 +500,7 @@
           "run_id": "run-69d998f354a8537f",
           "status": "PUBLISHED",
           "source_sha256": "f427719f44070b01021ab25e8a5fe7cded0e39de75f3ded705bbd87b62eac8ad",
-          "started_at": "2026-11-18T07:19:23.158182",
+          "started_at": "2026-11-18T08:45:06.197480",
           "output_row_count": 132,
           "quarantined_row_count": 11
         }
@@ -786,7 +786,7 @@
           "run_id": "run-aab7f6cb86c756e0",
           "status": "QUARANTINED",
           "source_sha256": "aa5b1aee1547e95ea7c24342ba542975c6a61c2b63a80664c236fb20c2d0b343",
-          "started_at": "2026-11-18T07:19:23.986203",
+          "started_at": "2026-11-18T08:45:06.734489",
           "output_row_count": 0,
           "quarantined_row_count": 11
         }
@@ -956,7 +956,7 @@
           "run_id": "run-759d7e82fc7f53c0",
           "status": "PUBLISHED",
           "source_sha256": "c6f54da0db4bfde880f5c4db6e79f95e14fd29c9b04711b808d96597e3dd7f68",
-          "started_at": "2026-11-18T07:19:23.749671",
+          "started_at": "2026-11-18T08:45:06.592275",
           "output_row_count": 11,
           "quarantined_row_count": 0
         }
@@ -1126,7 +1126,7 @@
           "run_id": "run-765a3718acc958e9",
           "status": "PUBLISHED",
           "source_sha256": "f927d32043e6e448d0f0b246b858691515306a96d36fabc8cf8e50a00f743b29",
-          "started_at": "2026-11-18T07:19:23.501808",
+          "started_at": "2026-11-18T08:45:06.449674",
           "output_row_count": 11,
           "quarantined_row_count": 0
         }
@@ -1297,7 +1297,7 @@
           "run_id": "run-31fed06b254651e9",
           "status": "PUBLISHED",
           "source_sha256": "f0589145f52b99429ff876f0ea4fddf589e725a6d13251be3a38579a0914515c",
-          "started_at": "2026-11-18T07:19:23.860369",
+          "started_at": "2026-11-18T08:45:06.674400",
           "output_row_count": 11,
           "quarantined_row_count": 0
         }
@@ -1468,7 +1468,7 @@
           "run_id": "run-86629f74a35351e7",
           "status": "PUBLISHED",
           "source_sha256": "0815eaf574d3c16fc6d3da2a3f78ae5f783128d120c9a104ab015bd0601414ef",
-          "started_at": "2026-11-18T07:19:23.294494",
+          "started_at": "2026-11-18T08:45:06.300330",
           "output_row_count": 11,
           "quarantined_row_count": 0
         }
@@ -10109,7 +10109,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -10360,7 +10360,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -10611,7 +10611,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -10864,7 +10864,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -11115,7 +11115,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -11366,7 +11366,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -11618,7 +11618,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -11871,7 +11871,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -12132,7 +12132,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -12387,7 +12387,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -12640,7 +12640,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -12901,7 +12901,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -13157,7 +13157,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -13408,7 +13408,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -13659,7 +13659,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -13912,7 +13912,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -14163,7 +14163,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -14414,7 +14414,7 @@
             "SRC-DOC"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -14668,7 +14668,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -14924,7 +14924,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -15209,7 +15209,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -15466,7 +15466,7 @@
             "SRC-PKM-NRI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -15711,7 +15711,7 @@
             "SRC-PKM-NRI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -15984,7 +15984,7 @@
             "SRC-PKM-NRI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -16229,7 +16229,7 @@
             "SRC-RS"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -16452,7 +16452,7 @@
             "SRC-RS"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -16701,7 +16701,7 @@
             "SRC-RS"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -16926,7 +16926,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -17149,7 +17149,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -17398,7 +17398,7 @@
             "SRC-POP-NAKES"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -17623,7 +17623,7 @@
             "SRC-PKM-RI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -17846,7 +17846,7 @@
             "SRC-PKM-RI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -18095,7 +18095,7 @@
             "SRC-PKM-RI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -18320,7 +18320,7 @@
             "SRC-PKM-NRI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -18543,7 +18543,7 @@
             "SRC-PKM-NRI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -18792,7 +18792,7 @@
             "SRC-PKM-NRI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -19018,7 +19018,7 @@
             "SRC-PKM-NRI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -19252,7 +19252,7 @@
             "SRC-PKM-NRI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -19513,7 +19513,7 @@
             "SRC-PKM-NRI"
           ],
           "methodology_version": "1.0.0",
-          "published_at": "2026-11-18T07:19:24.075784",
+          "published_at": "2026-11-18T08:45:06.822988",
           "demo_data": false
         },
         "summary": {
@@ -35684,7 +35684,7 @@
       "mapping_version": "1.0.0",
       "transformation_version": "1.0.0",
       "retrieved_at": "2026-11-18T06:50:55",
-      "started_at": "2026-11-18T07:19:23.158182",
+      "started_at": "2026-11-18T08:45:06.197480",
       "input_row_count": 66,
       "output_row_count": 132,
       "quarantined_row_count": 11,
@@ -35955,7 +35955,7 @@
       "mapping_version": "1.0.0",
       "transformation_version": "1.0.0",
       "retrieved_at": "2026-11-18T06:54:20",
-      "started_at": "2026-11-18T07:19:23.294494",
+      "started_at": "2026-11-18T08:45:06.300330",
       "input_row_count": 11,
       "output_row_count": 11,
       "quarantined_row_count": 0,
@@ -36101,7 +36101,7 @@
       "mapping_version": "1.0.0",
       "transformation_version": "1.0.0",
       "retrieved_at": "2026-11-18T06:54:20",
-      "started_at": "2026-11-18T07:19:23.501808",
+      "started_at": "2026-11-18T08:45:06.449674",
       "input_row_count": 11,
       "output_row_count": 11,
       "quarantined_row_count": 0,
@@ -36247,7 +36247,7 @@
       "mapping_version": "1.0.0",
       "transformation_version": "1.0.0",
       "retrieved_at": "2026-11-18T06:54:20",
-      "started_at": "2026-11-18T07:19:23.749671",
+      "started_at": "2026-11-18T08:45:06.592275",
       "input_row_count": 11,
       "output_row_count": 11,
       "quarantined_row_count": 0,
@@ -36393,7 +36393,7 @@
       "mapping_version": "1.0.0",
       "transformation_version": "1.0.0",
       "retrieved_at": "2026-11-18T06:58:31",
-      "started_at": "2026-11-18T07:19:23.860369",
+      "started_at": "2026-11-18T08:45:06.674400",
       "input_row_count": 11,
       "output_row_count": 11,
       "quarantined_row_count": 0,
@@ -36539,7 +36539,7 @@
       "mapping_version": "1.0.0",
       "transformation_version": "1.0.0",
       "retrieved_at": "2026-11-18T06:54:25",
-      "started_at": "2026-11-18T07:19:23.986203",
+      "started_at": "2026-11-18T08:45:06.734489",
       "input_row_count": 11,
       "output_row_count": 0,
       "quarantined_row_count": 11,

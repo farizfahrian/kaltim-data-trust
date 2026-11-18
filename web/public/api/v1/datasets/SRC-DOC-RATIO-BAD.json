@@ -278,7 +278,7 @@
       "run_id": "run-aab7f6cb86c756e0",
       "status": "QUARANTINED",
       "source_sha256": "aa5b1aee1547e95ea7c24342ba542975c6a61c2b63a80664c236fb20c2d0b343",
-      "started_at": "2026-11-18T07:19:23.986203",
+      "started_at": "2026-11-18T08:45:06.734489",
       "output_row_count": 0,
       "quarantined_row_count": 11
     }

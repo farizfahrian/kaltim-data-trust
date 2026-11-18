@@ -19,6 +19,7 @@ Alih-alih langsung membangun grafik di atas file unduhan, eksekusi dimulai dari 
 3. **Mesin 14 Aturan Kualitas (`validate.py`):** Menguji keunikan kunci, keutuhan bilangan bulat, konsistensi subkategori, rekonsiliasi total provinsi, serta memblokir publikasi dataset korup (`SRC-DOC-RATIO-BAD` tertahan `QUARANTINED`).
 4. **Skema SQL Terpisah untuk Fakta Sumber vs Turunan (`models.py` & `sql/`):** Menghubungkan setiap angka rasio melalui `derived_fact_inputs` ke fakta pembilang dan penyebutnya.
 5. **Hybrid Edge Snapshot (`export_static.py` + Astro 5):** Mengekspor snapshot aktif yang lolos gate ke JSON ber-checksum untuk disajikan cepat dan tahan gangguan, selaras penuh dengan kontrak FastAPI `/api/v1`.
+6. **Peta Tematik Choropleth Tervalidasi (`kdt.geo` + MapLibre GL JS di `/map`):** Memadankan 10 poligon kabupaten/kota resmi BPS/WFP/UN OCHA (`CC BY 3.0 IGO`, termasuk rekonsiliasi ejaan `Mahakam Hulu` → `64.11`) dengan jaminan 0 poligon tak terpetakan dan bundel geospasial yang terisolasi khusus pada halaman `/map`.
 
 ## 3. Hasil Terukur
 - **20 skenario uji kritis (`T-001`..`T-020`)** lulus pada `pytest` (mencakup idempotensi, perlindungan snapshot lama saat run baru gagal, tahun tak sepadan, denominator nol, dan injeksi formula).

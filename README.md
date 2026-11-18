@@ -18,6 +18,7 @@ Mengubah kumpulan spreadsheet pemerintah menjadi dashboard regional tidak boleh 
 | 4 | **Korupsi serial waktu Excel & pemisah ribuan** | `SRC-DOC-RATIO-BAD` (`aa5b1aee…`): rasio Paser `45,05` terbaca `1,877083` hari; penduduk `286.991` menjadi float `286.990999` | **Dikarantina penuh (`QUARANTINED`)** oleh `DQ-005` & `DQ-009` sehingga gagal masuk ke *Published Snapshot*. |
 | 5 | **Subkategori melampaui nilai total pada tahun historis** | `SRC-DOC` tahun 2022: Berau (`Dokter=185 < Dokter Umum=197`), Kubar (`120 < 184`) | `DQ-007` memblokir seri 2022 secara otomatis sementara meloloskan seri terverifikasi 2023–2025. |
 | 6 | **Selisih rekonsiliasi agregat provinsi** | `SRC-DOC` Dokter Spesialis 2024: jumlah 10 kab/kota `930` vs baris provinsi `980` (`+50`) | `DQ-011` tidak mengubah angka sumber secara diam-diam, melainkan memberi status `warning` pada observasi provinsi. |
+| 7 | **Variasi penamaan batas geospasial (`GIS-01`)** | Geometri resmi BPS/WFP/UN OCHA (`geoBoundaries IDN ADM2`) menulis `Mahakam Hulu` untuk kode `64.11` | `kdt.geo` memvalidasi keselarasan 10/10 poligon ke `region_code` kanonik (`0 unmatched shapes`) sebelum diterbitkan ke `/api/v1/geo/regions` dan peta tematik `/map`. |
 
 ---
 
@@ -56,6 +57,7 @@ kaltim-data-trust/
 ├── data/
 │   ├── manifests/sources.yml                     # Registri sumber dengan SHA-256 & sistem kode
 │   ├── mapping/{region_aliases.csv,metric_map.yml}
+│   ├── geo/kaltim_adm2_bps_ocha.geojson          # Batas resmi 10 kab/kota Kaltim (CC BY 3.0 IGO)
 │   ├── fixtures/synthetic/                       # Fixture sintetis berlabel jelas untuk pengujian
 │   └── raw/.gitkeep                              # File mentah eksternal sengaja di-gitignore
 ├── sql/

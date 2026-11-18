@@ -291,7 +291,7 @@
       "run_id": "run-69d998f354a8537f",
       "status": "PUBLISHED",
       "source_sha256": "f427719f44070b01021ab25e8a5fe7cded0e39de75f3ded705bbd87b62eac8ad",
-      "started_at": "2026-11-18T07:19:23.158182",
+      "started_at": "2026-11-18T08:45:06.197480",
       "output_row_count": 132,
       "quarantined_row_count": 11
     }
