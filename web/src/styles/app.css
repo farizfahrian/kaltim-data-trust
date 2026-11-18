@@ -75,10 +75,14 @@ body {
 h1, h2, h3, h4, p, figure, ul, ol, dl, dd, pre { margin: 0; }
 ul[class], ol[class] { padding: 0; list-style: none; }
 img, svg { display: block; max-width: 100%; }
-button, input, select { font: inherit; color: inherit; accent-color: var(--accent); }
-a { color: inherit; text-decoration: none; text-underline-offset: 2px; }
+button, input, select { font: inherit; color: inherit; accent-color: var(--accent); -webkit-tap-highlight-color: transparent; }
+a { color: inherit; text-decoration: none; text-underline-offset: 2px; -webkit-tap-highlight-color: transparent; }
 ::selection { background: #d6eaee; color: var(--text); }
+:focus { outline: none; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+svg:focus, svg *:focus, svg *:focus-visible, .leaflet-interactive:focus, .leaflet-interactive:focus-visible {
+  outline: none !important;
+}
 
 .num, table, .kpi-value, .bar-val { font-variant-numeric: tabular-nums; }
 .mono, code, pre { font-family: var(--mono); font-size: var(--fs-code); }
@@ -743,9 +747,13 @@ th.n button.sort-btn { margin-left: auto; }
 }
 
 .btn[aria-pressed="true"] {
-  background: var(--active);
-  border-color: var(--accent);
-  color: var(--text);
+  background: var(--primary);
+  border-color: transparent;
+  color: var(--primary-ink);
+}
+.btn[aria-pressed="true"]:hover {
+  opacity: 0.92;
+  background: var(--primary);
 }
 .btn:disabled {
   opacity: 0.5;
@@ -765,6 +773,20 @@ th.n button.sort-btn { margin-left: auto; }
   border: 1px solid var(--border);
   border-radius: var(--radius-control);
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.map-stage-wrap *,
+.map-stage-wrap *:focus,
+.map-stage-wrap *:focus-visible,
+.map-stage-wrap *:active {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+.map-stage-wrap .leaflet-bar a:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: -2px !important;
 }
 .map-canvas {
   width: 100%;
@@ -817,9 +839,14 @@ th.n button.sort-btn { margin-left: auto; }
   filter: grayscale(0.75) opacity(0.55);
 }
 
-/* Smooth in-place choropleth fill & spotlight transitions */
-.map-stage-wrap svg path.kdt-geo-poly {
+/* Smooth in-place choropleth fill & spotlight transitions with cartographic stroke casing */
+.map-stage-wrap svg path.kdt-geo-poly,
+.map-stage-wrap svg path.kdt-geo-islet {
   cursor: pointer;
+  paint-order: stroke fill;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  shape-rendering: geometricPrecision;
   transition:
     fill 320ms var(--ease-expo),
     fill-opacity 200ms var(--ease-expo),
@@ -1003,8 +1030,8 @@ button.legend-bin:hover {
 }
 button.legend-bin[aria-pressed="true"] {
   background: var(--active);
-  border-color: var(--accent);
-  font-weight: 500;
+  border-color: var(--control);
+  font-weight: 600;
 }
 .legend-count {
   font-family: var(--mono);
@@ -1043,6 +1070,7 @@ button.legend-bin[aria-pressed="true"] {
   padding: 6px 8px;
   border-radius: var(--radius-control);
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   transition:
     background-color var(--t-hover) ease,
     opacity 200ms ease;
@@ -1058,8 +1086,7 @@ button.legend-bin[aria-pressed="true"] {
   background: var(--active);
 }
 .rank-row[data-compare-b="true"] {
-  outline: 1px dashed var(--accent);
-  outline-offset: -1px;
+  background: var(--raised);
 }
 .rank-row[data-dimmed="true"] {
   opacity: 0.34;
@@ -1149,7 +1176,7 @@ button.legend-bin[aria-pressed="true"] {
 }
 .year-cell-btn[aria-current="true"] {
   background: var(--active);
-  border-color: var(--accent);
+  border-color: var(--control);
 }
 .year-cell-yr {
   font-size: 12px;

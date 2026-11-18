@@ -76,9 +76,8 @@ const projY = (lat: number) => (offsetY + (maxLat - lat) * scale).toFixed(1);
 const equatorY = projY(0);
 
 function ringToSvgPath(ring: number[][]): string {
-  const step = ring.length > 400 ? 3 : ring.length > 150 ? 2 : 1;
   const pts: string[] = [];
-  for (let i = 0; i < ring.length; i += step) {
+  for (let i = 0; i < ring.length; i += 1) {
     pts.push(`${i === 0 ? 'M' : 'L'}${projX(ring[i][0])} ${projY(ring[i][1])}`);
   }
   return `${pts.join(' ')} Z`;
@@ -217,16 +216,18 @@ const clientPayload = {
       </div>
 
       <div class="map-toolbar">
-        <div class="map-preset-group" role="group" aria-label="Fokus area dan alat analisis spasial">
-          <button type="button" class="btn" data-cam-preset="all" aria-pressed="true">
-            Seluruh Kaltim
-          </button>
-          <button type="button" class="btn" data-cam-preset="cities" aria-pressed="false">
-            Koridor 3 kota
-          </button>
-          <button type="button" class="btn" data-cam-preset="mahakam" aria-pressed="false">
-            Hulu Mahakam
-          </button>
+        <div class="map-preset-group">
+          <div class="segmented" role="group" aria-label="Fokus area peta">
+            <button type="button" data-cam-preset="all" aria-pressed="true">
+              Seluruh Kaltim
+            </button>
+            <button type="button" data-cam-preset="cities" aria-pressed="false">
+              Koridor 3 kota
+            </button>
+            <button type="button" data-cam-preset="mahakam" aria-pressed="false">
+              Hulu Mahakam
+            </button>
+          </div>
           <button type="button" class="btn" id="compare-mode-btn" aria-pressed="false">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
               <circle cx="6" cy="12" r="3"></circle>
@@ -647,6 +648,7 @@ const clientPayload = {
       let geoData: any = null;
       let lMap: L.Map | null = null;
       const polyByCode = new Map<string, L.Path>();
+      const isletByCode = new Map<string, L.Path>();
       const cityDotByCode = new Map<string, L.CircleMarker>();
       let osmLayer: L.TileLayer | null = null;
       let activeReticle: L.CircleMarker | null = null;
@@ -845,6 +847,8 @@ const clientPayload = {
 
         let selectedLayer: L.Path | null = null;
         let hoveredLayer: L.Path | null = null;
+        let selectedIslet: L.Path | null = null;
+        let hoveredIslet: L.Path | null = null;
 
         polyByCode.forEach((layer, code) => {
           const obs = byReg[code];
@@ -855,26 +859,44 @@ const clientPayload = {
           const isHov = code === state.hoveredRegion;
           const dimmed = activeBin !== null && b !== activeBin;
 
-          const baseOpacity = osmToggle?.checked ? 0.80 : 0.94;
+          const baseOpacity = osmToggle?.checked ? 0.82 : 0.95;
           layer.setStyle({
             fillColor: fillFor(val, brk),
-            fillOpacity: dimmed ? 0.18 : isHov ? 0.98 : baseOpacity,
+            fillOpacity: dimmed ? 0.18 : isSel || isHov ? 0.99 : baseOpacity,
             color: isSel ? '#131416' : isCmpB ? '#0f5466' : isHov ? '#2f3336' : '#ffffff',
-            weight: isSel ? 2.3 : isCmpB || isHov ? 1.9 : 1.1,
+            weight: isSel ? 2.4 : isCmpB || isHov ? 1.8 : 1.15,
             dashArray: isCmpB && !isSel ? '4 3' : undefined,
           });
 
           const statusText = obs ? stLabel(obs.quality_status, obs.missing_reason) : 'Tidak tersedia';
           const gProps = store.geoPropsByCode[code];
-          layer.setTooltipContent(
-            tooltipHtml(gProps?.region_name || code, code, rankMap[code] || 0, fmtVal(val, unit), unit, statusText)
-          );
+          const tip = tooltipHtml(gProps?.region_name || code, code, rankMap[code] || 0, fmtVal(val, unit), unit, statusText);
+          layer.setTooltipContent(tip);
 
-          if (isSel) selectedLayer = layer;
-          if (isHov) hoveredLayer = layer;
+          const islet = isletByCode.get(code);
+          if (islet) {
+            islet.setStyle({
+              fillColor: fillFor(val, brk),
+              fillOpacity: dimmed ? 0.18 : isSel || isHov ? 0.99 : baseOpacity,
+              color: isSel ? '#154e5d' : isCmpB || isHov ? '#2b6777' : '#eaf1f3',
+              weight: isSel || isCmpB || isHov ? 1.05 : 0.75,
+            });
+            islet.setTooltipContent(tip);
+          }
+
+          if (isSel) {
+            selectedLayer = layer;
+            if (islet) selectedIslet = islet;
+          }
+          if (isHov) {
+            hoveredLayer = layer;
+            if (islet) hoveredIslet = islet;
+          }
         });
 
+        if (selectedIslet) (selectedIslet as L.Path).bringToFront();
         if (selectedLayer) (selectedLayer as L.Path).bringToFront();
+        if (hoveredIslet) (hoveredIslet as L.Path).bringToFront();
         if (hoveredLayer) (hoveredLayer as L.Path).bringToFront();
 
         cityDotByCode.forEach((dot, code) => {
@@ -1428,46 +1450,87 @@ const clientPayload = {
             }),
           }).addTo(lMap);
 
-          // Instantiate Persistent Choropleth Polygons ONCE
-          L.geoJSON(geoData, {
-            style: () => ({
-              fillColor: MISSING,
-              fillOpacity: 0.94,
-              color: '#ffffff',
-              weight: 1.1,
-              className: 'kdt-geo-poly',
-            }),
-            onEachFeature: (feature: any, layer: L.Layer) => {
-              const code = feature.properties.region_code as string;
-              polyByCode.set(code, layer as L.Path);
+          // Instantiate Persistent Choropleth Polygons ONCE (splitting Mainland vs Delta/Offshore Islets for crisp highlights)
+          const bindRegionEvents = (code: string, layer: L.Layer) => {
+            layer.bindTooltip('', { sticky: true, direction: 'top', offset: [0, -6] });
 
-              layer.bindTooltip('', { sticky: true, direction: 'top', offset: [0, -6] });
+            layer.on('mouseover', () => {
+              if (state.hoveredRegion !== code) {
+                state.hoveredRegion = code;
+                renderAll();
+              }
+            });
+            layer.on('mouseout', () => {
+              if (state.hoveredRegion === code) {
+                state.hoveredRegion = null;
+                renderAll();
+              }
+            });
+            layer.on('click', (ev: any) => {
+              if (document.activeElement instanceof HTMLElement || document.activeElement instanceof SVGElement) {
+                (document.activeElement as any).blur?.();
+              }
+              if (ev.originalEvent?.shiftKey) {
+                state.compareMode = true;
+                state.compareRegion = code;
+                renderAll({ animateCompare: true });
+                return;
+              }
+              const alreadySelected = state.selectedRegion === code;
+              state.selectedRegion = code;
+              renderAll({ flyToSelected: alreadySelected, animateCompare: state.compareMode });
+            });
+          };
 
-              layer.on('mouseover', () => {
-                if (state.hoveredRegion !== code) {
-                  state.hoveredRegion = code;
-                  renderAll();
+          geoData.features.forEach((feature: any) => {
+            const code = feature.properties.region_code as string;
+            const geom = feature.geometry;
+            const isMulti = geom.type === 'MultiPolygon' && geom.coordinates.length > 1;
+
+            const mainFeature = isMulti
+              ? {
+                  ...feature,
+                  geometry: { type: 'Polygon', coordinates: geom.coordinates[0] },
                 }
-              });
-              layer.on('mouseout', () => {
-                if (state.hoveredRegion === code) {
-                  state.hoveredRegion = null;
-                  renderAll();
-                }
-              });
-              layer.on('click', (ev: any) => {
-                if (ev.originalEvent?.shiftKey) {
-                  state.compareMode = true;
-                  state.compareRegion = code;
-                  renderAll({ animateCompare: true });
-                  return;
-                }
-                const alreadySelected = state.selectedRegion === code;
-                state.selectedRegion = code;
-                renderAll({ flyToSelected: alreadySelected, animateCompare: state.compareMode });
-              });
-            },
-          }).addTo(lMap);
+              : feature;
+
+            const mainGeo = L.geoJSON(mainFeature, {
+              style: () => ({
+                fillColor: MISSING,
+                fillOpacity: 0.95,
+                color: '#ffffff',
+                weight: 1.15,
+                smoothFactor: 0.15,
+                className: 'kdt-geo-poly',
+              }),
+              onEachFeature: (_f: any, lyr: L.Layer) => {
+                polyByCode.set(code, lyr as L.Path);
+                bindRegionEvents(code, lyr);
+              },
+            }).addTo(lMap!);
+            void mainGeo;
+
+            if (isMulti) {
+              const isletFeature = {
+                ...feature,
+                geometry: { type: 'MultiPolygon', coordinates: geom.coordinates.slice(1) },
+              };
+              L.geoJSON(isletFeature, {
+                style: () => ({
+                  fillColor: MISSING,
+                  fillOpacity: 0.95,
+                  color: '#eaf1f3',
+                  weight: 0.75,
+                  smoothFactor: 0.12,
+                  className: 'kdt-geo-islet',
+                }),
+                onEachFeature: (_f: any, lyr: L.Layer) => {
+                  isletByCode.set(code, lyr as L.Path);
+                  bindRegionEvents(code, lyr);
+                },
+              }).addTo(lMap!);
+            }
+          });
 
           // Instantiate Persistent Coastal City Enclave Markers ONCE
           geoData.features
